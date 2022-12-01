@@ -61,9 +61,8 @@ public class User
 		this.verified = true;
 	}
 
-	public User(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
+	public User(String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
 		super();
-		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.firstname = firstname;
