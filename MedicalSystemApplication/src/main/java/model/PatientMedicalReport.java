@@ -24,7 +24,7 @@ public class PatientMedicalReport {
     private Doctor doctor;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cetre_id")
+    @JoinColumn(name = "centre_id")
     private Centre centre;
 
 	@OneToOne(fetch = FetchType.EAGER)

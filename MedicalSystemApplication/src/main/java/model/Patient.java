@@ -22,8 +22,7 @@ public class Patient extends User{
 		super();
 	}
 	
-	public Patient(String password, String email, String firstname, String lastname, String city,
-			String address, String state, String date_of_birth, String phone) {
+	public Patient(String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
 		super(password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Patient);
 		medicalRecord = new MedicalRecord();
 		this.setIsFirstLog(false);
