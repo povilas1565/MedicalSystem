@@ -44,7 +44,7 @@ public class Hall
 		super();
 		this.centre = centre;
 		this.number = number;
-		this.name=name;
+		this.name = name;
 		deleted = false;
 	}
 

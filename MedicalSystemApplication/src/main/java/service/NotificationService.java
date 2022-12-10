@@ -14,7 +14,6 @@ public class NotificationService {
         this.javaMailSender = javaMailSender;
     }
 
-
     public void sendNotification(String email, String subject, String content) throws MailException {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(email);
