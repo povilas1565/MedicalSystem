@@ -51,10 +51,6 @@ public class Call {
         @JoinColumn(name = "video_id")
         private Video video;
 
-        @OneToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "voice_id")
-        private Voice voice;
-
 
 
         public Call() {
@@ -72,7 +68,7 @@ public class Call {
 
         }
 
-        public Call(Date startTime, Date endTime, long duration, Audio audio, Video video, Voice voice) {
+        public Call(Date startTime, Date endTime, long duration, Audio audio, Video video) {
 
                 this.startTime = startTime;
                 this.endTime = endTime;
@@ -84,7 +80,6 @@ public class Call {
                 this.halls = new ArrayList<>();
                 this.audio = audio;
                 this.video = video;
-                this.voice = voice;
         }
 
     public Date getStartTime() {
@@ -121,11 +116,6 @@ public class Call {
 
     public void setVideo(Video video) { this.video = video; }
 
-    public Voice getVoice() {
-        return voice;
-    }
-
-    public void setVoice(Voice voice) { this.voice = voice; }
 
     public List<User> getUsers() { return users; }
 
