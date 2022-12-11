@@ -34,7 +34,7 @@ public class PrescriptionDTO {
         }
         this.isValid = false;
         this.id = prescription.getId();
-        this.version =prescription.getVersion();
+        this.version = prescription.getVersion();
     }
 
     public PrescriptionDTO(String description, Date validationDate,
