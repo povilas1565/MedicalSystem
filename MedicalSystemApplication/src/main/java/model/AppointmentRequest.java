@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import model.Appointment.AppointmentType;
 
+
+
 @Entity
 public class AppointmentRequest {
 

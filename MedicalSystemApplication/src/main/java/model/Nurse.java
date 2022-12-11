@@ -10,6 +10,7 @@ import dto.NurseDTO;
 import helpers.DateUtil;
 import helpers.UserBuilder;
 
+
 @Entity
 public class Nurse extends User{
 

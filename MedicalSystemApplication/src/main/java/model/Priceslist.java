@@ -1,11 +1,10 @@
 package model;
 
+
 import javax.persistence.*;
 
-
 @Entity
-public class Priceslist 
-{
+public class Priceslist {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

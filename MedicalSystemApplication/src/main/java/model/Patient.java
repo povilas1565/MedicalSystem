@@ -7,7 +7,6 @@ import model.User.UserRole;
 
 import javax.persistence.*;
 
-
 @Entity
 public class Patient extends User{
 

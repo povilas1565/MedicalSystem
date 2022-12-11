@@ -11,6 +11,7 @@ import dto.DoctorDTO;
 import helpers.DateUtil;
 import helpers.UserBuilder;
 
+
 @Entity
 public class Doctor extends User
 {
