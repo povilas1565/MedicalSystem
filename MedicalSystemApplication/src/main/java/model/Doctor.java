@@ -10,8 +10,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import dto.DoctorDTO;
 import helpers.DateUtil;
 import helpers.UserBuilder;
+import lombok.Data;
 
-
+@Data
 @Entity
 public class Doctor extends User
 {

@@ -56,6 +56,11 @@ public class UserService {
 		return userRepository.findByEmailAndDeleted(email,deleted);
 	}
 
+	public User findByFirstname(String firstname)
+	{
+		return userRepository.findByFirstname(firstname);
+	}
+
 	public void save(User user)
 	{
 		userRepository.save(user);

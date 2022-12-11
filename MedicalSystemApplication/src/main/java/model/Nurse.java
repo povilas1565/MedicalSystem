@@ -9,8 +9,9 @@ import javax.persistence.*;
 import dto.NurseDTO;
 import helpers.DateUtil;
 import helpers.UserBuilder;
+import lombok.Data;
 
-
+@Data
 @Entity
 public class Nurse extends User{
 

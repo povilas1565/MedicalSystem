@@ -14,10 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
+import lombok.Data;
 import model.Appointment.AppointmentType;
 
 
-
+@Data
 @Entity
 public class AppointmentRequest {
 

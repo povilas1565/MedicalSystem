@@ -12,8 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import lombok.Data;
 import org.springframework.data.annotation.Version;
 
+@Data
 @Entity
 public class VacationRequest
 {
