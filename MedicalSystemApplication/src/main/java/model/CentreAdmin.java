@@ -4,12 +4,10 @@ package model;
 import javax.persistence.*;
 
 import helpers.UserBuilder;
-import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Entity
 public class CentreAdmin extends User {
 

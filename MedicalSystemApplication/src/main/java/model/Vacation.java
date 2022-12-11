@@ -1,13 +1,9 @@
 package model;
 
-
-import lombok.Data;
-
 import java.util.Date;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 public class Vacation 
 {

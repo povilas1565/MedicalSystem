@@ -2,10 +2,8 @@ package model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-
 import javax.persistence.*;
-@Data
+
 @Entity
 public class Audio {
     @Id
@@ -13,9 +11,8 @@ public class Audio {
     private Long id;
 
     @Lob
-    @Column(columnDefinition = "LONGBLOB")
+    @Column(name = "audio_bytes")
     private byte[] audioBytes;
-
 
     @JsonIgnore
     private Long userId;
@@ -24,16 +21,20 @@ public class Audio {
     private Long callId;
 
     @JsonIgnore
-    private Long doctorId;
-
-    @JsonIgnore
-    private Long patientId;
-
-    @JsonIgnore
-    private Long nurseId;
-
-    @JsonIgnore
     private Long hallId;
+
+
+    public Audio() {
+        super();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }
 

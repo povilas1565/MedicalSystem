@@ -1,8 +1,5 @@
 package model;
 
-
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-@Data
 @Entity
 public class Recipe {
 	

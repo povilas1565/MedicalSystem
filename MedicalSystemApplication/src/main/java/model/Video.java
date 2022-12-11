@@ -1,12 +1,9 @@
 package model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-
 import javax.persistence.*;
 
-@Data
+
 @Entity
     public class Video {
     @Id
@@ -14,9 +11,8 @@ import javax.persistence.*;
     private Long id;
 
     @Lob
-    @Column(columnDefinition = "LONGBLOB")
+    @Column(name = "video_bytes")
     private byte[] videoBytes;
-
 
     @JsonIgnore
     private Long userId;
@@ -25,15 +21,21 @@ import javax.persistence.*;
     private Long callId;
 
     @JsonIgnore
-    private Long doctorId;
-
-    @JsonIgnore
-    private Long patientId;
-
-    @JsonIgnore
-    private Long nurseId;
-
-    @JsonIgnore
     private Long hallId;
+
+
+    public Video() {
+        super();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
+
+
 

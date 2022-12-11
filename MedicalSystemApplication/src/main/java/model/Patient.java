@@ -3,12 +3,10 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import helpers.UserBuilder;
-import lombok.Data;
 import model.User.UserRole;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 public class Patient extends User {
 
