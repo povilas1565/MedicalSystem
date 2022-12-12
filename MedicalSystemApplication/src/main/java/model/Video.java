@@ -21,7 +21,6 @@ import javax.persistence.*;
     private Long callId;
 
 
-
     public Video() {
         super();
     }
@@ -33,6 +32,11 @@ import javax.persistence.*;
     public void setId(Long id) {
         this.id = id;
     }
+
+    public byte[] getVideoBytes() { return videoBytes; }
+
+    public void setVideoBytes(byte[] videoBytes) { this.videoBytes = videoBytes; }
+
 }
 
 

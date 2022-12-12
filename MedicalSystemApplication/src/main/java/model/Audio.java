@@ -33,6 +33,11 @@ public class Audio {
         this.id = id;
     }
 
+    public byte[] getAudioBytes() { return audioBytes; }
+
+        public void setAudioBytes(byte[] audioBytes) { this.audioBytes = audioBytes; }
+
 }
+
 
 
