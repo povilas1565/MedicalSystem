@@ -25,6 +25,18 @@ import javax.persistence.*;
         super();
     }
 
+    public byte[] getVideoBytes() { return videoBytes; }
+
+    public void setVideoBytes(byte[] videoBytes) { this.videoBytes = videoBytes; }
+
+    public Long getCallId() {
+        return callId;
+    }
+
+    public void setCallId(Long callId) {
+        this.callId = callId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -32,12 +44,8 @@ import javax.persistence.*;
     public void setId(Long id) {
         this.id = id;
     }
-
-    public byte[] getVideoBytes() { return videoBytes; }
-
-    public void setVideoBytes(byte[] videoBytes) { this.videoBytes = videoBytes; }
-
 }
+
 
 
 

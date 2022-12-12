@@ -1,19 +1,25 @@
 package service;
 
 import exceptions.VideoNotFoundException;
+import model.Call;
+import model.Image;
+import model.User;
 import model.Video;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import org.springframework.web.multipart.MultipartFile;
 import repository.CallRepository;
 import repository.UserRepository;
 import repository.VideoRepository;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
@@ -86,6 +92,7 @@ public class VideoService {
         );
     }
 
+
     public Video getCallVideo(Long callId) {
         Video callVideo = videoRepository.findByCallId(callId)
                 .orElseThrow(() -> new VideoNotFoundException("Video cannot found for call" + callId));
@@ -93,6 +100,12 @@ public class VideoService {
             callVideo.setVideoBytes(decompressVideo((callVideo.getVideoBytes())));
         }
         return callVideo;
+    }
+
+    private User getUserByPrincipal(Principal principal) {
+        String username = principal.getName();
+        return userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
     }
 
 
