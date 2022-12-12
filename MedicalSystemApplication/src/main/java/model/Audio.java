@@ -20,9 +20,6 @@ public class Audio {
     @JsonIgnore
     private Long callId;
 
-    @JsonIgnore
-    private Long hallId;
-
 
     public Audio() {
         super();

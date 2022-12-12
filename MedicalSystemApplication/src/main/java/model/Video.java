@@ -20,8 +20,6 @@ import javax.persistence.*;
     @JsonIgnore
     private Long callId;
 
-    @JsonIgnore
-    private Long hallId;
 
 
     public Video() {

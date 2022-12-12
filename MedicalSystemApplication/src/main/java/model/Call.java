@@ -27,22 +27,6 @@ public class Call {
         @ManyToMany(fetch = FetchType.LAZY)
         private List<User> users = new ArrayList<>();
 
-        @JsonIgnore
-        @ManyToMany(fetch = FetchType.LAZY)
-        private List<Patient> patients = new ArrayList<>();
-
-        @JsonIgnore
-        @ManyToMany(fetch = FetchType.LAZY)
-        private List<Doctor> doctors = new ArrayList<>();
-
-        @JsonIgnore
-        @ManyToMany(fetch = FetchType.LAZY)
-        private List<Nurse> nurses = new ArrayList<>();
-
-        @JsonIgnore
-        @ManyToMany(fetch = FetchType.LAZY)
-        private List<Hall> halls = new ArrayList<>();
-
         @OneToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "audio_id")
         private Audio audio;
@@ -58,13 +42,9 @@ public class Call {
                 // TODO Auto-generated constructor stub
         }
 
-        public Call(long duration, List<User> users, List<Patient> patients, List<Doctor> doctors, List<Nurse> nurses, List<Hall> halls) {
+        public Call(long duration, List<User> users) {
                 this.duration = duration;
                 this.users = users;
-                this.patients = patients;
-                this.doctors = doctors;
-                this.nurses = nurses;
-                this.halls = halls;
 
         }
 
@@ -74,10 +54,6 @@ public class Call {
                 this.endTime = endTime;
                 this.duration = duration;
                 this.users = new ArrayList<>();
-                this.patients = new ArrayList<>();
-                this.doctors = new ArrayList<>();
-                this.nurses = new ArrayList<>();
-                this.halls = new ArrayList<>();
                 this.audio = audio;
                 this.video = video;
         }
@@ -121,21 +97,6 @@ public class Call {
 
     public void setUsers(List<User> users) { this.users = users; }
 
-    public List<Patient> getPatients() { return patients; }
-
-    public void setPatients(List<Patient> patients) { this.patients = patients; }
-
-    public List<Doctor> getDoctors() { return doctors; }
-
-    public void setDoctors(List<Doctor> doctors) { this.doctors = doctors; }
-
-    public List<Nurse> getNurses() { return nurses; }
-
-    public void setNurses(List<Nurse> nurses) { this.nurses = nurses; }
-
-    public List<Hall> getHalls() { return halls; }
-
-    public void setHalls(List<Hall> halls) { this.halls = halls; }
 
     public Long getId() {
         return id;
