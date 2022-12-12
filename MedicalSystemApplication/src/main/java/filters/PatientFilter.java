@@ -13,6 +13,14 @@ public class PatientFilter implements Filter{
 			Patient p = (Patient)o1;
 			UserDTO d = (UserDTO)o2;
 			Boolean flag = true;
+
+			if(!d.getUsername().equals(""))
+			{
+				if(!p.getUsername().toLowerCase().contains(d.getUsername().toLowerCase()))
+				{
+					flag = false;
+				}
+			}
 			if(!d.getFirstname().equals(""))
 			{
 				if(!p.getFirstname().toLowerCase().contains(d.getFirstname().toLowerCase()))

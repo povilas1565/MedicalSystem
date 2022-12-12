@@ -7,6 +7,7 @@ public class SessionUserDTO
 {
 	private Boolean isFirstLog;
 	private Boolean verified;
+	private String username;
 	private String email;
 	private String firstname;
 	private String lastname;
@@ -21,8 +22,9 @@ public class SessionUserDTO
 		super();
 	}
 
-	public SessionUserDTO(String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
+	public SessionUserDTO(String username, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
 		super();
+		this.username = username;
 		this.email = email;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -37,6 +39,7 @@ public class SessionUserDTO
 	{
 		super();
 		this.email = user.getEmail();
+		this.username = user.getUsername();
 		this.firstname = user.getFirstname();
 		this.lastname = user.getLastname();
 		this.city = user.getCity();
@@ -63,6 +66,14 @@ public class SessionUserDTO
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getFirstname() {

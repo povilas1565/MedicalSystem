@@ -15,6 +15,14 @@ public class DoctorFilter implements Filter{
 			Boolean flag = true;
 			Doctor d = (Doctor)o1;
 			DoctorDTO dto = (DoctorDTO)o2;
+
+			if(!dto.getUser().getUsername().equals(""))
+			{
+				if(!d.getUsername().toLowerCase().contains(dto.getUser().getUsername().toLowerCase()))
+				{
+					flag = false;
+				}
+			}
 			
 			if(!dto.getUser().getFirstname().equals(""))
 			{

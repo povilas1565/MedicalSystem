@@ -49,9 +49,9 @@ public class Doctor extends User
 		// TODO Auto-generated constructor stub
 	}
 
-	public Doctor(String password, String email, String firstname, String lastname, String city,
+	public Doctor(String username, String password, String email, String firstname, String lastname, String city,
 			 String state, String date_of_birth, String phone) {
-		super(password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Doctor);
+		super(username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Doctor);
 		this.setIsFirstLog(true);
 		this.appointments = new ArrayList<>();
 		this.vacations = new ArrayList<Vacation>();
@@ -198,7 +198,14 @@ public class Doctor extends User
 		{
 			super(email);
 		}
-		
+
+
+		public Builder withUsername(String username)
+		{
+			super.withUsername(username);
+
+			return this;
+		}
 
 		public Builder withPassword(String password)
 		{

@@ -21,8 +21,8 @@ public class Patient extends User {
 		super();
 	}
 	
-	public Patient(String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
-		super(password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Patient);
+	public Patient(String username,String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
+		super(username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Patient);
 		medicalRecord = new MedicalRecord();
 		this.setIsFirstLog(false);
 	}
@@ -54,6 +54,13 @@ public class Patient extends User {
 		public Builder (String email)
 		{
 			super(email);
+		}
+
+		public Builder withUsername(String username)
+		{
+			super.withUsername(username);
+
+			return this;
 		}
 		
 

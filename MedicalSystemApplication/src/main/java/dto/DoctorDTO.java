@@ -31,6 +31,7 @@ public class DoctorDTO {
 	public DoctorDTO(Doctor d)
 	{
 		UserDTO dto = new UserDTO();
+		dto.setUsername(d.getUsername());
 		dto.setFirstname(d.getFirstname());
 		dto.setLastname(d.getLastname());
 		dto.setEmail(d.getEmail());

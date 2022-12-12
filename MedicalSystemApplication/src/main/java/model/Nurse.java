@@ -37,8 +37,8 @@ public class Nurse extends User{
     }
 
 
-    public Nurse(String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
-        super(password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Nurse);
+    public Nurse(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
+        super(username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Nurse);
         this.prescriptions = new ArrayList<>();
 		this.vacations = new ArrayList<>();
         this.setIsFirstLog(true);
@@ -138,6 +138,13 @@ public class Nurse extends User{
 		{
 			super(email);
 		}
+
+		public Builder withUsername(String username)
+		{
+			super.withUsername(username);
+
+			return this;
+		}
 		
 
 		public Builder withPassword(String password)
@@ -146,6 +153,7 @@ public class Nurse extends User{
 			
 			return this;
 		}
+
 
 		public Builder withFirstname(String firstname)
 		{

@@ -9,7 +9,8 @@ import dto.UserDTO;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User
 {
-	public enum UserRole{ Patient, Doctor, Nurse, CentreAdmin}
+
+    public enum UserRole{ Patient, Doctor, Nurse, CentreAdmin}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -61,8 +62,9 @@ public class User
 		this.verified = true;
 	}
 
-	public User(String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
+	public User(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
 		super();
+		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.firstname = firstname;
@@ -91,6 +93,7 @@ public class User
 	
 
 	public User(User user) {
+		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.email = user.getEmail();
 		this.firstname = user.getFirstname();
@@ -108,6 +111,7 @@ public class User
 	
 	public User(UserDTO user) {
 		// TODO Auto-generated constructor stub
+		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.email = user.getEmail();
 		this.firstname = user.getFirstname();
@@ -150,6 +154,10 @@ public class User
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public String getUsername() { return username; }
+
+	public void setUsername(String username) { this.username = username; }
 
 
 	public String getPassword() {

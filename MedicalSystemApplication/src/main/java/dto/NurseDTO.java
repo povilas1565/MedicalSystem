@@ -1,6 +1,7 @@
 package dto;
 
 import helpers.DateUtil;
+import model.Doctor;
 import model.Nurse;
 import model.User;
 
@@ -29,6 +30,7 @@ public class NurseDTO {
 	public NurseDTO(Nurse n)
 	{
 		UserDTO dto = new UserDTO();
+		dto.setUsername(n.getUsername());
 		dto.setFirstname(n.getFirstname());
 		dto.setLastname(n.getLastname());
 		dto.setEmail(n.getEmail());

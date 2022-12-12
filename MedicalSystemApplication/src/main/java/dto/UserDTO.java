@@ -5,6 +5,7 @@ import model.User.UserRole;
 
 public class UserDTO 
 {
+	private String username;
 	private String password;
 	private String email;
 	private String firstname;
@@ -23,6 +24,7 @@ public class UserDTO
 	public UserDTO(String username, String password, String email, String firstname, String lastname, String city,
 			 String state, String date_of_birth, String phone,UserRole role) {
 		super();
+		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.firstname = firstname;
@@ -37,6 +39,7 @@ public class UserDTO
 	public UserDTO(User dto)
 	{
 		super();
+		username = dto.getUsername();
 		email = dto.getEmail();
 		password = dto.getPassword();
 		firstname = dto.getFirstname();
@@ -55,6 +58,14 @@ public class UserDTO
 
 	public void setRole(UserRole role) {
 		this.role = role;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
