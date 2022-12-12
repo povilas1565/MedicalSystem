@@ -27,7 +27,7 @@ public class CallDTO {
         this.duration = call.getDuration();
         this.users = new ArrayList<>();
         for(User user : call.getUsers()) {
-            users.add(user.getFirstname());
+            users.add(user.getUsername());
         }
         this.audio = call.getAudio();
         this.video = call.getVideo();
