@@ -1,8 +1,10 @@
 package service;
 
+import java.security.Principal;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import model.*;
@@ -50,15 +52,16 @@ public class UserService {
 		return null;
 		
 	}
+
+	private User getUserByPrincipal(Principal principal) {
+		String username = principal.getName();
+		return userRepository.findUserByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
+	}
 	
 	public User findByEmailAndDeleted(String email,Boolean deleted)
 	{
 		return userRepository.findByEmailAndDeleted(email,deleted);
-	}
-
-	public User findUserByUsername(String username)
-	{
-		return userRepository.findUserByUsername(username);
 	}
 
 	public void save(User user)

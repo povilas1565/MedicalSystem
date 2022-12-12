@@ -1,6 +1,7 @@
 package repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,7 +12,7 @@ public interface UserRepository extends JpaRepository<User,Long>{
 	
 	public User findByEmailAndDeleted(String email, Boolean deleted);
 
-	public User findUserByUsername(String username);
+	Optional<User> findUserByUsername(String username);
 	
 	public List<User> findAllByRole(UserRole role);
 

@@ -3,12 +3,16 @@ package model;
 import javax.persistence.*;
 import dto.UserDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity(name = "users")
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User
 {
+
 
     public enum UserRole{ Patient, Doctor, Nurse, CentreAdmin}
 	
@@ -54,7 +58,8 @@ public class User
 	
 	@Column(name="verified")
 	private Boolean verified;
-	
+
+
 	public User()
 	{
 		super();
