@@ -26,7 +26,7 @@ public class ListUtil {
                  j++)
             {
 
-                if (list.get(i).getFirstname() == list.get(j).getFirstname()) {
+                if (list.get(i).getUsername() == list.get(j).getUsername()) {
                     if (i != j) {
                         indices.add(j);
                     }
