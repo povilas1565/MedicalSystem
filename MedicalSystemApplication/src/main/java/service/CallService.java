@@ -49,7 +49,6 @@ public class CallService {
     }
 
 
-
     public List<Call> getAllCallsForUser(Principal principal) {
         User user = getUserByPrincipal(principal);
         return callRepository.findAllByUsers(user);
@@ -83,3 +82,4 @@ public class CallService {
     }
 
 }
+
