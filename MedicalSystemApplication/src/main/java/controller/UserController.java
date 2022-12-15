@@ -158,7 +158,7 @@ public class UserController {
         return new ResponseEntity<>(new UserDTO(ret), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getUser/{userId}")
+    @GetMapping(value = "/{userId}")
     public ResponseEntity<UserDTO> getUserProfile(@PathVariable("userId") String userId) {
         User ret = userService.findUserById(Long.parseLong(userId));
 
