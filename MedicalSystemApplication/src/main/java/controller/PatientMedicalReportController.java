@@ -158,7 +158,7 @@ import java.util.List;
 
                 if(drug == null)
                 {
-                    header.set("responseText", "Drug not found: " + name);
+                    header.set("responseText", "drug not found: " + name);
                     return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
                 }
 
@@ -182,7 +182,7 @@ import java.util.List;
 
                 if(diagnosis == null)
                 {
-                    header.set("responseText", "Diagnosis not found: " + name);
+                    header.set("responseText", "diagnosis not found: " + name);
                     return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
                 }
 
