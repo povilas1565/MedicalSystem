@@ -40,7 +40,7 @@ public class DoctorController {
     private NotificationService notificationService;
 
     @PostMapping(value = "/makeNewDoctor", consumes = "application/json")
-    public ResponseEntity<Void> addNewDoctor(@RequestBody DoctorDTO dto) {
+        public ResponseEntity<Void> addNewDoctor(@RequestBody DoctorDTO dto) {
         Doctor d = (Doctor) userService.findByEmailAndDeleted(dto.getUser().getEmail(), false);
         Centre c = centreService.findByName(dto.getCentreName());
 
