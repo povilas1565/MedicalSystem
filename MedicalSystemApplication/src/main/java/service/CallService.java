@@ -61,6 +61,8 @@ public class CallService {
         call.setStartTime(callDTO.getStartTime());
         call.setEndTime(callDTO.getEndTime());
         call.setDuration(call.getDuration());
+        call.setAudio(call.getAudio());
+        call.setVideo(call.getVideo());
 
         LOG.info("Create new call for user: {}", user.getEmail());
         return callRepository.save(call);
