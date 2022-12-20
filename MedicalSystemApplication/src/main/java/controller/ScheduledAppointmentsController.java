@@ -75,9 +75,9 @@ public class ScheduledAppointmentsController {
     {
         List<AppointmentRequest> requests = appointmentRequestService.findAll();
 
-        for(AppointmentRequest request : requests)
+        for (AppointmentRequest request : requests)
         {
-            if(request.getAppointmentType().equals(Appointment.AppointmentType.Examination))
+            if (request.getAppointmentType().equals(Appointment.AppointmentType.Examination))
             {
                 List<Doctor> doctors = request.getDoctors();
                 reserve(request, request.getDate());
@@ -92,7 +92,7 @@ public class ScheduledAppointmentsController {
     {
         int hoursDelta = 1;
 
-        if(request.getAppointmentType().equals(Appointment.AppointmentType.Examination))
+        if (request.getAppointmentType().equals(Appointment.AppointmentType.Examination))
         {
             hoursDelta = 1;
         }
@@ -102,7 +102,7 @@ public class ScheduledAppointmentsController {
 
         Hall hall = findAvailableHall(request, start, end);
 
-        if(hall == null)
+        if (hall == null)
         {
             start = Scheduler.addHoursToJavaUtilDate(start, hoursDelta);
             reserve(request, start);
@@ -111,7 +111,7 @@ public class ScheduledAppointmentsController {
 
         Doctor doctor = findAvailableDoctor(request, start, end);
 
-        if(doctor == null)
+        if (doctor == null)
         {
             start = Scheduler.addHoursToJavaUtilDate(start, hoursDelta);
             reserve(request, start);
@@ -153,7 +153,7 @@ public class ScheduledAppointmentsController {
         Hibernate.initialize(request.getDoctors());
         List<Doctor> doctors = request.getDoctors();
 
-        for(Doctor d : doctors)
+        for (Doctor d : doctors)
         {
             DateInterval di = new DateInterval(util.transformToDay(start, d.getShiftStart()), util.transformToDay(end, d.getShiftEnd()));
 
@@ -169,7 +169,7 @@ public class ScheduledAppointmentsController {
 
         doctors = doctorService.findAllByCentreAndType(request.getCentre(), request.getPriceslist().getTypeOfExamination());
 
-        for(Doctor d : doctors)
+        for (Doctor d : doctors)
         {
             if(d.IsFreeOn(start) && checkAppointments(d, start, end))
             {
@@ -185,12 +185,12 @@ public class ScheduledAppointmentsController {
     {
         List<Appointment> apps = d.getAppointments();
 
-        for(Appointment app : apps)
+        for (Appointment app : apps)
         {
             DateInterval di1 = new DateInterval(start,end);
             DateInterval di2 = new DateInterval(app.getDate(),app.getEndDate());
 
-            if(DateUtil.getInstance().overlappingInterval(di1, di2))
+            if (DateUtil.getInstance().overlappingInterval(di1, di2))
             {
                 return false;
             }
@@ -202,19 +202,19 @@ public class ScheduledAppointmentsController {
     public Hall findAvailableHall(AppointmentRequest request, Date start, Date end)
     {
         List<Hall> halls = hallService.findAllByCentre(request.getCentre());
-        for(Hall hall : halls)
+        for (Hall hall : halls)
         {
             List<Appointment> apps = appointmentService.findAllByHall(hall);
             List<DateInterval> intervals = Scheduler.getFreeIntervals(apps, start);
 
-            if(intervals.size() == 0)
+            if (intervals.size() == 0)
             {
                 return hall;
             }
 
-            for(DateInterval di : intervals)
+            for (DateInterval di : intervals)
             {
-                if(DateUtil.getInstance().insideInterval(start, di) && DateUtil.getInstance().insideInterval(end, di))
+                if (DateUtil.getInstance().insideInterval(start, di) && DateUtil.getInstance().insideInterval(end, di))
                 {
                     return hall;
                 }
