@@ -149,7 +149,7 @@ public class AppointmentController {
         return new ResponseEntity<>(new AppointmentDTO(appointmentReq),HttpStatus.OK);
     }
 
-    @GetMapping(value ="/clinic/getAllRequests/{centreName}")
+    @GetMapping(value ="/centre/getAllRequests/{centreName}")
     public ResponseEntity<AppointmentDTO[]> getAppointmentRequests(@PathVariable("centreName") String centre)
     {
         List<AppointmentRequest> list = appointmentRequestService.getAllByCentre(centre);
@@ -169,7 +169,7 @@ public class AppointmentController {
         return new ResponseEntity<>(dtos.toArray(new AppointmentDTO[dtos.size()]),HttpStatus.OK);
     }
 
-    @GetMapping(value ="/clinic/getAllAppointments/{centreName}")
+    @GetMapping(value ="/centre/getAllAppointments/{centreName}")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentre(@PathVariable("centreName") String centreName)
     {
 
@@ -197,7 +197,7 @@ public class AppointmentController {
         return new ResponseEntity<>(dtos,HttpStatus.OK);
     }
 
-    @GetMapping(value ="/clinic/getAllAppointmentsToday/{centreName}")
+    @GetMapping(value ="/centre/getAllAppointmentsToday/{centreName}")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreToday(@PathVariable("centreName") String centreName)
     {
 
@@ -231,7 +231,7 @@ public class AppointmentController {
     }
 
 
-    @GetMapping(value ="/clinic/getAllAppointmentsWeek/{centreName}")
+    @GetMapping(value ="/centre/getAllAppointmentsWeek/{centreName}")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreWeekly(@PathVariable("centreName") String centreName)
     {
         Calendar cal = Calendar.getInstance();
@@ -275,7 +275,7 @@ public class AppointmentController {
     }
 
 
-    @GetMapping(value ="/clinic/getAllAppointmentsMonth/{centreName}")
+    @GetMapping(value ="/centre/getAllAppointmentsMonth/{centreName}")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreMonth(@PathVariable("centreName") String centreName)
     {
         Calendar cal = Calendar.getInstance();
@@ -748,7 +748,7 @@ public class AppointmentController {
                     .queryParam("hall", appointment.getHall().getNumber())
                     .queryParam("confirmed", false);
 
-            notificationService.sendNotification("", "Confirm preview","The centre administrator has approved your request for examination. Confirm by going to the link:" + builderRootAccept.toUriString() + " Refuse by going to the link:"+ builderRootDeny.toUriString());
+            notificationService.sendNotification("prerecover07@gmail.com ", "Confirm preview","The centre administrator has approved your request for examination. Confirm by going to the link:" + builderRootAccept.toUriString() + " Refuse by going to the link:"+ builderRootDeny.toUriString());
 
             notificationService.sendNotification(appointment.getDoctors().get(0).getEmail(), "Admin has booked an appointment to review", "Admin booked a date review " + DateUtil.getInstance().getString(appointment.getDate(), "dd-MM-yyyy HH:mm") + ", in the centre "+appointment.getCentre().getName() + ", in Room № " + appointment.getHall().getNumber()+ " and he choose you as a doctor.");
 
