@@ -121,7 +121,7 @@ public class DoctorController {
 
          if (appointments != null) {
              if (appointments.size() > 0) {
-                 header.set("responseText","Doctor("+email+") it cannot be deleted because it has "+appointments.size()+" scheduled examinations");
+                 header.set("responseText", "Doctor("+email+") it cannot be deleted because it has "+appointments.size()+" scheduled examinations");
                  return new ResponseEntity<Void>(header, HttpStatus.CONFLICT);
              }
          }

@@ -14,7 +14,7 @@ import service.AudioService;
 @RequestMapping(value = "api/audio")
 public class AudioController {
 
-    @Autowired
+    @Autowired(required = false)
     private AudioService audioService;
 
     @GetMapping("/{callId}/audio")

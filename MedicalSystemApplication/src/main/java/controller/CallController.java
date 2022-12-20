@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class CallController {
 
-    @Autowired
+    @Autowired(required = false)
     private CallFacade callFacade;
 
     @Autowired
     private CallService callService;
 
-    @Autowired
+    @Autowired(required = false)
     private ResponseErrorValidator responseErrorValidator;
 
     @PostMapping("/create")
