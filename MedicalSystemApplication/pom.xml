@@ -20,9 +20,31 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<maven.compiler.target>8</maven.compiler.target>
 	</properties>
 
 	<dependencies>
+		<!--Metrics-->
+		<dependency>
+			<!--Для подтягивания мета-данных приложения-->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>2.5.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-core</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+		<!--Metrics end-->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
