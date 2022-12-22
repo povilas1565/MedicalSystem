@@ -1,9 +1,11 @@
 package model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 public class Audio {
     @Id

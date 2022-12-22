@@ -133,7 +133,7 @@ public class AuthController
             patient.setPassword(hash);
             userService.save(patient);
             String requestURL = httpRequest.getRequestURL().toString();
-            String root = requestURL.split("api")[0] + "confirmRequest.html?reg="+req.getEmail();
+            String root = requestURL.split("api")[0] + req.getEmail();
             notificationService.sendNotification(req.getEmail(), "Registration Center",
                     "Your request for registration for the Medical Center has been accepted.\n\n Please confirm your registration by visiting the link:"+root);
             authService.delete(req);

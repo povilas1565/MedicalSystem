@@ -2,8 +2,9 @@ package model;
 
 import javax.persistence.*;
 import dto.UserDTO;
+import lombok.Data;
 
-
+@Data
 @Entity(name = "users")
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
