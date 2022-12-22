@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +14,17 @@ import model.User.UserRole;
 import repository.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
 
+    public static User loadUserById(Long userId) {
+		return null;
+	}
 
-	public void delete(User user) {
+
+    public void delete(User user) {
 		userRepository.delete(user);
 	}
 
@@ -64,5 +70,10 @@ public class UserService {
 		String username = principal.getName();
 		return userRepository.findUserByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+		return null;
 	}
 }
