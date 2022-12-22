@@ -17,8 +17,10 @@ import service.UserService;
 
 import java.util.ArrayList;
 
+
 @RestController
 @RequestMapping(value = "/api/admins/centre")
+@CrossOrigin
 public class CentreAdminController {
 
     @Autowired

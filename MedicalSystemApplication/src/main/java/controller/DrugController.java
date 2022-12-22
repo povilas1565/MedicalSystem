@@ -11,8 +11,10 @@ import service.DrugService;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value = "api/drug")
+@CrossOrigin
 public class DrugController {
 
     @Autowired

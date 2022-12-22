@@ -15,6 +15,7 @@ import java.util.List;
 
     @RestController
     @RequestMapping(value = "api/reports")
+    @CrossOrigin
     public class PatientMedicalReportController {
 
         @Autowired

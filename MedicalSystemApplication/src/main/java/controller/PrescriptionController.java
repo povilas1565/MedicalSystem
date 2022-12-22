@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/prescription")
+@CrossOrigin
 public class PrescriptionController {
     @Autowired
     private PrescriptionService prescriptionService;

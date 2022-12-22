@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/vacation")
+@CrossOrigin
 public class VacationController {
 
     @Autowired

@@ -11,8 +11,10 @@ import service.DiagnosisService;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value = "api/diagnosis")
+@CrossOrigin
 public class DiagnosisController {
 
     @Autowired

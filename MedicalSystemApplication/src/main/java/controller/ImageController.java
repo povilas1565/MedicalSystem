@@ -12,8 +12,10 @@ import service.ImageService;
 import java.io.IOException;
 import java.security.Principal;
 
+
 @RestController
 @RequestMapping(value = "api/image")
+@CrossOrigin
 public class ImageController {
 
     @Autowired

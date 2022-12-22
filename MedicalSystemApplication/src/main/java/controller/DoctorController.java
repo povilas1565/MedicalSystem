@@ -23,8 +23,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value = "api/doctors")
+@CrossOrigin
 public class DoctorController {
 
     @Autowired

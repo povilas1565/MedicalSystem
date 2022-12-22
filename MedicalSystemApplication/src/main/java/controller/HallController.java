@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value = "api/hall")
+@CrossOrigin
 public class HallController {
 
     @Autowired

@@ -29,6 +29,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/centre")
+@CrossOrigin
 public class CentreController {
 
     @Autowired

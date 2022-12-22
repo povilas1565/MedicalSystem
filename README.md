@@ -1,10 +1,10 @@
-# Clinic-Centre-System
+# Medical-Centre-System
 
 ## Introduction
-Web based application made for patients and Clinic Centre. Made for a course at Faculty of technical sciences in Novi Sad.
+Web based application made for patients and Centre. 
 
 ### Technologies used:
-- **Backend:** Java + SpringBoot + PostgreSQL
-- **Frontend:** JQuery + HTML + CSS
+- **Backend:** Java + SpringBoot + PostgreSQL + Hibernate
+
 
 
