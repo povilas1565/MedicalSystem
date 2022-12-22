@@ -22,7 +22,8 @@ public class CentreAdmin extends User {
     private  List<VacationRequest> vacationRequests;
 
     public CentreAdmin(){
-    	setRole(UserRole.CentreAdmin);
+        super();
+        setRole(UserRole.CentreAdmin);
     	this.setIsFirstLog(true);
     }
 

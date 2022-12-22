@@ -34,6 +34,7 @@ public class Nurse extends User{
 
 
     public Nurse() {
+        super();
     }
 
 

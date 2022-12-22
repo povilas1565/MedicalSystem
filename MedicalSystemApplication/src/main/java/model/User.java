@@ -3,18 +3,22 @@ package model;
 import javax.persistence.*;
 import dto.UserDTO;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 
 @Entity(name = "users")
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class User
-{
+public class User   {
 
+	public User() {
 
-    public enum UserRole{ Patient, Doctor, Nurse, CentreAdmin}
+	}
+
+	public enum UserRole{ Patient, Doctor, Nurse, CentreAdmin}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,15 +56,16 @@ public class User
 	
 	@Column(name = "phone", nullable = false)
 	private String phone;
-	
+
 	@Column(name = "role", nullable = false)
 	private UserRole role;
-	
+
 	@Column(name="verified")
 	private Boolean verified;
 
 
-	public User()
+
+	public User(Long id, String username, String password, String email, String firstname, String lastname, String state, String city, String date_of_birth, String phone, Boolean deleted, Boolean verified)
 	{
 		super();
 		this.deleted = false;
@@ -78,7 +83,6 @@ public class User
 		this.state = state;
 		this.date_of_birth = date_of_birth;
 		this.phone = phone;
-		this.role = role;
 		this.deleted = false;
 		this.verified = true;
 	}
@@ -162,6 +166,7 @@ public class User
 
 	public String getUsername() { return username; }
 
+
 	public void setUsername(String username) { this.username = username; }
 
 
@@ -223,16 +228,16 @@ public class User
 		return phone;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
 	public UserRole getRole() {
 		return role;
 	}
 
 	public void setRole(UserRole role) {
-		this.role = role;
+		this.role= role;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public Long getId() {

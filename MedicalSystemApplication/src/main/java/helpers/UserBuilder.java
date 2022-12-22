@@ -1,7 +1,5 @@
 package helpers;
 
-import javax.persistence.Column;
-
 import model.User;
 import model.User.UserRole;
 
