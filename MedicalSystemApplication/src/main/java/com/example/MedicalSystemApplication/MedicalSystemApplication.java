@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EntityScan("model") 
 @EnableJpaRepositories(basePackages="repository") 
-@SpringBootApplication(scanBasePackages = {"model","service","security", "repository","controller","org.nil"})
+@SpringBootApplication(scanBasePackages = {"model","service","repository","controller","org.nil"})
 @EnableScheduling
 public class MedicalSystemApplication {
 

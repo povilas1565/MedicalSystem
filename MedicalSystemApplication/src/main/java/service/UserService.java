@@ -14,17 +14,12 @@ import model.User.UserRole;
 import repository.UserRepository;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
 
-    public static User loadUserById(Long userId) {
-		return null;
-	}
-
-
-    public void delete(User user) {
+	public void delete(User user) {
 		userRepository.delete(user);
 	}
 
@@ -45,11 +40,7 @@ public class UserService implements UserDetailsService {
 	public User findById(Long id) {
 		Optional<User> user = userRepository.findById(id);
 
-		if (user.isPresent()) {
-			return user.get();
-		}
-
-		return null;
+		return user.orElse(null);
 
 	}
 
@@ -71,9 +62,6 @@ public class UserService implements UserDetailsService {
 		return userRepository.findUserByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
 	}
-
-	@Override
-	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-		return null;
-	}
 }
+
+
