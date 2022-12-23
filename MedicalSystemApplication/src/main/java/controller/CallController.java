@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value ="/api/post")
+@RequestMapping(value ="/api/call")
 @CrossOrigin
 public class CallController {
 
