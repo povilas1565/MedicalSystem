@@ -9,16 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import service.StripeService;
 
 @RestController
+@RequestMapping(value = "api/charge")
 public class ChargeController {
 
     @Autowired
     private StripeService paymentsService;
 
-    @PostMapping(value ="/charge")
+    @PostMapping("/charge")
     public String charge(ChargeRequest chargeRequest, Model model)
             throws StripeException, APIException {
         chargeRequest.setDescription("Example charge");
