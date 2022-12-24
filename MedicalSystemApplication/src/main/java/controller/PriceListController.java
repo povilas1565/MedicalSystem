@@ -62,6 +62,7 @@ public class PriceListController {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
+
     @GetMapping(value="/getAllByCentre/{centreName}")
     public ResponseEntity<List<PriceListDTO>> getAllTypeExaminationByCentre(@PathVariable("centreName") String centreName)
     {

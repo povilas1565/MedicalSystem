@@ -16,13 +16,13 @@ public class Call {
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
 
-       @Column(name = "startTime", nullable = true)
+       @Column(name = "startTime", nullable = false)
        private Date startTime;
 
-       @Column(name = "endTime", nullable = true)
+       @Column(name = "endTime", nullable = false)
        private Date endTime;
 
-        @Column(name = "duration", nullable = true)
+        @Column(name = "duration", nullable = false)
         private long duration;
 
         @JsonIgnore

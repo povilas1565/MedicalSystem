@@ -149,8 +149,6 @@ import java.util.List;
                 return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
             }
 
-
-
             Prescription pr = new Prescription();
             pr.setDescription(dto.getPrescription().getDescription());
             for(String name : dto.getPrescription().getDrugs())
