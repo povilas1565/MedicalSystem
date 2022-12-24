@@ -98,7 +98,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/getAppointment/{centreName}/{date}/{hallNumber}")
-    public ResponseEntity<AppointmentDTO> getApp(@PathVariable("centreName") String centre, @PathVariable("date") String date, @PathVariable("hallNumber") int hallNumber)
+    public ResponseEntity<AppointmentDTO> getAppointment(@PathVariable("centreName") String centre, @PathVariable("date") String date, @PathVariable("hallNumber") int hallNumber)
     {
         Appointment appointment = appointmentService.findAppointment(date, hallNumber, centre);
 
@@ -151,7 +151,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/centre/getAllRequests/{centreName}")
-    public ResponseEntity<AppointmentDTO[]> getAppointmentRequests(@PathVariable("centreName") String centre)
+    public ResponseEntity<AppointmentDTO[]> getAllAppointmentRequests(@PathVariable("centreName") String centre)
     {
         List<AppointmentRequest> list = appointmentRequestService.getAllByCentre(centre);
 
@@ -371,7 +371,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value="/patient/getAll/{email}")
-    public ResponseEntity<List<AppointmentDTO>> getAppointments(@PathVariable("email") String email)
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointments(@PathVariable("email") String email)
     {
         Patient  p = null;
 
@@ -1005,7 +1005,7 @@ public class AppointmentController {
 
         if(app == null)
         {
-            headers.set("responseText", "App not found for: " + dto.getDate() + " " + dto.getHallNumber() + " " + dto.getCentreName());
+            headers.set("responseText", "Appointment not found for: " + dto.getDate() + " " + dto.getHallNumber() + " " + dto.getCentreName());
             return new ResponseEntity<>(headers,HttpStatus.NOT_FOUND);
         }
 
@@ -1063,7 +1063,7 @@ public class AppointmentController {
 
         if(app == null)
         {
-            headers.set("responseText", "App not found for: " + dto.getDate() + " " + dto.getHallNumber() + " " + dto.getCentreName());
+            headers.set("responseText", "Appointment not found for: " + dto.getDate() + " " + dto.getHallNumber() + " " + dto.getCentreName());
             return new ResponseEntity<>(headers,HttpStatus.NOT_FOUND);
         }
 
