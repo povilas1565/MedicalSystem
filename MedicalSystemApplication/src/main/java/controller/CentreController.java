@@ -11,6 +11,8 @@ import helpers.DateUtil;
 import helpers.ListUtil;
 import helpers.Scheduler;
 import helpers.UserSortingComparator;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/centre")
 @CrossOrigin
+@Api
 public class CentreController {
 
     @Autowired
@@ -45,6 +48,7 @@ public class CentreController {
     private NotificationService notificationService;
 
     @PostMapping(value = "/registerCentre", consumes = "application/json")
+    @ApiOperation("Создание центров")
     public ResponseEntity<Void> registerCentre(@RequestBody CentreDTO dto, HttpServletRequest request) {
         Centre c = centreService.findByName((dto.getName()));
 
@@ -67,6 +71,7 @@ public class CentreController {
     }
 
     @GetMapping(value = "/getNurse/{nurseEmail}")
+    @ApiOperation("Поиск центров по работающим в них медработникам")
     public ResponseEntity<CentreDTO> getCentreFromNurse(@PathVariable("nurseEmail") String nurseEmail) {
         Nurse n = (Nurse) userService.findByEmailAndDeleted(nurseEmail,false);
 
@@ -79,6 +84,7 @@ public class CentreController {
     }
 
     @GetMapping(value = "/getAll")
+    @ApiOperation("Поиск всех центров")
     public ResponseEntity<CentreDTO[]> getCentres() {
         List<Centre> centres = centreService.findAllSafe();
         List<CentreDTO> centresDTO = new ArrayList<CentreDTO>();
@@ -95,6 +101,7 @@ public class CentreController {
     }
 
     @PostMapping(value = "/getAll/{date}/{type}")
+    @ApiOperation("Поиск всех центров с фильтрами даты и типа")
     public ResponseEntity<CentreDTO[]> getCentresWithFilter(@RequestBody CentreFilterDTO dto, @PathVariable("date") String date, @PathVariable("type") String typeOfExamination) {
         List<Centre> centres = centreService.findAllSafe();
         List<CentreDTO> centresDTO = new ArrayList<CentreDTO>();
@@ -126,6 +133,7 @@ public class CentreController {
     }
 
     @GetMapping(value = "/getPatients/{centreName}")
+    @ApiOperation("Получение пациентов центров по названиям центров")
     public ResponseEntity<List<UserDTO>> getCentrePatients(@PathVariable("centreName") String centreName) {
         Centre c = centreService.findByName(centreName);
 
@@ -160,6 +168,7 @@ public class CentreController {
     }
 
     @PostMapping(value = "/getPatientsByFilter/{centreName}", consumes = "application/json")
+    @ApiOperation("Получение пациентов центров по названиям центром и фильтрация")
     public ResponseEntity<List<UserDTO>> getCentrePatientByFilter(@PathVariable("centreName") String centreName, @RequestBody UserDTO dto) {
         HttpHeaders header = new HttpHeaders();
         Centre c = centreService.findByName(centreName);
@@ -204,6 +213,7 @@ public class CentreController {
     }
 
     @GetMapping(value="/getDoctorsByType/{centreName}/{typeOfExamination}")
+    @ApiOperation("Получение докторов по типам услуг и названиям центров")
     public ResponseEntity<List<DoctorDTO>> getClinicDoctorsByType(@PathVariable("centreName") String centreName, @PathVariable("typeOfExamination") String typeOfExamination)
     {
         Centre centre = centreService.findByName(centreName);
@@ -229,6 +239,7 @@ public class CentreController {
     }
 
     @GetMapping(value="/getDoctorsByTypeAndVacation/{centreName}/{typeOfExamination}/{date}")
+    @ApiOperation("Получение докторов по типам услуг, названиям центров и отпускам")
     public ResponseEntity<DoctorDTO[]> getCentreDoctorsByTypeAndVacation(@PathVariable("centreName") String centreName, @PathVariable("typeOfExamination") String typeOfExamination, @PathVariable("date") String date)
     {
         Centre centre = centreService.findByName(centreName);

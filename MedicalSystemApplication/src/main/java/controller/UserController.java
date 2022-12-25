@@ -2,6 +2,8 @@ package controller;
 
 import dto.*;
 import helpers.SecurePasswordHasher;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.*;
 import model.User.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/users")
 @CrossOrigin
+@Api
 public class UserController {
 
     @Autowired
@@ -41,6 +44,7 @@ public class UserController {
     private MedicalRecordService medicalRecordService;
 
     @PutMapping(value = "/update/{email}")
+    @ApiOperation("Обновление(добавление, изменение) данных пользователя")
     public ResponseEntity<Void> updateUser(@RequestBody UserDTO dto, @PathVariable("email") String email) {
         User user = userService.findByEmailAndDeleted(email, false);
 
@@ -60,6 +64,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/update/password/{email}", consumes = "application/json")
+    @ApiOperation("Обновление(изменение) пароля")
     public ResponseEntity<Void> updatePassword(@PathVariable("email") String email, @RequestBody PasswordDTO dto) {
         System.out.println(email);
         User user = userService.findByEmailAndDeleted(email, false);
@@ -86,6 +91,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/update/firstPassword/{email}", consumes = "application/json")
+    @ApiOperation("Обновление(изменение) пароля")
     public ResponseEntity<Void> updateFirstPassword(@PathVariable("email") String email, @RequestBody PasswordDTO dto) {
         User user = userService.findByEmailAndDeleted(email,false);
         if (user != null) {
@@ -105,6 +111,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/getPatient/{email}")
+    @ApiOperation("Получение данных пациентов")
     public ResponseEntity<UserDTO> getPatient(@PathVariable("email") String email) {
         Patient ret = (Patient) userService.findByEmailAndDeleted(email, false);
 
@@ -116,6 +123,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/getDoctor/{email}")
+    @ApiOperation("Получение данных докторов")
     public ResponseEntity<DoctorDTO> getDoctor(@PathVariable("email") String email)  {
         Doctor ret = (Doctor) userService.findByEmailAndDeleted(email, false);
 
@@ -127,6 +135,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/getNurse/{email}")
+    @ApiOperation("Получение данных медработников")
     public ResponseEntity<NurseDTO> getNurse(@PathVariable("email") String email) {
         Nurse ret = (Nurse) userService.findByEmailAndDeleted(email, false);
 
@@ -138,6 +147,7 @@ public class UserController {
     }
 
     @GetMapping(value="/getCentreAdmin/{email}")
+    @ApiOperation("Получение данных администраторв центров")
     public ResponseEntity<UserDTO> getCentreAdmin(@PathVariable("email") String email) {
         User ret = (User) userService.findByEmailAndDeleted(email, false);
 
@@ -149,6 +159,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/getUser/{email}")
+    @ApiOperation("Получение данных обычных пользователей")
     public ResponseEntity<UserDTO> getUser(@PathVariable("email") String email) {
         User ret = userService.findByEmailAndDeleted(email, false);
 
@@ -160,6 +171,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{userId}")
+    @ApiOperation("Получение профилей пользователей по Id")
     public ResponseEntity<UserDTO> getUserProfile(@PathVariable("userId") String userId) {
         User ret = userService.findUserById(Long.parseLong(userId));
 
@@ -172,6 +184,7 @@ public class UserController {
 
 
     @GetMapping(value = "/getAll/{role}")
+    @ApiOperation("Получение всех пользователей по конкретным role")
     public ResponseEntity<List<UserDTO>> geAllUserByRole(@PathVariable("role") UserRole role) {
 
         List<User> ret = userService.getAll(role);
@@ -190,6 +203,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/getAll")
+    @ApiOperation("Получение всех пользователей")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<User> ret = userService.getAll();
         List<UserDTO> dtos = new ArrayList<UserDTO>();
@@ -207,6 +221,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/patient/getMedicalRecord/{email}")
+    @ApiOperation("Получение медкарт пациентов")
     public ResponseEntity<MedicalRecordDTO> getMedicalRecord(@PathVariable("email") String email) {
         Patient patient = (Patient) userService.findByEmailAndDeleted(email, false);
 
@@ -221,6 +236,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/patient/updateMedicalRecord/{email}")
+    @ApiOperation("Обновление(изменение) данных медкарт пациентов")
     ResponseEntity<Void> updateMedicalRecord(@PathVariable("email") String email, @RequestBody MedicalRecordDTO dto) {
         Patient patient = (Patient) userService.findByEmailAndDeleted(email, false);
         MedicalRecord record = medicalRecordService.findByPatient(patient);

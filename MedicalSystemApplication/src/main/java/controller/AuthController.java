@@ -3,6 +3,8 @@ package controller;
 import dto.LoginDTO;
 import dto.SessionUserDTO;
 import helpers.SecurePasswordHasher;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Patient;
 import model.RegistrationRequest;
 import model.User;
@@ -24,7 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/auth")
 @CrossOrigin
-
+@Api
 public class AuthController
 {
     @Autowired
@@ -37,6 +39,7 @@ public class AuthController
     private UserService userService;
 
     @PostMapping(value = "/login", consumes = "application/json")
+    @ApiOperation("Вход")
     public ResponseEntity<SessionUserDTO> login(@RequestBody LoginDTO dto, HttpServletResponse response) {
         HttpHeaders header = new HttpHeaders();
 
@@ -74,7 +77,9 @@ public class AuthController
         return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
     }
 
+
     @PutMapping(value="/verifyAccount/{email}")
+    @ApiOperation("Проверка и обновление cозданного аккаунта")
     public ResponseEntity<Void> verifyAccount(@PathVariable("email") String email)
     {
         User u = userService.
@@ -96,6 +101,7 @@ public class AuthController
     }
 
     @PostMapping(value = "/registerRequest",consumes = "application/json")
+    @ApiOperation("Регистрация")
     public ResponseEntity<Void> requestRegistration(@RequestBody RegistrationRequest request)
     {
         RegistrationRequest req = authService.
@@ -113,6 +119,7 @@ public class AuthController
     }
 
     @PostMapping(value = "/confirmRegister/{email}")
+    @ApiOperation("Подтверждение пароля при регистрации")
     public ResponseEntity<Void> confirmRegister(@PathVariable("email") String email, HttpServletRequest httpRequest)
     {
         RegistrationRequest req = authService.
@@ -148,6 +155,7 @@ public class AuthController
     }
 
     @DeleteMapping(value ="/denyRegister/{reply}")
+    @ApiOperation("Отмена регистрации")
     public ResponseEntity<Void> denyRegistration(@PathVariable("reply") String reply)
     {
 
@@ -176,6 +184,7 @@ public class AuthController
     }
 
     @GetMapping(value = "/sessionUser")
+    @ApiOperation("Получение и нахождения конкретного пользователя приложения")
     public ResponseEntity<SessionUserDTO> getSessionUser(@CookieValue(value = "email", defaultValue = "none") String email)
     {
         if(email == null || email == "none")
@@ -197,6 +206,7 @@ public class AuthController
     }
 
     @PostMapping(value = "/logout")
+    @ApiOperation("Выход")
     public ResponseEntity<Void> logout(HttpServletResponse response)
     {
         Cookie cookie = new Cookie("email",null);
@@ -207,6 +217,7 @@ public class AuthController
     }
 
     @GetMapping(value = "/getAllRegRequest")
+    @ApiOperation("Получение всех запросов на регистрацию")
     public ResponseEntity<List<RegistrationRequest>> getRegRequests()
     {
         List<RegistrationRequest> ret = authService.getAll();

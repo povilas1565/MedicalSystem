@@ -2,6 +2,8 @@ package controller;
 
 import dto.PatientMedicalReportDTO;
 import dto.PrescriptionDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +18,7 @@ import java.util.List;
     @RestController
     @RequestMapping(value = "api/reports")
     @CrossOrigin
+    @Api
     public class PatientMedicalReportController {
 
         @Autowired
@@ -41,6 +44,7 @@ import java.util.List;
 
 
         @GetMapping(value = "/getAllReports/{email}")
+        @ApiOperation("Получение всевозможных отчетов согласно email")
         public ResponseEntity<List<PatientMedicalReportDTO>> getAllReports(@PathVariable("email")String email)
         {
             HttpHeaders header = new HttpHeaders();
@@ -66,6 +70,7 @@ import java.util.List;
         }
 
         @PutMapping(value = "/updateReport/{id}")
+        @ApiOperation("Обновление(изменение) отчета по id")
         public ResponseEntity<Void> updateReport(@PathVariable("id")long id, @RequestBody PatientMedicalReportDTO dto)
         {
             HttpHeaders header = new HttpHeaders();
@@ -106,6 +111,7 @@ import java.util.List;
         }
 
         @GetMapping(value = "/getReportPrescription/{reportId}")
+        @ApiOperation("Получение отчета по рецепту согласно его id")
         public ResponseEntity<PrescriptionDTO> getReport(@PathVariable("reportId")long reportId)
         {
             HttpHeaders header = new HttpHeaders();
@@ -124,6 +130,7 @@ import java.util.List;
         }
 
         @PostMapping(value="/addPatientMedicalReport/{email}")
+        @ApiOperation("Cоздание нового медицинского отчета пациента")
         public ResponseEntity<Void> addPatientMedicalReport(@PathVariable("email") String email, @RequestBody PatientMedicalReportDTO dto)
         {
             HttpHeaders header = new HttpHeaders();

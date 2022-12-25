@@ -1,6 +1,8 @@
 package controller;
 
 import dto.PriceListDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Appointment;
 import model.Centre;
 import model.Priceslist;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/priceList")
 @CrossOrigin
+@Api
 public class PriceListController {
 
     @Autowired
@@ -30,6 +33,7 @@ public class PriceListController {
     private AppointmentService appointmentService;
 
     @DeleteMapping(value="/deletePriceList/{typeOfExamination}/{centreName}")
+    @ApiOperation("Удаление pricelist")
     public ResponseEntity<Void> deletePriceList(@PathVariable("typeOfExamination") String typeOfExamination, @PathVariable("centreName") String centreName)
     {
         Priceslist priceList = priceListService.findByTypeOfExaminationAndCentre(typeOfExamination, centreName);
@@ -64,6 +68,7 @@ public class PriceListController {
     }
 
     @GetMapping(value="/getAllByCentre/{centreName}")
+    @ApiOperation("Получение всех typeOfExamination по названиям центров")
     public ResponseEntity<List<PriceListDTO>> getAllTypeExaminationByCentre(@PathVariable("centreName") String centreName)
     {
         Centre c  = centreService.findByName(centreName);
@@ -94,6 +99,7 @@ public class PriceListController {
     }
 
     @GetMapping(value="/getAll")
+    @ApiOperation("Получение всех typeOfExamination")
     public ResponseEntity<List<PriceListDTO>> getAllTypeExamination()
     {
         List<Priceslist> pricesList = priceListService.findAll();
@@ -117,6 +123,7 @@ public class PriceListController {
     }
 
     @GetMapping(value="/get/{typeOfExamination}/{centreName}")
+    @ApiOperation("Получение конкретных typeOfExamination по названиям центров")
     public ResponseEntity<PriceListDTO> getTypeOfExamination(@PathVariable("typeOfExamination") String typeOfExamination, @PathVariable("centreName") String centreName)
     {
         Priceslist priceList= priceListService.findByTypeOfExaminationAndCentre(typeOfExamination, centreName);
@@ -135,6 +142,7 @@ public class PriceListController {
     }
 
     @PutMapping(value="/update/{typeOfExamination}/{centreName}")
+    @ApiOperation("Обновление(изменение) typeOfExamination по названиям центров")
     public ResponseEntity<Void> update(@RequestBody PriceListDTO pricesList, @PathVariable("typeOfExamination") String typeOfExamination, @PathVariable("centreName") String centreName)
     {
         Priceslist oldPricesList = priceListService.findByTypeOfExaminationAndCentre(typeOfExamination, centreName);
@@ -160,7 +168,9 @@ public class PriceListController {
         priceListService.save(oldPricesList);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PostMapping(value ="/add", consumes = "application/json")
+    @ApiOperation("Добавление")
     public ResponseEntity<Void> add(@RequestBody PriceListDTO dto)
     {
 

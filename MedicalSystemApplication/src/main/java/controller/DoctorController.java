@@ -8,6 +8,8 @@ import helpers.DateInterval;
 import helpers.DateUtil;
 import helpers.Scheduler;
 import helpers.SecurePasswordHasher;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/doctors")
 @CrossOrigin
+@Api
 public class DoctorController {
 
     @Autowired
@@ -42,6 +45,7 @@ public class DoctorController {
     private NotificationService notificationService;
 
     @PostMapping(value = "/makeNewDoctor", consumes = "application/json")
+    @ApiOperation("Добавление нового доктора")
         public ResponseEntity<Void> addNewDoctor(@RequestBody DoctorDTO dto) {
         Doctor d = (Doctor) userService.findByEmailAndDeleted(dto.getUser().getEmail(), false);
         Centre c = centreService.findByName(dto.getCentreName());
@@ -73,6 +77,7 @@ public class DoctorController {
 }
 
          @PostMapping(value = "/addReview")
+         @ApiOperation("Добавить отзыв")
          public ResponseEntity<Void> addReview(@RequestBody ReviewDTO dto) {
 
          Doctor doctor = (Doctor) userService.findByEmailAndDeleted(dto.getDoctorEmail(), false);
@@ -98,6 +103,7 @@ public class DoctorController {
      }
 
      @GetMapping(value = "/getCentre/{email}")
+     @ApiOperation("Получение центров по работающим в них докторам")
      public ResponseEntity<CentreDTO> getCentreByDoctor(@PathVariable("email") String email) {
         Doctor d = (Doctor) userService.findByEmailAndDeleted(email, false);
 
@@ -111,6 +117,7 @@ public class DoctorController {
      }
 
      @DeleteMapping(value = "/removeDoctor/{email}")
+     @ApiOperation("Удаление докторов")
      public ResponseEntity<Void> removeDoctor(@PathVariable("email") String email) {
          HttpHeaders header = new HttpHeaders();
          Doctor doc = (Doctor) userService.findByEmailAndDeleted(email,false);
@@ -136,6 +143,7 @@ public class DoctorController {
      }
 
      @GetMapping(value = "/getBusyTime/{doctor}/{date}")
+     @ApiOperation("Получение времени когда докторы заняты")
      public ResponseEntity<List<DateIntervalDTO>> getBusyTime(@PathVariable("doctor") String doctorEmail, @PathVariable("date") String date) {
         Doctor d = (Doctor) userService.findByEmailAndDeleted(doctorEmail, false);
 
@@ -154,6 +162,7 @@ public class DoctorController {
      }
 
      @GetMapping(value = "/getFreeTime/{doctor}/{date}")
+     @ApiOperation("Получение времени когда докторы свободны")
      public ResponseEntity<List<DateIntervalDTO>> getFreeTime(@PathVariable("doctor") String doctorEmail, @PathVariable("date") String date) {
         Doctor d = (Doctor) userService.findByEmailAndDeleted(doctorEmail, false);
 

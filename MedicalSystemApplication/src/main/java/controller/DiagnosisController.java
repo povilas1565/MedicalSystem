@@ -1,6 +1,8 @@
 package controller;
 
 import dto.DiagnosisDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Diagnosis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +17,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/diagnosis")
 @CrossOrigin
+@Api
 public class DiagnosisController {
 
     @Autowired
     private DiagnosisService diagnosisService;
 
     @GetMapping(value = "/getAllDiagnosis")
+    @ApiOperation("Получение всех диагнозов")
     public ResponseEntity<List<DiagnosisDTO>> getDiagnosis() {
         List<Diagnosis> diagnosis = diagnosisService.findAll();
         List<DiagnosisDTO> diagnosisDTO = new ArrayList<DiagnosisDTO>();
@@ -37,6 +41,7 @@ public class DiagnosisController {
     }
 
     @PostMapping(value = "/addDiagnosis", consumes = "application/json")
+    @ApiOperation("Добавление диагнозов")
     public ResponseEntity<Void> addDiagnosis(@RequestBody DiagnosisDTO dto) {
         Diagnosis d = diagnosisService.findByCode(dto.getCode());
 
@@ -55,6 +60,7 @@ public class DiagnosisController {
     }
 
     @PutMapping(value = "/updateDiagnosis/{code}")
+    @ApiOperation("бновление(изменение) диагнозов согласно их кодам")
     public ResponseEntity<Void> updateDiagnosis(@RequestBody DiagnosisDTO dto, @PathVariable("code") String code) {
         Diagnosis diagnosis = diagnosisService.findByCode(code);
 
@@ -70,6 +76,7 @@ public class DiagnosisController {
     }
 
     @DeleteMapping(value = "/deleteDiagnosis/{code}")
+    @ApiOperation("Удаление диагнозов согласно их кодам")
     public ResponseEntity<Void> deleteDiagnosis(@PathVariable("code") String code) {
         Diagnosis diagnosis = diagnosisService.findByCode(code);
 

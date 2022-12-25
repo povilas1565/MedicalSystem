@@ -6,6 +6,8 @@ import dto.WeekDTO;
 import helpers.DateInterval;
 import helpers.DateUtil;
 import helpers.Scheduler;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Appointment;
 import model.Centre;
 import model.Doctor;
@@ -27,12 +29,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/utility")
 @CrossOrigin
+@Api
 public class UtilityController {
 
     @Autowired
     private UserService userService;
 
     @GetMapping(value="/date/getWeekInfo")
+    @ApiOperation("Получение информации о неделе")
     public ResponseEntity<WeekDTO> getWeekInfo()
     {
         Calendar cal = Calendar.getInstance();
@@ -50,6 +54,7 @@ public class UtilityController {
     }
 
     @GetMapping(value="/date/getMonthInfo")
+    @ApiOperation("Получение информации о месяце")
     public ResponseEntity<MonthDTO> getMonthInfo()
     {
 
@@ -77,6 +82,7 @@ public class UtilityController {
     }
 
     @GetMapping(value="/testDate/{date1}/{date2}/{date3}/{date4}")
+    @ApiOperation("Проверка дат")
     public ResponseEntity<Void> testDate(@PathVariable("date1") String d1, @PathVariable("date2") String d2, @PathVariable("date3") String d3, @PathVariable("date4") String d4)
     {
         DateUtil util = DateUtil.getInstance();
@@ -97,6 +103,7 @@ public class UtilityController {
     }
 
     @GetMapping(value = "/getBusyTime/{doctor}")
+    @ApiOperation("Получение времен занятости докторов")
     public ResponseEntity<List<DateIntervalDTO>> getBusy(@PathVariable("doctor") String doctorEmail)
     {
         Doctor d = (Doctor) userService.findByEmailAndDeleted(doctorEmail, false);
@@ -122,6 +129,7 @@ public class UtilityController {
     private CentreService centreService;
 
     @GetMapping(value="/hall/getBusyTime/{hallNumber}/{date}/{centreName}")
+    @ApiOperation("Получение времени загруженности аптек")
     public ResponseEntity<List<DateIntervalDTO>> getBusyHall(@PathVariable("hallNumber") int num, @PathVariable("date") String date,@PathVariable("centreName") String centreName)
     {
         Centre centre = centreService.findByName(centreName);

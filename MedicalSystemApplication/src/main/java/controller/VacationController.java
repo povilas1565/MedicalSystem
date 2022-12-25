@@ -2,6 +2,8 @@ package controller;
 
 import dto.VacationDTO;
 import helpers.DateUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/vacation")
 @CrossOrigin
+@Api
 public class VacationController {
 
     @Autowired
@@ -37,6 +40,7 @@ public class VacationController {
     private VacationService vacationService;
 
     @PostMapping(value ="/checkAvailability/{centreName}")
+    @ApiOperation("Проверка доступности тех или иных медработников по названиям центров")
     public ResponseEntity<Boolean> checkAvailabillity(@RequestBody VacationDTO vdto, @PathVariable("centreName") String centreName)
     {
 
@@ -92,6 +96,7 @@ public class VacationController {
     }
 
     @PostMapping(value ="/makeVacationRequest/{centreName}")
+    @ApiOperation("Создание нового запроса на отпуск")
     public ResponseEntity<Void> makeVacationRequest(@RequestBody VacationDTO vdto, @PathVariable("centreName") String centreName)
     {
         if (vdto.getUser() == null) {
@@ -128,6 +133,7 @@ public class VacationController {
     }
 
     @GetMapping(value ="/getAllVacationRequestsByCentre/{centreName}")
+    @ApiOperation("Получение всевозможных запросов на отпуски тех или иных медработников")
     public ResponseEntity<List<VacationDTO>> getAllVacationRequestsByCentre(@PathVariable("centreName") String centreName)
     {
         Centre c = centreService.findByName(centreName);
@@ -151,6 +157,7 @@ public class VacationController {
 
 
     @PostMapping(value = "/confirmVacationRequest")
+    @ApiOperation("Подтвердить запрос на отпуск")
     public ResponseEntity<Void> confirmVacationRequest(@RequestBody VacationDTO dto)
     {
         User user = userService.findByEmailAndDeleted(dto.getUser().getEmail(), false);
@@ -170,6 +177,7 @@ public class VacationController {
     }
 
     @DeleteMapping(value ="/denyVacationRequest/{denyText}")
+    @ApiOperation("Отклонить запрос на отпуск")
     public ResponseEntity<Void> denyVacationRequest (@RequestBody VacationDTO dto, @PathVariable("denyText") String denyText)
     {
         User user = userService.findByEmailAndDeleted(dto.getUser().getEmail(), false);
@@ -190,6 +198,7 @@ public class VacationController {
 
 
     @GetMapping(value ="/getAllVacationsByUser/{email}")
+    @ApiOperation("Получение всех отпусков по пользователям")
     public ResponseEntity<List<VacationDTO>> getAllVacationsByUser(@PathVariable ("email") String email)
     {
         User u = userService.findByEmailAndDeleted(email, false);

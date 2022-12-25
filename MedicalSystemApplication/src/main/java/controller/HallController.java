@@ -4,6 +4,8 @@ import dto.HallDTO;
 import filters.FilterFactory;
 import filters.HallFilter;
 import helpers.DateUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Appointment;
 import model.Centre;
 import model.Hall;
@@ -24,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/hall")
 @CrossOrigin
+@Api
 public class HallController {
 
     @Autowired
@@ -36,6 +39,7 @@ public class HallController {
     private CentreService centreService;
 
     @GetMapping(value = "/getHallBusyDays/{centreName}/{hallNumber}")
+    @ApiOperation("Получение максимально-загруженных дней в аптеках")
     public ResponseEntity<List<Date>> getHallBusyFromHallAndCentre(@PathVariable("centreName") String centreName, @PathVariable ("hallNumber") int hallNumber)
     {
         Centre c = centreService.findByName(centreName);
@@ -67,6 +71,7 @@ public class HallController {
     }
 
     @GetMapping(value = "/getAll")
+    @ApiOperation("Получение всех аптек")
     public ResponseEntity<List<HallDTO>> getHalls()
     {
         List<Hall> halls = hallService.findAll();
@@ -90,6 +95,7 @@ public class HallController {
 
 
     @PostMapping(value = "/getAllByFilter",consumes = "application/json")
+    @ApiOperation("Поиск всех аптек при помощи фильтра")
     public ResponseEntity<HallDTO[]> getHallsFilter(@RequestBody HallDTO dto)
     {
 
@@ -143,6 +149,7 @@ public class HallController {
     }
 
     @GetMapping(value = "/getAllByCentre/{centreName}")
+    @ApiOperation("Получение всех аптек для центров")
     public ResponseEntity<List<HallDTO>> getHalls(@PathVariable("centreName") String centreName)
     {
         HttpHeaders header = new HttpHeaders();
@@ -168,6 +175,7 @@ public class HallController {
     }
 
     @DeleteMapping(value="/deleteHall/{number}/{centreName}")
+    @ApiOperation("Удаление аптек")
     public ResponseEntity<Void> deleteHall(@PathVariable ("number") int number, @PathVariable("centreName") String centreName)
     {
         Centre centre = centreService.findByName(centreName);
@@ -207,6 +215,7 @@ public class HallController {
     }
 
     @PutMapping(value="/changeHall/{oldNumber}/{newNumber}/{newName}/{centreName}")
+    @ApiOperation("Обновление(изменение) данных аптек")
     public ResponseEntity<Void> changeHall(@PathVariable("oldNumber") int oldNumber, @PathVariable("newNumber") int newNumber, @PathVariable("newName") String newName, @PathVariable("centreName") String centreName)
     {
         Centre centre = centreService.findByName(centreName);
@@ -243,6 +252,7 @@ public class HallController {
     }
 
     @GetMapping(value="/get/{number}/{centreName}")
+    @ApiOperation("Получение аптек по номерам")
     public ResponseEntity<HallDTO> getHallByNumber(@PathVariable("number") int number, @PathVariable("centreName") String centreName)
     {
         Centre centre = centreService.findByName(centreName);
@@ -269,6 +279,7 @@ public class HallController {
 
 
     @PostMapping(value ="/addHall", consumes = "application/json")
+    @ApiOperation("Добавления новых аптек")
     public ResponseEntity<Void> add(@RequestBody HallDTO hall)
     {
         HttpHeaders header = new HttpHeaders();

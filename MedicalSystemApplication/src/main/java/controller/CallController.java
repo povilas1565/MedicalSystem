@@ -2,6 +2,8 @@ package controller;
 
 import dto.CallDTO;
 import facade.CallFacade;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Call;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value ="/api/call")
 @CrossOrigin
+@Api
 public class CallController {
 
     @Autowired(required = false)
@@ -33,6 +36,7 @@ public class CallController {
     private ResponseErrorValidator responseErrorValidator;
 
     @PostMapping("/create")
+    @ApiOperation("Создание звонков")
     public ResponseEntity<Object> createPost(@Valid @RequestBody CallDTO callDTO, BindingResult bindingResult, Principal principal) {
         ResponseEntity<Object> listErrors = responseErrorValidator.mappedValidatorService(bindingResult);
         if (!ObjectUtils.isEmpty(listErrors)) return listErrors;
@@ -44,6 +48,7 @@ public class CallController {
     }
 
     @GetMapping("/all")
+    @ApiOperation("Получение всевозможных звонков")
     public ResponseEntity<List<CallDTO>> getAllCalls() {
         List<CallDTO> callDTOList = callService.getAllCalls()
                 .stream()
@@ -54,6 +59,7 @@ public class CallController {
     }
 
     @GetMapping("/user/calls")
+    @ApiOperation("Получение всевозможных звонков для конкретного пользователя")
     public ResponseEntity<List<CallDTO>> getAllCallsForUser(Principal principal) {
         List<CallDTO> postDTOList = callService.getAllCallsForUser(principal)
                 .stream()
@@ -64,6 +70,7 @@ public class CallController {
     }
 
     @PostMapping("/{callId}/delete")
+    @ApiOperation("Удаление звонков")
     public ResponseEntity<MessageResponse> deleteCall(@PathVariable("callId") String callId, Principal principal) {
         callService.deleteCall(Long.parseLong(callId), principal);
         return new ResponseEntity<>(new MessageResponse("The call" + callId + "were deleted"), HttpStatus.OK);

@@ -3,6 +3,8 @@ package controller;
 import com.mks.api.response.APIException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.ChargeRequest;
 import model.ChargeRequest.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,14 @@ import service.StripeService;
 
 @RestController
 @RequestMapping(value = "api/charge")
+@Api
 public class ChargeController {
 
     @Autowired
     private StripeService paymentsService;
 
     @PostMapping("/charge")
+    @ApiOperation("Оформление оплаты заказов")
     public String charge(ChargeRequest chargeRequest, Model model)
             throws StripeException, APIException {
         chargeRequest.setDescription("Example charge");

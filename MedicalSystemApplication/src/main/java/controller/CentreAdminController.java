@@ -4,6 +4,8 @@ package controller;
 import dto.CentreDTO;
 import dto.UserDTO;
 import helpers.SecurePasswordHasher;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Centre;
 import model.CentreAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping(value = "/api/admins/centre")
 @CrossOrigin
+@Api
 public class CentreAdminController {
 
     @Autowired
@@ -34,6 +37,7 @@ public class CentreAdminController {
 
 
     @GetMapping(value = "/getCentreFromAdmin/{email}")
+    @ApiOperation("Создание администраторов для центров")
     public ResponseEntity<CentreDTO> getCentreFromAdmin(@PathVariable("email") String email) {
         CentreAdmin ca = (CentreAdmin) userService.findByEmailAndDeleted(email,false);
         if (ca ==  null) {
@@ -45,6 +49,7 @@ public class CentreAdminController {
     }
 
     @PostMapping(value = "/registerCentreAdmin/{centreName}")
+    @ApiOperation("Поиск центров по Администраторам")
     public ResponseEntity<Void> registerCentreAdmin(@RequestBody UserDTO dto, @PathVariable("centreName") String centreName) {
         CentreAdmin ca = (CentreAdmin) userService.findByEmailAndDeleted(dto.getEmail(),false);
 

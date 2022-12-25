@@ -1,5 +1,7 @@
 package controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.ChargeRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
@@ -9,12 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "api/checkout")
+@Api
 public class CheckoutController {
 
     @Value("${STRIPE_PUBLIC_KEY}")
     private String stripePublicKey;
 
     @PostMapping(value ="/checkout")
+    @ApiOperation("Оформление заказов")
     public String checkout(Model model) {
         model.addAttribute("amount", 50 * 100); // in cents
         model.addAttribute("stripePublicKey", stripePublicKey);

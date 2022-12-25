@@ -3,6 +3,8 @@ package controller;
 import helpers.DateInterval;
 import helpers.DateUtil;
 import helpers.Scheduler;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Appointment;
 import model.AppointmentRequest;
 import model.Doctor;
@@ -32,6 +34,7 @@ import java.util.List;
 @RequestMapping(value = "api/scheduled")
 @CrossOrigin
 @EnableScheduling
+@Api
 public class ScheduledAppointmentsController {
 
     private final static Logger logger = LoggerFactory.getLogger(ScheduledAppointmentsController.class);
@@ -65,6 +68,7 @@ public class ScheduledAppointmentsController {
 
 
     @PutMapping(value="/reserve")
+    @ApiOperation("Обновление(изменение) записи")
     public ResponseEntity<Void> Reserve()
     {
         reserveAlgorithmExamination();

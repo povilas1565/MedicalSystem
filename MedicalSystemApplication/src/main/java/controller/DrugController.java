@@ -1,6 +1,8 @@
 package controller;
 
 import dto.DrugDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Drug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +17,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/drug")
 @CrossOrigin
+@Api
 public class DrugController {
 
     @Autowired
     private DrugService drugService;
 
     @GetMapping(value = "/getAllDrugs")
+    @ApiOperation("Получение списка всех доступных лекарств")
     public ResponseEntity<List<DrugDTO>> getDrugs() {
         List<Drug> drugs = drugService.findAll();
         List<DrugDTO> drugsDTO = new ArrayList<DrugDTO>();
@@ -37,6 +41,7 @@ public class DrugController {
     }
 
     @PostMapping(value = "/addDrug", consumes = "application/json")
+    @ApiOperation("Добавление лекарств")
     public ResponseEntity<Void> addDrug(@RequestBody DrugDTO dto) {
         Drug d = drugService.findByCode(dto.getCode());
 
@@ -54,6 +59,7 @@ public class DrugController {
     }
 
     @PutMapping(value ="/updateDrug/{code}")
+    @ApiOperation("Обновление(изменение) лекарств согласно их кодам")
     public ResponseEntity<Void> updateDrug(@RequestBody DrugDTO dto, @PathVariable("code") String code)
     {
         Drug drug = drugService.findByCode(code);
@@ -69,6 +75,7 @@ public class DrugController {
     }
 
     @DeleteMapping(value ="/deleteDrug/{code}")
+    @ApiOperation("Удаление лекарств согласно их кодам")
     public ResponseEntity<Void> deleteDrug(@PathVariable("code") String code)
     {
 

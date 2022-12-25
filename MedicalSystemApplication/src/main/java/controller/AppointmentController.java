@@ -3,6 +3,8 @@ package controller;
 import dto.AppointmentDTO;
 import helpers.DateInterval;
 import helpers.DateUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.*;
 import model.User.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "api/appointments")
 @CrossOrigin
+@Api
 public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
@@ -44,6 +47,7 @@ public class AppointmentController {
     private PriceListService priceslistService;
 
     @GetMapping(value ="/get")
+    @ApiOperation("Записаться на приемы")
     public ResponseEntity<AppointmentDTO> getAppointment(@RequestBody AppointmentDTO dto)
     {
         String centre = dto.getCentreName();
@@ -62,8 +66,10 @@ public class AppointmentController {
 
         return new ResponseEntity<>(new AppointmentDTO(appointment),HttpStatus.OK);
     }
+
     //Get By doctor and patient
     @GetMapping(value="/getAppointments/{doctorEmail}/{patientEmail}")
+    @ApiOperation("Назначить приемы")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatient(@PathVariable("doctorEmail") String doctorEmail, @PathVariable("patientEmail") String patientEmail )
     {
         Patient p = (Patient) userService.findByEmailAndDeleted(patientEmail, false);
@@ -98,6 +104,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/getAppointment/{centreName}/{date}/{hallNumber}")
+    @ApiOperation("Записаться на конкретные приемы")
     public ResponseEntity<AppointmentDTO> getAppointment(@PathVariable("centreName") String centre, @PathVariable("date") String date, @PathVariable("hallNumber") int hallNumber)
     {
         Appointment appointment = appointmentService.findAppointment(date, hallNumber, centre);
@@ -114,6 +121,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/getAll")
+    @ApiOperation("Получение всевозможных назначений на приемы")
     public ResponseEntity<List<AppointmentDTO>> getAllAppointments()
     {
         List<Appointment> app = appointmentService.findAll();
@@ -134,6 +142,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/getRequest")
+    @ApiOperation("Получение запросов на приемы")
     public ResponseEntity<AppointmentDTO> getAppointmentRequest(@RequestBody AppointmentDTO dto)
     {
         String centre = dto.getCentreName();
@@ -151,6 +160,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/centre/getAllRequests/{centreName}")
+    @ApiOperation("Получение всех запросов на приемы")
     public ResponseEntity<AppointmentDTO[]> getAllAppointmentRequests(@PathVariable("centreName") String centre)
     {
         List<AppointmentRequest> list = appointmentRequestService.getAllByCentre(centre);
@@ -171,6 +181,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/centre/getAllAppointments/{centreName}")
+    @ApiOperation("Получение всех назначений центров")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentre(@PathVariable("centreName") String centreName)
     {
 
@@ -199,6 +210,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/centre/getAllAppointmentsToday/{centreName}")
+    @ApiOperation("Получение всех сегодняшних назначений центров")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreToday(@PathVariable("centreName") String centreName)
     {
 
@@ -233,6 +245,7 @@ public class AppointmentController {
 
 
     @GetMapping(value ="/centre/getAllAppointmentsWeek/{centreName}")
+    @ApiOperation("Еженедельное получение всех назначений центров")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreWeekly(@PathVariable("centreName") String centreName)
     {
         Calendar cal = Calendar.getInstance();
@@ -277,6 +290,7 @@ public class AppointmentController {
 
 
     @GetMapping(value ="/centre/getAllAppointmentsMonth/{centreName}")
+    @ApiOperation("Месячное получение всех назначений центров")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreMonth(@PathVariable("centreName") String centreName)
     {
         Calendar cal = Calendar.getInstance();
@@ -318,6 +332,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value="/hall/getAll/{centreName}/{hallNumber}")
+    @ApiOperation("Получение всех записей по аптекам")
     public ResponseEntity<List<AppointmentDTO>> getAllByHall(@PathVariable("centreName") String centreName, @PathVariable("hallNumber") int hallNumber)
     {
         Centre centre = centreService.findByName(centreName);
@@ -349,6 +364,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/patient/getAllRequests/{email}")
+    @ApiOperation("Получение всех запросов пациентов")
     public ResponseEntity<List<AppointmentDTO>> getPatientRequests(@PathVariable("email") String email)
     {
         Patient p = (Patient) userService.findByEmailAndDeleted(email, false);
@@ -371,12 +387,13 @@ public class AppointmentController {
     }
 
     @GetMapping(value="/patient/getAll/{email}")
+    @ApiOperation("Получение всех назначений пациентов")
     public ResponseEntity<List<AppointmentDTO>> getAllAppointments(@PathVariable("email") String email)
     {
         Patient  p = null;
 
         try {
-            p = (Patient)userService.findByEmailAndDeleted(email,false);
+            p = (Patient) userService.findByEmailAndDeleted(email,false);
         }
         catch(ClassCastException e)
         {
@@ -411,6 +428,7 @@ public class AppointmentController {
 
 
     @GetMapping(value ="/getAllPredefined")
+    @ApiOperation("Получение всех заданий")
     public ResponseEntity<AppointmentDTO[]> getPredefined()
     {
         List<Appointment> appointments = appointmentService.findAllByPredefined();
@@ -434,6 +452,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/doctor/getAllAppointments/{email}")
+    @ApiOperation("Получение всех записей на приемы к докторам")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctor(@PathVariable("email") String email)
     {
         Doctor d = null;
@@ -473,6 +492,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value ="/doctor/getAllAppointmentsByDate/{email}/{date}")
+    @ApiOperation("Получение всех записей на приемы к докторам по дате")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctorByDate(@PathVariable("email") String email, @PathVariable("date") String date)
     {
         Doctor d = null;
@@ -517,6 +537,7 @@ public class AppointmentController {
 
 
     @GetMapping(value ="/doctor/getAllAppointmentsCalendar/{email}")
+    @ApiOperation("Получение всех записей на приемы к докторам в календаре")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctorCalendar(@PathVariable("email") String email)
     {
         Doctor d = null;
@@ -563,6 +584,7 @@ public class AppointmentController {
 
 
     @PostMapping(value ="/makePredefined")
+    @ApiOperation("Cоздание заданий")
     public ResponseEntity<Void> makePredefined(@RequestBody AppointmentDTO dto)
     {
         HttpHeaders header = new HttpHeaders();
@@ -661,6 +683,7 @@ public class AppointmentController {
 
 
     @PostMapping(value ="/confirmRequest")
+    @ApiOperation("Подтверждение запросов на приемы")
     public ResponseEntity<Void> confirmAppointmentRequest(@RequestBody AppointmentDTO dto, HttpServletRequest httpRequest)
     {
         HttpHeaders header = new HttpHeaders();
@@ -778,6 +801,7 @@ public class AppointmentController {
     }
 
     @PutMapping(value ="/confirmAppointment")
+    @ApiOperation("Подтвердить приемы")
     public ResponseEntity<Void> confirmAppointment(@RequestBody AppointmentDTO dto)
     {
         Appointment app = appointmentService.findAppointment(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
@@ -794,6 +818,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping(value ="/denyAppointment")
+    @ApiOperation("Удаление записей на приемы")
     public ResponseEntity<Void> denyAppointment(@RequestBody AppointmentDTO dto)
     {
         Appointment app = appointmentService.findAppointment(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
@@ -812,6 +837,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping(value ="/denyRequest")
+    @ApiOperation("Отклонение запросов на приемы")
     public ResponseEntity<Void> denyAppointmentRequest(@RequestBody AppointmentDTO dto)
     {
         HttpHeaders header = new HttpHeaders();
@@ -830,6 +856,7 @@ public class AppointmentController {
     }
 
     @PostMapping(value ="/sendRequest")
+    @ApiOperation("Добавление новых записей на приемы")
     public ResponseEntity<Void> addAppointmentRequest(@RequestBody AppointmentDTO dto)
     {
         HttpHeaders header = new HttpHeaders();
@@ -925,6 +952,7 @@ public class AppointmentController {
 
 
     @DeleteMapping(value ="/cancelRequest/{role}")
+    @ApiOperation("Отмены запросов на приемы")
     public ResponseEntity<Void> cancelAppointmentRequest(@RequestBody AppointmentDTO dto, @PathVariable("role") UserRole role)
     {
         AppointmentRequest req = appointmentRequestService.findAppointmentRequest(dto.getDate(), dto.getPatientEmail(), dto.getCentreName());
@@ -989,6 +1017,7 @@ public class AppointmentController {
 
 
     @PutMapping(value ="/reservePredefined/{email}")
+    @ApiOperation("Зарезирвировать заранее")
     public ResponseEntity<Void> reservePredefined(@RequestBody AppointmentDTO dto, @PathVariable("email") String email)
     {
         HttpHeaders headers = new HttpHeaders();
@@ -1055,6 +1084,7 @@ public class AppointmentController {
 
 
     @PutMapping(value="/appointmentIsDone")
+    @ApiOperation("Приемы закончены")
     public ResponseEntity<Void> appointmentIsDone(@RequestBody AppointmentDTO dto)
     {
         HttpHeaders headers = new HttpHeaders();

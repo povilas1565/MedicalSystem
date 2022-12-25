@@ -1,6 +1,8 @@
 package controller;
 
 import dto.PrescriptionDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import model.Prescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api/prescription")
 @CrossOrigin
+@Api
 public class PrescriptionController {
     @Autowired
     private PrescriptionService prescriptionService;
@@ -25,6 +28,7 @@ public class PrescriptionController {
     private UserService userService;
 
     @GetMapping(value = "/getAllPrescriptions")
+    @ApiOperation("Получение всех рецептов")
     public ResponseEntity<List<PrescriptionDTO>> getDrugs()
     {
         List<Prescription> prescriptions = prescriptionService.findAll();
@@ -48,6 +52,7 @@ public class PrescriptionController {
 
 
     @PutMapping(value = "/validate/{email}")
+    @ApiOperation("Подтверждение регистрации")
     public ResponseEntity<Void> confirmRegister(@RequestBody PrescriptionDTO dto, @PathVariable("email") String email)
     {
 
