@@ -4,7 +4,7 @@
 Бекэнд приложения, сделанный для пациентов и центров. 
 
 ### Использованный стек технологий:
-- **Backend:** Java + SpringFramework + SpringBoot + PostgreSQL + Hibernate + JPA Buddy
+- **Backend:** Java + SpringFramework + SpringBoot + PostgreSQL + Hibernate + JPA Buddy.
 
 ### Паттерны проектирования:
 1) Builder.
