@@ -119,6 +119,12 @@
 			<artifactId>stripe-java</artifactId>
 			<version>10.12.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<!--Stripe end-->
 
 		<dependency>
