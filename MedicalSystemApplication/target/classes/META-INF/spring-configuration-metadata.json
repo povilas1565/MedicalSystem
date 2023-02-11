@@ -1,0 +1,16 @@
+{
+  "groups": [],
+  "properties": [
+    {
+      "name": "STRIPE_PUBLIC_KEY",
+      "type": "java.lang.String",
+      "description": "Description for STRIPE_PUBLIC_KEY."
+    },
+    {
+      "name": "STRIPE_SECRET_KEY",
+      "type": "java.lang.String",
+      "description": "Description for STRIPE_SECRET_KEY."
+    }
+  ],
+  "hints": []
+}
