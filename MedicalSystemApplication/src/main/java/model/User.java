@@ -10,13 +10,13 @@ import lombok.Data;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User   {
 
-	public enum UserRole{ Patient, Doctor, Nurse, CentreAdmin}
+	public enum UserRole {Patient, Doctor, Nurse, CentreAdmin}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name="deleted",nullable = true)
+	@Column(name="deleted", nullable = true)
 	private Boolean deleted;
 	
 	@Column(name = "isFirstLog", nullable = false)
@@ -52,7 +52,7 @@ public class User   {
 	@Column(name = "role", nullable = false)
 	private UserRole role;
 
-	@Column(name="verified")
+	@Column(name = "verified")
 	private Boolean verified;
 
 

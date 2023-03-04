@@ -54,7 +54,7 @@ public class Appointment
 	@Column(name="done")
 	private Boolean done = false;
 	
-	@Column(name="confirьed")
+	@Column(name="confirmed")
 	private Boolean confirmed = false;
 
 	private Date newDate;
