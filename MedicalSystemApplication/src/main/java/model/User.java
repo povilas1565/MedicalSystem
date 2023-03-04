@@ -10,10 +10,6 @@ import lombok.Data;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User   {
 
-	public User() {
-
-	}
-
 	public enum UserRole{ Patient, Doctor, Nurse, CentreAdmin}
 	
 	@Id
@@ -60,8 +56,7 @@ public class User   {
 	private Boolean verified;
 
 
-
-	public User(Long id, String username, String password, String email, String firstname, String lastname, String state, String city, String date_of_birth, String phone, Boolean deleted, Boolean verified)
+	public User()
 	{
 		super();
 		this.deleted = false;
