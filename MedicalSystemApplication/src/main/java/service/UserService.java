@@ -44,13 +44,10 @@ public class UserService {
 
 	}
 
-	public User findByEmailAndDeleted(String email, Boolean deleted) {
+		public User findByEmailAndDeleted(String email, Boolean deleted) {
 		return userRepository.findByEmailAndDeleted(email, deleted);
 	}
 
-	public User findUserById(Long userId) {
-		return userRepository.findUserById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-	}
 
 	public void save(User user) {
 		userRepository.save(user);
@@ -62,6 +59,7 @@ public class UserService {
 		return userRepository.findUserByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
 	}
+
 }
 
 

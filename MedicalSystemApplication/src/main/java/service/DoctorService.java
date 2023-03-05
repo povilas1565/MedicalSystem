@@ -34,31 +34,9 @@ public class DoctorService {
         return doctorRepository.findAllByCentreAndType(centre, type);
     }
 
-    public List<Doctor> getAll() {
-        return doctorRepository.findAll();
-    }
-
-    public User findById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-
-        return user.orElse(null);
-
-    }
-
-
-    public User UserById(Long userId) {
-        return userRepository.findUserById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
     public void save(Doctor doctor) {
         doctorRepository.save(doctor);
 
-    }
-
-    private User getUserByPrincipal(Principal principal) {
-        String username = principal.getName();
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
     }
 
 }

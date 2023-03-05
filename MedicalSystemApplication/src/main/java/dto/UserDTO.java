@@ -5,6 +5,7 @@ import model.User.UserRole;
 
 public class UserDTO 
 {
+	private Long id;
 	private String username;
 	private String password;
 	private String email;
@@ -21,9 +22,10 @@ public class UserDTO
 		super();
 	}
 		
-	public UserDTO(String username, String password, String email, String firstname, String lastname, String city,
+	public UserDTO(Long id, String username, String password, String email, String firstname, String lastname, String city,
 			 String state, String date_of_birth, String phone,UserRole role) {
 		super();
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.email = email;
@@ -39,6 +41,7 @@ public class UserDTO
 	public UserDTO(User dto)
 	{
 		super();
+		id = dto.getId();
 		username = dto.getUsername();
 		email = dto.getEmail();
 		password = dto.getPassword();
@@ -126,4 +129,12 @@ public class UserDTO
 		this.phone = phone;
 	}
 
-}
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	}
+

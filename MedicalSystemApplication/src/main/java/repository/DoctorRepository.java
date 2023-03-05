@@ -16,7 +16,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     public List<Doctor> findAllByCentreAndType(Centre centre, String type);
 
-    Optional<User> findUserById(Long id);
 
     public List<User> findAllByRole(User.UserRole role);
 

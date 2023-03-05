@@ -29,8 +29,8 @@ public class CentreAdmin extends User {
     	this.setIsFirstLog(true);
     }
 
-    public CentreAdmin(String username, String password, String email, String firstname, String lastname, String city,  String state, String date_of_birth, String phone, Centre centre) {
-        super(username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.CentreAdmin);
+    public CentreAdmin(Long id, String username, String password, String email, String firstname, String lastname, String city,  String state, String date_of_birth, String phone, Centre centre) {
+        super(id, username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.CentreAdmin);
         this.centre = centre;
         this.appointmentRequests = new ArrayList<>();
         this.vacationRequests = new ArrayList<>();

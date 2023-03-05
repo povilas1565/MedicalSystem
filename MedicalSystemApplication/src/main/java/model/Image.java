@@ -1,6 +1,7 @@
 package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dto.ImageDTO;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,15 +13,26 @@ import javax.persistence.*;
         @GeneratedValue(strategy = GenerationType.AUTO)
         private Long id;
 
+        @Column(name="deleted", nullable = true)
+        private Boolean deleted;
+
         @Lob
-        @Column(name = "image_bytes")
+        @Column(name = "bytea")
         private byte[] imageBytes;
 
         @JsonIgnore
         private Long userId;
 
+
         public Image() {
             super();
+            deleted = false;
+        }
+
+        public Image(Long id) {
+            super();
+            this.id = id;
+            deleted = false;
         }
 
         public byte[] getImageBytes() { return imageBytes; }
@@ -28,11 +40,11 @@ import javax.persistence.*;
         public void setImageBytes(byte[] imageBytes) { this.imageBytes = imageBytes; }
 
         public Long getUserId() {
-            return userId;
+        return userId;
         }
 
         public void setUserId(Long userId) {
-            this.userId = userId;
+        this.userId = userId;
         }
 
         public Long getId() {

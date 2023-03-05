@@ -9,11 +9,11 @@ import javax.persistence.*;
 @Entity
     public class Video {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Lob
-    @Column(name = "video_bytes")
+    @Column(name = "bytea")
     private byte[] videoBytes;
 
     @JsonIgnore

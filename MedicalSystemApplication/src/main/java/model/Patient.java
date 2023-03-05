@@ -23,8 +23,8 @@ public class Patient extends User {
 		super();
 	}
 	
-	public Patient(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
-		super(username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Patient);
+	public Patient(Long id, String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
+		super(id, username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Patient);
 		medicalRecord = new MedicalRecord();
 		this.setIsFirstLog(false);
 	}

@@ -23,6 +23,7 @@ import java.util.zip.Inflater;
 public class ImageService {
 
     public static final Logger LOG = LoggerFactory.getLogger(ImageService.class);
+
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
 
@@ -32,57 +33,20 @@ public class ImageService {
         this.userRepository = userRepository;
     }
 
-    public static byte[] compressImage(byte[] data) {
-        Deflater deflater = new Deflater();
-        deflater.setInput(data);
-        deflater.finish();
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(data.length);
-        byte[] segment = new byte[1024];
-        while (!deflater.finished()) {
-            int count = deflater.deflate(segment);
-            byteArrayOutputStream.write(segment, 0, count);
-        }
-        try {
-            byteArrayOutputStream.close();
-        } catch (IOException e) {
-            LOG.error("Cannot compress image");
-        }
-        System.out.println("Compressed image size = " + byteArrayOutputStream.toByteArray().length);
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    private static byte[] decompressImage(byte[] data) {
-        Inflater inflater = new Inflater();
-        inflater.setInput(data);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(data.length);
-        byte[] segment = new byte[1024];
-
-        try {
-            while (!inflater.finished()) {
-                int count = inflater.inflate(segment);
-                byteArrayOutputStream.write(segment, 0, count);
-            }
-            byteArrayOutputStream.close();
-        } catch (IOException | DataFormatException e) {
-            LOG.error(("cannot decompress image"));
-        }
-        return byteArrayOutputStream.toByteArray();
-
-    }
-
     public Image uploadImageToProfile(MultipartFile file, Principal principal) throws IOException {
         User user = getUserByPrincipal(principal);
-        Image userProfileImage = imageRepository.findByUserId(user.getId()).orElse( null);
+        Image userProfileImage = imageRepository.findByUserId(user.getId()).orElse(null);
 
+        //проверяем - есть ли уже фотография пользователя в базе.
+        //если есть - тогда удаляем и загружаем новую
         if (!ObjectUtils.isEmpty(userProfileImage)) {
             imageRepository.delete(userProfileImage);
         }
+
         Image image = new Image();
         image.setUserId(user.getId());
         image.setImageBytes(compressImage(file.getBytes()));
-        LOG.info("Create image to user {}", user.getId());
+        LOG.info("Upload image to user {}", user.getId());
 
         return imageRepository.save(image);
     }
@@ -97,9 +61,50 @@ public class ImageService {
         return userProfileImage;
     }
 
+    public static byte[] compressImage(byte[] data) {
+        Deflater deflater = new Deflater();
+        deflater.setInput(data);
+        deflater.finish();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(data.length);
+        byte[] segment = new byte[1024];
+        while (!deflater.finished()) {
+            int count = deflater.deflate(segment); //фактическое количество байтов сжатых данных, записанных в выходной буфер
+            byteArrayOutputStream.write(segment, 0, count);
+        }
+        try {
+            byteArrayOutputStream.close();
+        } catch (IOException e) {
+            LOG.error("Cannot compress image");
+        }
+
+        System.out.println("Compressed image size = " + byteArrayOutputStream.toByteArray().length);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    //декомпрессия фото
+    private static byte[] decompressImage(byte[] data) {
+        Inflater inflater = new Inflater();
+        inflater.setInput(data);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(data.length);
+        byte[] segment = new byte[1024];
+        try {
+            while (!inflater.finished()) {
+                int count = inflater.inflate(segment);
+                byteArrayOutputStream.write(segment, 0, count);
+            }
+            byteArrayOutputStream.close();
+        } catch (IOException | DataFormatException e) {
+            LOG.error("Cannot decompress image");
+        }
+        return byteArrayOutputStream.toByteArray();
+    }
+
     private User getUserByPrincipal(Principal principal) {
         String username = principal.getName();
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
     }
+
 }

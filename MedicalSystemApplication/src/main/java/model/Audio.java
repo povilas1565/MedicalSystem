@@ -9,11 +9,11 @@ import javax.persistence.*;
 @Entity
 public class Audio {
     @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Lob
-    @Column(name = "audio_bytes")
+    @Column(name = "bytea")
     private byte[] audioBytes;
 
     @JsonIgnore

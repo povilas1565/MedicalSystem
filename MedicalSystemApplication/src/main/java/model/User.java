@@ -63,8 +63,9 @@ public class User   {
 		this.verified = true;
 	}
 
-	public User(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
+	public User(Long id, String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
 		super();
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.email = email;
@@ -93,6 +94,7 @@ public class User   {
 	
 
 	public User(User user) {
+		this.id = user.getId();
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.email = user.getEmail();
@@ -107,10 +109,10 @@ public class User   {
 		this.verified = true;
 	}
 
-	
-	
+
 	public User(UserDTO user) {
 		// TODO Auto-generated constructor stub
+		this.id = user.getId();
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.email = user.getEmail();

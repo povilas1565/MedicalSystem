@@ -49,6 +49,7 @@ public class UserController {
         User user = userService.findByEmailAndDeleted(email, false);
 
         if (user != null) {
+            user.setId(dto.getId());
             user.setUsername(dto.getUsername());
             user.setFirstname(dto.getFirstname());
             user.setLastname(dto.getLastname());
@@ -173,7 +174,7 @@ public class UserController {
     @GetMapping(value = "/{userId}")
     @ApiOperation("Получение профилей пользователей по Id")
     public ResponseEntity<UserDTO> getUserProfile(@PathVariable("userId") String userId) {
-        User ret = userService.findUserById(Long.parseLong(userId));
+        User ret = userService.findById(Long.parseLong(userId));
 
         if (ret == null || ret.getDeleted()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

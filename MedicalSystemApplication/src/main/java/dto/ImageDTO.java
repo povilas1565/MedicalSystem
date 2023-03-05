@@ -1,11 +1,9 @@
 package dto;
-
-
 import model.Image;
 
 public class ImageDTO {
 
-    private long id;
+    private Long id;
 
     public ImageDTO(){
         super();
@@ -21,7 +19,7 @@ public class ImageDTO {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
