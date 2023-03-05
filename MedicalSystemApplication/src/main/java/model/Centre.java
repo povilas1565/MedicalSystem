@@ -42,17 +42,16 @@ public class Centre
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CentreReview> reviews;
 
-
-    
     public Centre()
     {
     	super();
       
     }
 
-    public Centre(String name, String address, String city, String state, String description)
+    public Centre(Long id, String name, String address, String city, String state, String description)
     { 	
     	super();
+		this.id = id;
 	    this.name = name;
 	    this.address = address;
 	    this.city = city;

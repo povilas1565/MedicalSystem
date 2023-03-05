@@ -136,10 +136,15 @@ public class Nurse extends User {
 	    private Date shiftEnd;
 	    public Centre centre;
 	    public String type;
-				
-		public Builder(String email)
+
+		protected Builder(Long id)
 		{
-			super(email);
+			super(id);
+		}
+
+		protected Builder withEmail(String email) {
+			super.withEmail(email);
+			return this;
 		}
 
 		public Builder withUsername(String username)

@@ -72,10 +72,15 @@ public class CentreAdmin extends User {
     public static class Builder extends UserBuilder
     {
     	public Centre centre;
-		
-		public Builder(String email)
+
+		protected Builder(Long id)
 		{
-			super(email);
+			super(id);
+		}
+
+		protected Builder withEmail(String email) {
+			super.withEmail(email);
+			return this;
 		}
 
 

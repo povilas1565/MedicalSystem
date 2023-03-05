@@ -5,6 +5,7 @@ import model.User.UserRole;
 
 public class SessionUserDTO 
 {
+	private Long id;
 	private Boolean isFirstLog;
 	private Boolean verified;
 	private String username;
@@ -22,8 +23,9 @@ public class SessionUserDTO
 		super();
 	}
 
-	public SessionUserDTO(String username, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
+	public SessionUserDTO(Long id, String username, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
 		super();
+		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.firstname = firstname;
@@ -38,6 +40,7 @@ public class SessionUserDTO
 	public SessionUserDTO(User user)
 	{
 		super();
+		this.id = user.getId();
 		this.email = user.getEmail();
 		this.username = user.getUsername();
 		this.firstname = user.getFirstname();
@@ -58,6 +61,14 @@ public class SessionUserDTO
 	
 	public void setIsFirstLog(Boolean isFirstLog) {
 		this.isFirstLog = isFirstLog;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getEmail() {

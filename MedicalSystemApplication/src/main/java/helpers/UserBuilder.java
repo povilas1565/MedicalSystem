@@ -4,6 +4,7 @@ import model.User;
 import model.User.UserRole;
 
 public class UserBuilder {
+	private final Long id;
 	private String username;
 	private String email;
 	private String password;
@@ -15,9 +16,14 @@ public class UserBuilder {
 	private String phone;
 	private UserRole role;
 
-	protected UserBuilder(String email)
+	protected UserBuilder(Long id)
 	{
+		this.id = id;
+	}
+
+	protected UserBuilder withEmail(String email) {
 		this.email = email;
+		return this;
 	}
 
 	protected UserBuilder withUsername(String username) {
@@ -86,6 +92,7 @@ public class UserBuilder {
 	protected User build()
 	{
 		User user = new User();
+		user.setId(this.id);
 		user.setEmail(this.email);
 		user.setUsername(this.username);
 		user.setPassword(this.password);
