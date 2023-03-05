@@ -1,5 +1,4 @@
-
-package com.example.MedicalSystemApplication;
+package config.MedicalSystemApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -15,10 +14,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class MedicalSystemApplication {
 
-    public static void main(String[] args) {
-        ConfigurableApplicationContext ctx = SpringApplication.run(MedicalSystemApplication.class, args);
-    }
+	public static void main(String[] args) {
+		ConfigurableApplicationContext ctx = SpringApplication.run(MedicalSystemApplication.class, args);
+	}
 
 }
-
-

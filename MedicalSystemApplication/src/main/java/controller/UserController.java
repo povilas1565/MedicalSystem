@@ -254,7 +254,6 @@ public class UserController {
         record.setWeight(dto.getWeight());
         record.setAlergies(dto.getAlergies());
         medicalRecordService.save(record);
-
         patient.setMedicalRecord(record);
         userService.save(patient);
 
