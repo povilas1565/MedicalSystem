@@ -21,7 +21,6 @@ import java.security.Principal;
 @Api
 public class ImageController {
 
-    @Autowired
     private ImageService imageService;
 
     @PostMapping("/upload")

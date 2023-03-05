@@ -13,9 +13,7 @@ import service.AudioService;
 @RequestMapping(value = "api/audio")
 @CrossOrigin
 @Api
-
 public class AudioController {
-
     @Autowired(required = false)
     private AudioService audioService;
 

@@ -23,7 +23,7 @@ public class Patient extends User {
 		super();
 	}
 	
-	public Patient(String username,String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
+	public Patient(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
 		super(username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Patient);
 		medicalRecord = new MedicalRecord();
 		this.setIsFirstLog(false);
@@ -53,7 +53,7 @@ public class Patient extends User {
 
 	public static class Builder extends UserBuilder
 	{
-		public Builder (String email)
+		public Builder(String email)
 		{
 			super(email);
 		}

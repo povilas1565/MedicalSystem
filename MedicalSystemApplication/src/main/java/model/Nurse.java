@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Nurse extends User{
+public class Nurse extends User {
 
 
 	@Column(name = "type", nullable = true)

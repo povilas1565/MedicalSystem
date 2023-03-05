@@ -17,8 +17,5 @@ public interface CallRepository extends JpaRepository<Call, Long> {
 
        List<Call> findAll();
 
-
-
-
     }
 

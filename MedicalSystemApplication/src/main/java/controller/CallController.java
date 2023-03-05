@@ -61,12 +61,12 @@ public class CallController {
     @GetMapping("/user/calls")
     @ApiOperation("Получение всевозможных звонков для конкретного пользователя")
     public ResponseEntity<List<CallDTO>> getAllCallsForUser(Principal principal) {
-        List<CallDTO> postDTOList = callService.getAllCallsForUser(principal)
+        List<CallDTO> callDTOList = callService.getAllCallsForUser(principal)
                 .stream()
                 .map(callFacade::callToCallDTO)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(postDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(callDTOList, HttpStatus.OK);
     }
 
     @PostMapping("/{callId}/delete")
