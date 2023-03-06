@@ -1,14 +1,7 @@
 package service;
-
-import java.security.Principal;
 import java.util.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import model.*;
 import model.User.UserRole;
 import repository.UserRepository;
@@ -52,12 +45,6 @@ public class UserService {
 	public void save(User user) {
 		userRepository.save(user);
 
-	}
-
-	private User getUserByPrincipal(Principal principal) {
-		String username = principal.getName();
-		return userRepository.findUserByUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with username " + username));
 	}
 
 }
