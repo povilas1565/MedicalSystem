@@ -43,8 +43,7 @@ public class AuthController
     public ResponseEntity<SessionUserDTO> login(@RequestBody LoginDTO dto, HttpServletResponse response) {
         HttpHeaders header = new HttpHeaders();
 
-        User u = userService.
-                findByEmailAndDeleted(dto.getEmail(),false);
+        User u = userService.findByEmail(dto.getEmail());
 
         if(u == null)
         {
@@ -82,8 +81,7 @@ public class AuthController
     @ApiOperation("Проверка и обновление cозданного аккаунта")
     public ResponseEntity<Void> verifyAccount(@PathVariable("email") String email)
     {
-        User u = userService.
-                findByEmailAndDeleted(email, false);
+        User u = userService.findByEmail(email);
 
         if(u == null)
         {
@@ -107,7 +105,7 @@ public class AuthController
         RegistrationRequest req = authService.
                 findByEmail(request.getEmail());
 
-        User u = userService.findByEmailAndDeleted(request.getEmail(),false);
+        User u = userService.findByEmail(request.getEmail());
 
         if(req != null || u != null)
         {
@@ -193,7 +191,7 @@ public class AuthController
         }
 
 
-        User user = userService.findByEmailAndDeleted(email,false);
+        User user = userService.findByEmail(email);
 
         if(user == null)
         {

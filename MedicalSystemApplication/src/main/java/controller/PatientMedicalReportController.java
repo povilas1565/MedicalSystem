@@ -40,6 +40,9 @@ import java.util.List;
         private DrugService drugService;
 
         @Autowired
+        private DoctorService doctorService;
+
+        @Autowired
         private PatientService patientService;
 
         @Autowired
@@ -145,7 +148,7 @@ import java.util.List;
                 return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
             }
 
-            Doctor doctor = (Doctor)userService.findByEmailAndDeleted(dto.getDoctorEmail(),false);
+            Doctor doctor = doctorService.findByEmail(dto.getDoctorEmail());
             if (doctor == null)
             {
                 header.set("responseText", "doctor not found: " + dto.getDoctorEmail());
