@@ -58,7 +58,7 @@ public class UserController {
     @PutMapping(value = "/update/{email}")
     @ApiOperation("Обновление(добавление, изменение) данных пользователя")
     public ResponseEntity<Void> updateUser(@RequestBody UserDTO dto, @PathVariable("email") String email) {
-        User user = userService.findByEmailAndDeleted(email, false);
+        User user = userService.findByEmail(email);
 
         if (user != null) {
             user.setId(dto.getId());

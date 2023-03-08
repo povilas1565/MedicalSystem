@@ -41,9 +41,6 @@ public class UserService {
 		return userRepository.findByEmail(email);
 	}
 
-	public User findByEmailAndDeleted(String email, boolean deleted) {
-		return userRepository.findByEmailAndDeleted(email, false);
-	}
 
 
 	public void save(User user) {

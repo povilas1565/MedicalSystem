@@ -49,7 +49,7 @@ public class VacationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        User user = userService.findByEmailAndDeleted(vdto.getUser().getEmail(), false);
+        User user = userService.findByEmail(vdto.getUser().getEmail());
 
         if (user == null)
         {
@@ -103,7 +103,7 @@ public class VacationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        User user = userService.findByEmailAndDeleted(vdto.getUser().getEmail(), false);
+        User user = userService.findByEmail(vdto.getUser().getEmail());
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
