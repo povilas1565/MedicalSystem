@@ -19,10 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.AppointmentService;
-import service.CentreService;
-import service.NotificationService;
-import service.UserService;
+import service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -40,6 +37,9 @@ public class CentreController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private NurseService nurseService;
 
     @Autowired
     private AppointmentService appointmentService;
@@ -73,7 +73,7 @@ public class CentreController {
     @GetMapping(value = "/getNurse/{nurseEmail}")
     @ApiOperation("Поиск центров по работающим в них медработникам")
     public ResponseEntity<CentreDTO> getCentreFromNurse(@PathVariable("nurseEmail") String nurseEmail) {
-        Nurse n = (Nurse) userService.findByEmailAndDeleted(nurseEmail,false);
+        Nurse n = nurseService.findByEmail(nurseEmail);
 
         if (n == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

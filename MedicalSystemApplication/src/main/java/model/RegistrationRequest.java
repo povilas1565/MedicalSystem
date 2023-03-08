@@ -33,8 +33,7 @@ public class RegistrationRequest{
     	super();
     }
 
-    public RegistrationRequest(Long id, String username, String password, String email, String phone) {
-		this.id = id;
+    public RegistrationRequest(String username, String password, String email, String phone) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
@@ -43,7 +42,6 @@ public class RegistrationRequest{
     
     public RegistrationRequest(RegistrationRequest req)
     {
-		this.id = req.getId();
 		this.username = req.getUsername();
 		this.password = req.getPassword();
 		this.email = req.getEmail();

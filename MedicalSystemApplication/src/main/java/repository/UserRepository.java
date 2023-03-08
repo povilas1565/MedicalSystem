@@ -9,8 +9,10 @@ import model.User;
 import model.User.UserRole;
 
 public interface UserRepository extends JpaRepository<User,Long>{
-	
-	public User findByEmailAndDeleted(String email, Boolean deleted);
+
+	User findByEmail(String email);
+
+	User findByEmailAndDeleted(String email, boolean deleted);
 
 	List<User> findAllByRole(UserRole role);
 

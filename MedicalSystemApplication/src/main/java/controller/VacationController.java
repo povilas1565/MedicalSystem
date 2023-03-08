@@ -160,7 +160,7 @@ public class VacationController {
     @ApiOperation("Подтвердить запрос на отпуск")
     public ResponseEntity<Void> confirmVacationRequest(@RequestBody VacationDTO dto)
     {
-        User user = userService.findByEmailAndDeleted(dto.getUser().getEmail(), false);
+        User user = userService.findByEmail(dto.getUser().getEmail());
         List<VacationRequest> vrq = vacationRequestService.findAllByUser(user);
 
         try
@@ -180,7 +180,7 @@ public class VacationController {
     @ApiOperation("Отклонить запрос на отпуск")
     public ResponseEntity<Void> denyVacationRequest (@RequestBody VacationDTO dto, @PathVariable("denyText") String denyText)
     {
-        User user = userService.findByEmailAndDeleted(dto.getUser().getEmail(), false);
+        User user = userService.findByEmail(dto.getUser().getEmail());
         List<VacationRequest> vrq = vacationRequestService.findAllByUser(user);
 
         try
@@ -201,7 +201,7 @@ public class VacationController {
     @ApiOperation("Получение всех отпусков по пользователям")
     public ResponseEntity<List<VacationDTO>> getAllVacationsByUser(@PathVariable ("email") String email)
     {
-        User u = userService.findByEmailAndDeleted(email, false);
+        User u = userService.findByEmail(email);
 
         if (u == null)
         {

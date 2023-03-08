@@ -40,6 +40,9 @@ import java.util.List;
         private DrugService drugService;
 
         @Autowired
+        private PatientService patientService;
+
+        @Autowired
         private MedicalRecordService medicalRecordService;
 
 
@@ -49,7 +52,7 @@ import java.util.List;
         {
             HttpHeaders header = new HttpHeaders();
 
-            Patient patient = (Patient)userService.findByEmailAndDeleted(email,false);
+            Patient patient = patientService.findByEmail(email);
             if (patient == null)
             {
                 header.set("responseText", "patient not found: " + email);
@@ -135,7 +138,7 @@ import java.util.List;
         {
             HttpHeaders header = new HttpHeaders();
 
-            Patient patient = (Patient)userService.findByEmailAndDeleted(email,false);
+            Patient patient = patientService.findByEmail(email);
             if (patient == null)
             {
                 header.set("responseText", "patient not found: " + email);

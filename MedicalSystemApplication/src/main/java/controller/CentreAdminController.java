@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.AppointmentService;
+import service.CentreAdminService;
 import service.CentreService;
 import service.UserService;
 
@@ -35,11 +36,14 @@ public class CentreAdminController {
     @Autowired
     private AppointmentService appointmentService;
 
+    @Autowired
+    private CentreAdminService centreAdminService;
+
 
     @GetMapping(value = "/getCentreFromAdmin/{email}")
     @ApiOperation("Создание администраторов для центров")
     public ResponseEntity<CentreDTO> getCentreFromAdmin(@PathVariable("email") String email) {
-        CentreAdmin ca = (CentreAdmin) userService.findByEmailAndDeleted(email,false);
+        CentreAdmin ca = centreAdminService.findByEmail(email);
         if (ca ==  null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -51,7 +55,7 @@ public class CentreAdminController {
     @PostMapping(value = "/registerCentreAdmin/{centreName}")
     @ApiOperation("Поиск центров по Администраторам")
     public ResponseEntity<Void> registerCentreAdmin(@RequestBody UserDTO dto, @PathVariable("centreName") String centreName) {
-        CentreAdmin ca = (CentreAdmin) userService.findByEmailAndDeleted(dto.getEmail(),false);
+        CentreAdmin ca = centreAdminService.findByEmail(dto.getEmail());
 
         Centre centre = centreService.findByName(centreName);
         HttpHeaders header = new HttpHeaders();
@@ -79,7 +83,7 @@ public class CentreAdminController {
             try {
                 String hash = SecurePasswordHasher.getInstance().encode(token);
                 centreAdmin.setPassword(hash);
-                userService.save(centreAdmin);
+                centreAdminService.save(centreAdmin);
                 centreAdmin.setCentre(centre);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {

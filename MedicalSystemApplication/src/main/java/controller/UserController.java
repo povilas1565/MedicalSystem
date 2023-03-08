@@ -41,6 +41,18 @@ public class UserController {
     private DrugService drugService;
 
     @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
+    private PatientService patientService;
+
+    @Autowired
+    private NurseService nurseService;
+
+    @Autowired
+    private CentreAdminService centreAdminService;
+
+    @Autowired
     private MedicalRecordService medicalRecordService;
 
     @PutMapping(value = "/update/{email}")
@@ -68,7 +80,7 @@ public class UserController {
     @ApiOperation("Обновление(изменение) пароля")
     public ResponseEntity<Void> updatePassword(@PathVariable("email") String email, @RequestBody PasswordDTO dto) {
         System.out.println(email);
-        User user = userService.findByEmailAndDeleted(email, false);
+        User user = userService.findByEmail(email);
 
         if (user != null) {
             try {
@@ -94,7 +106,7 @@ public class UserController {
     @PutMapping(value = "/update/firstPassword/{email}", consumes = "application/json")
     @ApiOperation("Обновление(изменение) пароля")
     public ResponseEntity<Void> updateFirstPassword(@PathVariable("email") String email, @RequestBody PasswordDTO dto) {
-        User user = userService.findByEmailAndDeleted(email,false);
+        User user = userService.findByEmail(email);
         if (user != null) {
             String newPassword = dto.getNewPassword();
             try {
@@ -113,74 +125,74 @@ public class UserController {
 
     @GetMapping(value = "/getPatient/{email}")
     @ApiOperation("Получение данных пациентов")
-    public ResponseEntity<UserDTO> getPatient(@PathVariable("email") String email) {
-        Patient ret = (Patient) userService.findByEmailAndDeleted(email, false);
+    public ResponseEntity<PatientDTO> getPatient(@PathVariable("email") String email) {
+        Patient patient = patientService.findByEmail(email);
 
-        if (ret == null || ret.getDeleted()) {
+        if (patient == null || patient.getDeleted()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new UserDTO(ret), HttpStatus.OK);
+        return new ResponseEntity<>(new PatientDTO(patient), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getDoctor/{email}")
     @ApiOperation("Получение данных докторов")
     public ResponseEntity<DoctorDTO> getDoctor(@PathVariable("email") String email)  {
-        Doctor ret = (Doctor) userService.findByEmailAndDeleted(email, false);
+        Doctor doctor = doctorService.findByEmail(email);
 
-        if (ret == null || ret.getDeleted()) {
+        if (doctor == null || doctor.getDeleted()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new DoctorDTO(ret), HttpStatus.OK);
+        return new ResponseEntity<>(new DoctorDTO(doctor), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getNurse/{email}")
     @ApiOperation("Получение данных медработников")
     public ResponseEntity<NurseDTO> getNurse(@PathVariable("email") String email) {
-        Nurse ret = (Nurse) userService.findByEmailAndDeleted(email, false);
+        Nurse nurse = nurseService.findByEmail(email);
 
-        if (ret == null || ret.getDeleted()) {
+        if (nurse == null || nurse.getDeleted()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new NurseDTO(ret), HttpStatus.OK);
+        return new ResponseEntity<>(new NurseDTO(nurse), HttpStatus.OK);
     }
 
     @GetMapping(value="/getCentreAdmin/{email}")
-    @ApiOperation("Получение данных администраторв центров")
-    public ResponseEntity<UserDTO> getCentreAdmin(@PathVariable("email") String email) {
-        User ret = (User) userService.findByEmailAndDeleted(email, false);
+    @ApiOperation("Получение данных администраторов центров")
+    public ResponseEntity<CentreAdminDTO> getCentreAdmin(@PathVariable("email") String email) {
+        CentreAdmin centreAdmin = centreAdminService.findByEmail(email);
 
-        if (ret == null || ret.getDeleted()) {
+        if (centreAdmin == null || centreAdmin.getDeleted()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new UserDTO(ret), HttpStatus.OK);
+        return new ResponseEntity<>(new CentreAdminDTO(centreAdmin), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getUser/{email}")
     @ApiOperation("Получение данных обычных пользователей")
     public ResponseEntity<UserDTO> getUser(@PathVariable("email") String email) {
-        User ret = userService.findByEmailAndDeleted(email, false);
+        User user = userService.findByEmail(email);
 
-        if (ret == null || ret.getDeleted()) {
+        if (user == null || user.getDeleted()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new UserDTO(ret), HttpStatus.OK);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{userId}")
     @ApiOperation("Получение профилей пользователей по Id")
     public ResponseEntity<UserDTO> getUserProfile(@PathVariable("userId") String userId) {
-        User ret = userService.findById(Long.parseLong(userId));
+        User user = userService.findById(Long.parseLong(userId));
 
-        if (ret == null || ret.getDeleted()) {
+        if (user == null || user.getDeleted()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new UserDTO(ret), HttpStatus.OK);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 
 
@@ -224,7 +236,7 @@ public class UserController {
     @GetMapping(value = "/patient/getMedicalRecord/{email}")
     @ApiOperation("Получение медкарт пациентов")
     public ResponseEntity<MedicalRecordDTO> getMedicalRecord(@PathVariable("email") String email) {
-        Patient patient = (Patient) userService.findByEmailAndDeleted(email, false);
+        Patient patient = patientService.findByEmail(email);
 
         if (patient == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -239,7 +251,7 @@ public class UserController {
     @PutMapping(value = "/patient/updateMedicalRecord/{email}")
     @ApiOperation("Обновление(изменение) данных медкарт пациентов")
     ResponseEntity<Void> updateMedicalRecord(@PathVariable("email") String email, @RequestBody MedicalRecordDTO dto) {
-        Patient patient = (Patient) userService.findByEmailAndDeleted(email, false);
+        Patient patient = patientService.findByEmail(email);
         MedicalRecord record = medicalRecordService.findByPatient(patient);
 
         if (patient == null) {
@@ -256,7 +268,7 @@ public class UserController {
         record.setAlergies(dto.getAlergies());
         medicalRecordService.save(record);
         patient.setMedicalRecord(record);
-        userService.save(patient);
+        patientService.save(patient);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -23,8 +23,8 @@ public class Patient extends User {
 		super();
 	}
 	
-	public Patient(Long id, String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
-		super(id, username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Patient);
+	public Patient(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
+		super(username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Patient);
 		medicalRecord = new MedicalRecord();
 		this.setIsFirstLog(false);
 	}
@@ -53,14 +53,10 @@ public class Patient extends User {
 
 	public static class Builder extends UserBuilder
 	{
-		protected Builder(Long id)
-		{
-			super(id);
-		}
 
-		protected Builder withEmail(String email) {
-			super.withEmail(email);
-			return this;
+		protected Builder(String email) {
+			super(email);
+
 		}
 
 		public Builder withUsername(String username)

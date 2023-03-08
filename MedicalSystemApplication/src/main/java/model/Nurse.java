@@ -40,8 +40,8 @@ public class Nurse extends User {
     }
 
 
-    public Nurse(Long id, String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
-        super(id, username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Nurse);
+    public Nurse(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone) {
+        super(username, password, email, firstname, lastname, city, state, date_of_birth, phone, UserRole.Nurse);
         this.prescriptions = new ArrayList<>();
 		this.vacations = new ArrayList<>();
         this.setIsFirstLog(true);
@@ -137,14 +137,10 @@ public class Nurse extends User {
 	    public Centre centre;
 	    public String type;
 
-		protected Builder(Long id)
-		{
-			super(id);
-		}
 
-		protected Builder withEmail(String email) {
-			super.withEmail(email);
-			return this;
+		protected Builder(String email) {
+			super(email);
+
 		}
 
 		public Builder withUsername(String username)

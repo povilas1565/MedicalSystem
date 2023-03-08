@@ -16,10 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.AppointmentService;
-import service.CentreService;
-import service.NotificationService;
-import service.UserService;
+import service.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -44,10 +41,16 @@ public class DoctorController {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
+    private PatientService patientService;
+
     @PostMapping(value = "/makeNewDoctor", consumes = "application/json")
     @ApiOperation("Добавление нового доктора")
         public ResponseEntity<Void> addNewDoctor(@RequestBody DoctorDTO dto) {
-        Doctor d = (Doctor) userService.findByEmailAndDeleted(dto.getUser().getEmail(), false);
+        Doctor d = doctorService.findByEmail(dto.getUser().getEmail());
         Centre c = centreService.findByName(dto.getCentreName());
 
         if (d != null) {
@@ -68,7 +71,7 @@ public class DoctorController {
         Doctor doctor = new Doctor(dto);
         doctor.setPassword(pass);
         doctor.setCentre(c);
-        userService.save(doctor);
+        doctorService.save(doctor);
 
         c.getDoctors().add(doctor);
         centreService.save(c);
@@ -80,8 +83,8 @@ public class DoctorController {
          @ApiOperation("Добавить отзыв")
          public ResponseEntity<Void> addReview(@RequestBody ReviewDTO dto) {
 
-         Doctor doctor = (Doctor) userService.findByEmailAndDeleted(dto.getDoctorEmail(), false);
-         Patient patient = (Patient) userService.findByEmailAndDeleted(dto.getPatientEmail(), false);
+         Doctor doctor = doctorService.findByEmail(dto.getDoctorEmail());
+         Patient patient = patientService.findByEmail(dto.getPatientEmail());
 
          if (doctor == null) {
              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -95,7 +98,7 @@ public class DoctorController {
 
          ReviewDoctor rd = new ReviewDoctor(dto.getRating(), DateUtil.getInstance().now("dd-MM-yyyy"), patient);
          doctor.getReviews().add(rd);
-         userService.save(doctor);
+         doctorService.save(doctor);
 
          notificationService.sendNotification(patient.getEmail(), "You rated the doctor!", "Your rating of" + dto.getRating() + "stars for the doctor" + dto.getDoctorEmail() + "it is successfully recorded! Thank you for the review!");
          notificationService.sendNotification(doctor.getEmail(), "You're rated!", "Your work is evaluated by" + dto.getPatientEmail() + "with a rating of" + dto.getRating() + "stars!");
@@ -105,7 +108,7 @@ public class DoctorController {
      @GetMapping(value = "/getCentre/{email}")
      @ApiOperation("Получение центров по работающим в них докторам")
      public ResponseEntity<CentreDTO> getCentreByDoctor(@PathVariable("email") String email) {
-        Doctor d = (Doctor) userService.findByEmailAndDeleted(email, false);
+        Doctor d =  doctorService.findByEmail(email);
 
         if (d == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -120,7 +123,7 @@ public class DoctorController {
      @ApiOperation("Удаление докторов")
      public ResponseEntity<Void> removeDoctor(@PathVariable("email") String email) {
          HttpHeaders header = new HttpHeaders();
-         Doctor doc = (Doctor) userService.findByEmailAndDeleted(email,false);
+         Doctor doc = doctorService.findByEmail(email);
 
          if (doc == null) {
              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -131,21 +134,21 @@ public class DoctorController {
          if (appointments != null) {
              if (appointments.size() > 0) {
                  header.set("responseText", "Doctor("+email+") it cannot be deleted because it has "+appointments.size()+" scheduled examinations");
-                 return new ResponseEntity<Void>(header, HttpStatus.CONFLICT);
+                 return new ResponseEntity<>(header, HttpStatus.CONFLICT);
              }
          }
          else {
              return new ResponseEntity<Void>(header, HttpStatus.CONFLICT);
          }
          doc.setDeleted(true);
-         userService.save(doc);
+         doctorService.save(doc);
          return new ResponseEntity<>(HttpStatus.OK);
      }
 
      @GetMapping(value = "/getBusyTime/{doctor}/{date}")
      @ApiOperation("Получение времени когда докторы заняты")
      public ResponseEntity<List<DateIntervalDTO>> getBusyTime(@PathVariable("doctor") String doctorEmail, @PathVariable("date") String date) {
-        Doctor d = (Doctor) userService.findByEmailAndDeleted(doctorEmail, false);
+        Doctor d = doctorService.findByEmail(doctorEmail);
 
         if (d == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -164,7 +167,7 @@ public class DoctorController {
      @GetMapping(value = "/getFreeTime/{doctor}/{date}")
      @ApiOperation("Получение времени когда докторы свободны")
      public ResponseEntity<List<DateIntervalDTO>> getFreeTime(@PathVariable("doctor") String doctorEmail, @PathVariable("date") String date) {
-        Doctor d = (Doctor) userService.findByEmailAndDeleted(doctorEmail, false);
+        Doctor d = doctorService.findByEmail(doctorEmail);
 
         if (d == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

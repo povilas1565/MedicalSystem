@@ -37,8 +37,12 @@ public class UserService {
 
 	}
 
-		public User findByEmailAndDeleted(String email, Boolean deleted) {
-		return userRepository.findByEmailAndDeleted(email, deleted);
+		public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	public User findByEmailAndDeleted(String email, boolean deleted) {
+		return userRepository.findByEmailAndDeleted(email, false);
 	}
 
 

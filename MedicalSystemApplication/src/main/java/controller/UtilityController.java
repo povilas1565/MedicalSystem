@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.AppointmentService;
-import service.CentreService;
-import service.HallService;
-import service.UserService;
+import service.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +31,9 @@ public class UtilityController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DoctorService doctorService;
 
     @GetMapping(value="/date/getWeekInfo")
     @ApiOperation("Получение информации о неделе")
@@ -106,7 +106,7 @@ public class UtilityController {
     @ApiOperation("Получение времен занятости докторов")
     public ResponseEntity<List<DateIntervalDTO>> getBusy(@PathVariable("doctor") String doctorEmail)
     {
-        Doctor d = (Doctor) userService.findByEmailAndDeleted(doctorEmail, false);
+        Doctor d = doctorService.findByEmail(doctorEmail);
 
         List<DateInterval> intervals =  Scheduler.getFreeIntervals(d, DateUtil.getInstance().getDate("21-01-2020", "dd-mm-yyyy"));
         List<DateIntervalDTO> dtos = new ArrayList<DateIntervalDTO>();

@@ -10,13 +10,13 @@ import java.util.Optional;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
-    public Doctor findByEmail(String email);
+    Doctor findByEmail(String email);
 
-    public List<Doctor> findByType(String type);
+    List<Doctor> findByType(String type);
 
-    public List<Doctor> findAllByCentreAndType(Centre centre, String type);
+    List<Doctor> findAllByCentreAndType(Centre centre, String type);
 
 
-    public List<User> findAllByRole(User.UserRole role);
+     List<User> findAllByRole(User.UserRole role);
 
 }

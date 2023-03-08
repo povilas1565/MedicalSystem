@@ -44,6 +44,12 @@ public class AppointmentController {
     private HallService hallService;
 
     @Autowired
+    private PatientService patientService;
+
+    @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
     private PriceListService priceslistService;
 
     @GetMapping(value ="/get")
@@ -72,8 +78,8 @@ public class AppointmentController {
     @ApiOperation("Назначить приемы")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatient(@PathVariable("doctorEmail") String doctorEmail, @PathVariable("patientEmail") String patientEmail )
     {
-        Patient p = (Patient) userService.findByEmailAndDeleted(patientEmail, false);
-        Doctor d = (Doctor) userService.findByEmailAndDeleted(doctorEmail, false);
+        Patient p = patientService.findByEmail(patientEmail);
+        Doctor d =  doctorService.findByEmail(doctorEmail);
 
 
         if (p == null )
@@ -367,7 +373,7 @@ public class AppointmentController {
     @ApiOperation("Получение всех запросов пациентов")
     public ResponseEntity<List<AppointmentDTO>> getPatientRequests(@PathVariable("email") String email)
     {
-        Patient p = (Patient) userService.findByEmailAndDeleted(email, false);
+        Patient p = patientService.findByEmail(email);
 
         if (p == null)
         {
@@ -393,7 +399,7 @@ public class AppointmentController {
         Patient  p = null;
 
         try {
-            p = (Patient) userService.findByEmailAndDeleted(email,false);
+            p = patientService.findByEmail(email);
         }
         catch(ClassCastException e)
         {
@@ -881,7 +887,7 @@ public class AppointmentController {
         request.setCentre(centre);
 
 
-        Patient patient = (Patient) userService.findByEmailAndDeleted(dto.getPatientEmail(),false);
+        Patient patient = patientService.findByEmail(dto.getPatientEmail());
 
         if (patient == null)
         {
@@ -899,7 +905,7 @@ public class AppointmentController {
 
         for (String email : dto.getDoctors())
         {
-            Doctor doctor = (Doctor) userService.findByEmailAndDeleted(email,false);
+            Doctor doctor = doctorService.findByEmail(email);
 
 
             if (doctor == null)
@@ -1022,7 +1028,7 @@ public class AppointmentController {
     {
         HttpHeaders headers = new HttpHeaders();
 
-        Patient p = (Patient) userService.findByEmailAndDeleted(email, false);
+        Patient p = patientService.findByEmail(email);
 
         if(p == null)
         {
