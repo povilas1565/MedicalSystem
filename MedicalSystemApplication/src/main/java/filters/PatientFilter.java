@@ -3,7 +3,7 @@ package filters;
 import dto.UserDTO;
 import model.Patient;
 
-public class PatientFilter implements Filter{
+public class PatientFilter implements Filter {
 
 	
 	@Override

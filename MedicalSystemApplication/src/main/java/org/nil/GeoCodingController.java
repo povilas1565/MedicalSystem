@@ -15,8 +15,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping(value = "api")
 @Api
-public class GeoCodingApiController {
-    private static final Logger log = LoggerFactory.getLogger(GeoCodingApiController.class);
+public class GeoCodingController {
+    private static final Logger log = LoggerFactory.getLogger(GeoCodingController.class);
     private static final String GEOCODING_URI = "https://maps.googleapis.com/maps/api/geocode/json";
 
     @Autowired
@@ -35,9 +35,10 @@ public class GeoCodingApiController {
         log.info("Calling geocoding api with: " + builder.toUriString());
 
         GeoCoding geoCoding = restTemplate.getForObject(builder.toUriString(), GeoCoding.class);
-        log.info(geoCoding.toString());
 
-
+        if (geoCoding != null) {
+            log.info(geoCoding.toString());
+        }
         return geoCoding;
     }
 }
