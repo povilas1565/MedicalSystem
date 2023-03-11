@@ -31,14 +31,14 @@ public class Appointment
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "centre_id")
 	private Centre centre;
 	
 	@Column(name = "duration", nullable = true)
 	private long duration;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Doctor> doctors;
 	
 	@OneToOne(fetch = FetchType.LAZY)
