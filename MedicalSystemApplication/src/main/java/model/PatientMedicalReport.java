@@ -39,7 +39,7 @@ public class PatientMedicalReport {
 	@JoinColumn(name = "prescription_id", nullable = true)
 	private Prescription prescription;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Diagnosis> diagnosis;
 	
 

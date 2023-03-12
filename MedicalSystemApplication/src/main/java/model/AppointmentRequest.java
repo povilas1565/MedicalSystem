@@ -40,7 +40,7 @@ public class AppointmentRequest {
 	@JoinColumn(name = "centre_id")
 	private Centre centre;
 		
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Doctor> doctors;
 	
 	@OneToOne(fetch = FetchType.EAGER)
