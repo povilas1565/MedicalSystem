@@ -15,10 +15,10 @@ public class MedicalRecord {
 	public enum BloodType{A, B, AB, O}
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<PatientMedicalReport> reports;
 	
 	@Column(name = "bloodType", nullable = true)

@@ -24,10 +24,10 @@ public class Appointment
 	@Column(name= "endingDateAndTime")
 	private Date endDate;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Hall hall;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 	
@@ -41,7 +41,7 @@ public class Appointment
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Doctor> doctors;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "priceslist_id")
 	private Priceslist priceslist;
 	
