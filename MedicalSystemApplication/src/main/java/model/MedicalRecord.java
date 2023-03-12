@@ -18,7 +18,7 @@ public class MedicalRecord {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<PatientMedicalReport> reports;
 	
 	@Column(name = "bloodType", nullable = true)
