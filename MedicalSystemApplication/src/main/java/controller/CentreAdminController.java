@@ -6,6 +6,7 @@ import dto.UserDTO;
 import helpers.SecurePasswordHasher;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import model.Centre;
 import model.CentreAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import service.UserService;
 
 import java.util.ArrayList;
 
-
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/admins/centre")
 @CrossOrigin
@@ -43,18 +44,20 @@ public class CentreAdminController {
     @GetMapping(value = "/getCentreFromAdmin/{email}")
     @ApiOperation("Создание администраторов для центров")
     public ResponseEntity<CentreDTO> getCentreFromAdmin(@PathVariable("email") String email) {
+        log.info("Creating an administrator for the center with the email '{}'.", email);
         CentreAdmin ca = centreAdminService.findByEmail(email);
-        if (ca ==  null) {
+        if (ca == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         CentreDTO dto = new CentreDTO(ca.getCentre());
-           return new ResponseEntity<CentreDTO>(dto, HttpStatus.OK);
+        return new ResponseEntity<CentreDTO>(dto, HttpStatus.OK);
     }
 
     @PostMapping(value = "/registerCentreAdmin/{centreName}")
     @ApiOperation("Поиск центров по Администраторам")
     public ResponseEntity<Void> registerCentreAdmin(@RequestBody UserDTO dto, @PathVariable("centreName") String centreName) {
+        log.info("Search centers by admin with email '{}'.", centreName);
         CentreAdmin ca = centreAdminService.findByEmail(dto.getEmail());
 
         Centre centre = centreService.findByName(centreName);
