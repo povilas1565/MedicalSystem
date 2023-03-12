@@ -5,6 +5,8 @@ import javax.persistence.*;
 
 import helpers.UserBuilder;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,12 @@ public class CentreAdmin extends User {
     @ManyToOne(fetch = FetchType.EAGER)
     private Centre centre;
 
-    @OneToMany(fetch = FetchType.EAGER)
+	@OneToMany()
+	@LazyCollection(LazyCollectionOption.FALSE)
     private List<AppointmentRequest> appointmentRequests;
 
-    @OneToMany(fetch = FetchType.EAGER)
+	@OneToMany()
+	@LazyCollection(LazyCollectionOption.FALSE)
     private  List<VacationRequest> vacationRequests;
 
     public CentreAdmin(){

@@ -1,6 +1,8 @@
 package model;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,10 +38,12 @@ public class Centre
     @OneToMany(fetch = FetchType.LAZY)
     private List<Hall> halls;
 
-    @OneToMany(fetch = FetchType.EAGER)
+	@OneToMany()
+	@LazyCollection(LazyCollectionOption.FALSE)
     private List<Doctor> doctors;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
     private List<CentreReview> reviews;
 
     public Centre()

@@ -10,6 +10,8 @@ import dto.NurseDTO;
 import helpers.DateUtil;
 import helpers.UserBuilder;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Data
 @Entity
@@ -28,10 +30,12 @@ public class Nurse extends User {
     @ManyToOne(fetch = FetchType.EAGER)
     private Centre centre;
     
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
     private List<Prescription> prescriptions;
 
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Vacation> vacations;
 
 
