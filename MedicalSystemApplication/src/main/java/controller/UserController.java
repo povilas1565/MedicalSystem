@@ -212,15 +212,15 @@ public class UserController {
     @ApiOperation("Получение всех пользователей по конкретным role")
     public ResponseEntity<List<UserDTO>> geAllUserByRole(@PathVariable("role") UserRole role) {
         log.info("Getting all users by role '{}'.", role);
-        List<User> ret = userService.getAll(role);
+        List<User> user = userService.getAll(role);
         List<UserDTO> dtos = new ArrayList<UserDTO>();
-        for (User u : ret) {
-            if (!u.getDeleted()) {
+        for(User u : user) {
+            if(!u.getDeleted()) {
                 dtos.add(new UserDTO(u));
             }
         }
 
-        if (ret == null) {
+        if(user == null) {
             return new ResponseEntity<>(dtos, HttpStatus.NOT_FOUND);
         }
 
@@ -231,15 +231,15 @@ public class UserController {
     @ApiOperation("Получение всех пользователей")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         log.info("Getting all users.");
-        List<User> ret = userService.getAll();
+        List<User> user = userService.getAll();
         List<UserDTO> dtos = new ArrayList<UserDTO>();
-        for (User u : ret) {
+        for(User u : user) {
             if (!u.getDeleted()) {
                 dtos.add(new UserDTO(u));
             }
         }
 
-        if (ret == null) {
+        if(user == null) {
             return new ResponseEntity<>(dtos, HttpStatus.NOT_FOUND);
         }
 
