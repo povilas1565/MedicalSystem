@@ -20,7 +20,7 @@ import org.springframework.data.annotation.Version;
 public class VacationRequest
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
     @Column(name = "startDate", nullable = false)

@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Vacation 
 {
 	@Id
-	@GeneratedValue( strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	@Column(name = "startDate", nullable = false)

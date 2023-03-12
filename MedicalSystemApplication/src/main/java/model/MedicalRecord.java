@@ -15,7 +15,7 @@ public class MedicalRecord {
 	public enum BloodType{A, B, AB, O}
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@OneToMany(fetch = FetchType.EAGER)
