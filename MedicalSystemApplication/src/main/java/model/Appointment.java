@@ -27,7 +27,7 @@ public class Appointment
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Hall hall;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 	
@@ -38,10 +38,10 @@ public class Appointment
 	@Column(name = "duration", nullable = true)
 	private long duration;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Doctor> doctors;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "priceslist_id")
 	private Priceslist priceslist;
 	

@@ -12,7 +12,7 @@ public class Priceslist {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Centre centre;
 
 	@Column(name = "typeOfExamination", nullable = false)
