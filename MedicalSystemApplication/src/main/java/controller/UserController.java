@@ -1,5 +1,4 @@
 package controller;
-
 import dto.*;
 import helpers.SecurePasswordHasher;
 import io.swagger.annotations.Api;
@@ -64,7 +63,6 @@ public class UserController {
         User user = userService.findByEmail(email);
 
         if (user != null) {
-            user.setId(dto.getId());
             user.setUsername(dto.getUsername());
             user.setFirstname(dto.getFirstname());
             user.setLastname(dto.getLastname());
@@ -82,10 +80,11 @@ public class UserController {
     @PutMapping(value = "/update/password/{email}", consumes = "application/json")
     @ApiOperation("Обновление(изменение) пароля")
     public ResponseEntity<Void> updatePassword(@PathVariable("email") String email, @RequestBody PasswordDTO dto) {
+        System.out.println(email);
         log.info("Changing the password of a user with email '{}'.", email);
         User user = userService.findByEmail(email);
 
-        if (user != null) {
+        if(user != null) {
             try {
                 String oldPassword = dto.getOldPassword();
                 String oldHash = SecurePasswordHasher.getInstance().encode(oldPassword);
@@ -97,7 +96,9 @@ public class UserController {
                     userService.save(user);
                     return new ResponseEntity<>(HttpStatus.OK);
                 }
+
             } catch (NoSuchAlgorithmException e) {
+                // TODO Auto-generated catch block
                 e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -120,6 +121,7 @@ public class UserController {
                 userService.save(user);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (NoSuchAlgorithmException e) {
+                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
