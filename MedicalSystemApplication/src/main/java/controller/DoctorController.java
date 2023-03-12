@@ -107,9 +107,9 @@ public class DoctorController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getCentre/{email}")
+    @GetMapping(value = "/getCentre/{doctorEmail}")
     @ApiOperation("Получение центров по работающим в них докторам")
-    public ResponseEntity<CentreDTO> getCentreByDoctor(@PathVariable("email") String email) {
+    public ResponseEntity<CentreDTO> getCentreByDoctor(@PathVariable("doctorEmail") String email) {
         log.info("Receiving centers by doctors working in them by email '{}'.", email);
         Doctor d = doctorService.findByEmail(email);
 
