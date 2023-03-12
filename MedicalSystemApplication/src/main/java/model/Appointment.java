@@ -27,7 +27,7 @@ public class Appointment
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Hall hall;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 	
