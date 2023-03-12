@@ -20,7 +20,7 @@ public class CentreReview {
     @Column(name = "date", nullable = false)
     private Date date;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Patient patient;
 
     public CentreReview(){

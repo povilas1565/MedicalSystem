@@ -20,7 +20,7 @@ public class Prescription {
 	@Column(name = "description", nullable = true)
 	private String description;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Drug> drugs = new ArrayList<>();
 
 	@Column(name = "date", nullable = true)
@@ -30,7 +30,7 @@ public class Prescription {
 	private Boolean isValid = false;
 
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "nurse_id",  nullable = true)
 	private Nurse nurse;
 

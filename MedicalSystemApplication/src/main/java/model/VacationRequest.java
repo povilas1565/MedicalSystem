@@ -20,7 +20,7 @@ import org.springframework.data.annotation.Version;
 public class VacationRequest
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
     @Column(name = "startDate", nullable = false)
@@ -29,7 +29,7 @@ public class VacationRequest
     @Column(name = "endDate", nullable = false)
 	private Date endDate;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
     

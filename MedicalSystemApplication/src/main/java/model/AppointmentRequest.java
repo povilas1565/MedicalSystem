@@ -33,17 +33,17 @@ public class AppointmentRequest {
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Hall hall;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "centre_id")
 	private Centre centre;
 		
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Doctor> doctors;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "priceslist_id")
 	private Priceslist priceslist;
 	

@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class PatientMedicalReport {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	@Column(name = "description", nullable = true)
@@ -39,7 +39,7 @@ public class PatientMedicalReport {
 	@JoinColumn(name = "prescription_id", nullable = true)
 	private Prescription prescription;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Diagnosis> diagnosis;
 	
 

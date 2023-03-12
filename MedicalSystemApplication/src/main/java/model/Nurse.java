@@ -28,10 +28,10 @@ public class Nurse extends User {
     @ManyToOne(fetch = FetchType.EAGER)
     private Centre centre;
     
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Prescription> prescriptions;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<Vacation> vacations;
 
 
