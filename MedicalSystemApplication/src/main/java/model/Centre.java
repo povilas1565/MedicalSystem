@@ -36,10 +36,10 @@ public class Centre
     @OneToMany(fetch = FetchType.LAZY)
     private List<Hall> halls;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Doctor> doctors;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CentreReview> reviews;
 
     public Centre()

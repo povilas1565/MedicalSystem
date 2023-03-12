@@ -29,7 +29,7 @@ public class VacationRequest
     @Column(name = "endDate", nullable = false)
 	private Date endDate;
     
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
     

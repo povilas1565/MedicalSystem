@@ -30,7 +30,7 @@ public class Prescription {
 	private Boolean isValid = false;
 
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "nurse_id",  nullable = true)
 	private Nurse nurse;
 

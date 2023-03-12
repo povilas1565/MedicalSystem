@@ -29,7 +29,7 @@ public class AppointmentRequest {
 	@Column(name= "startingDateAndTime",nullable = false)
 	private Date date;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 	
@@ -40,10 +40,10 @@ public class AppointmentRequest {
 	@JoinColumn(name = "centre_id")
 	private Centre centre;
 		
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Doctor> doctors;
 	
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "priceslist_id")
 	private Priceslist priceslist;
 	
