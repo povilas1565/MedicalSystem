@@ -20,7 +20,7 @@ public class Prescription {
 	@Column(name = "description", nullable = true)
 	private String description;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Drug> drugs = new ArrayList<>();
 
 	@Column(name = "date", nullable = true)

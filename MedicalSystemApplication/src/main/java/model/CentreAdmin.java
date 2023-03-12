@@ -16,10 +16,10 @@ public class CentreAdmin extends User {
     @ManyToOne(fetch = FetchType.EAGER)
     private Centre centre;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     private List<AppointmentRequest> appointmentRequests;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     private  List<VacationRequest> vacationRequests;
 
     public CentreAdmin(){

@@ -31,7 +31,7 @@ public class Nurse extends User {
     @OneToMany(fetch = FetchType.EAGER)
     private List<Prescription> prescriptions;
 
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.LAZY)
 	private List<Vacation> vacations;
 
 

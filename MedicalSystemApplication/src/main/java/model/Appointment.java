@@ -38,7 +38,7 @@ public class Appointment
 	@Column(name = "duration", nullable = true)
 	private long duration;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Doctor> doctors;
 	
 	@OneToOne(fetch = FetchType.EAGER)
