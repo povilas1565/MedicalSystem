@@ -2,6 +2,8 @@ package model;
 
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,8 @@ public class MedicalRecord {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany()
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<PatientMedicalReport> reports;
 	
 	@Column(name = "bloodType", nullable = true)
