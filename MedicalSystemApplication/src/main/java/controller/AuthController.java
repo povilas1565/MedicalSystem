@@ -79,10 +79,32 @@ public class AuthController {
 
     @PutMapping(value="/verifyAccount/{email}")
     @ApiOperation("Проверка и обновление cозданного аккаунта")
-    public ResponseEntity<Void> verifyAccount(@PathVariable("email") String email)
+    public ResponseEntity<Void> verifyAccountByEmail(@PathVariable("email") String email)
     {
         log.info("Checking and updating the created account with email '{}'.", email);
         User u = userService.findByEmail(email);
+
+        if(u == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if(u.getVerified())
+        {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        u.setVerified(true);
+        userService.save(u);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(value="/verifyAccount/{phone}")
+    @ApiOperation("Проверка и обновление cозданного аккаунта")
+    public ResponseEntity<Void> verifyAccountByPhone(@PathVariable("phone") String phone)
+    {
+        log.info("Checking and updating the created account with phone '{}'.", phone);
+        User u = userService.findByPhone(phone);
 
         if(u == null)
         {

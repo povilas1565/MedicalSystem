@@ -81,10 +81,8 @@ public class User   {
 	public User(RegistrationRequest request, UserRole role)
 	{
 		super();
-		this.username = request.getUsername();
 		this.password = request.getPassword();
 		this.email = request.getEmail();
-		this.phone = request.getPhone();
 		this.role = role;
 		this.deleted = false;
 		this.verified = true;
