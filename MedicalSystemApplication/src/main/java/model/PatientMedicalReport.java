@@ -2,6 +2,8 @@ package model;
 
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +41,8 @@ public class PatientMedicalReport {
 	@JoinColumn(name = "prescription_id", nullable = true)
 	private Prescription prescription;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany()
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Diagnosis> diagnosis;
 	
 
