@@ -30,6 +30,7 @@ public class MedicalRecord {
 	@ElementCollection
 	@CollectionTable(name="Alergies", joinColumns=@JoinColumn(name="user_id"))
 	@Column(name="alergie")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<String> alergies;
 	
 	@Column(name = "height", nullable = true)
