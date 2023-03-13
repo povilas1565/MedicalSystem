@@ -107,28 +107,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping(value = "/update/firstPassword/{email}", consumes = "application/json")
-    @ApiOperation("Обновление(изменение) пароля")
-    public ResponseEntity<Void> updateFirstPassword(@PathVariable("email") String email, @RequestBody PasswordDTO dto) {
-        log.info("Adding user password with email '{}'.", email);
-        User user = userService.findByEmail(email);
-        if (user != null) {
-            String newPassword = dto.getNewPassword();
-            try {
-                String hashNewPassword = SecurePasswordHasher.getInstance().encode(newPassword);
-                user.setPassword(hashNewPassword);
-                user.setIsFirstLog(false);
-                userService.save(user);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (NoSuchAlgorithmException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
     @GetMapping(value = "/getPatient/{email}")
     @ApiOperation("Получение данных пациентов")
     public ResponseEntity<PatientDTO> getPatient(@PathVariable("email") String email) {
