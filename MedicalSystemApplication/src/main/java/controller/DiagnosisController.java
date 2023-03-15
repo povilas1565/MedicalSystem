@@ -66,6 +66,7 @@ public class DiagnosisController {
 
         if (diagnosis != null) {
             diagnosis.setName(dto.getName());
+            diagnosis.setCode(dto.getCode());
             diagnosis.setTag(dto.getTag());
             diagnosisService.save(diagnosis);
         } else {
