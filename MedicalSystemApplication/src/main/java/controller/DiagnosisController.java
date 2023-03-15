@@ -3,6 +3,7 @@ package controller;
 import dto.DiagnosisDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import model.Diagnosis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import service.DiagnosisService;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 @RestController
 @RequestMapping(value = "api/diagnosis")
 @CrossOrigin
@@ -26,6 +27,7 @@ public class DiagnosisController {
     @GetMapping(value = "/getAllDiagnosis")
     @ApiOperation("Получение всех диагнозов")
     public ResponseEntity<List<DiagnosisDTO>> getDiagnosis() {
+        log.info("Getting all diagnoses.");
         List<Diagnosis> diagnosis = diagnosisService.findAll();
         List<DiagnosisDTO> diagnosisDTO = new ArrayList<DiagnosisDTO>();
         if (diagnosis == null) {
@@ -43,6 +45,7 @@ public class DiagnosisController {
     @PostMapping(value = "/addDiagnosis", consumes = "application/json")
     @ApiOperation("Добавление диагнозов")
     public ResponseEntity<Void> addDiagnosis(@RequestBody DiagnosisDTO dto) {
+        log.info("Adding a diagnosis '{}'.", dto.getName());
         Diagnosis d = diagnosisService.findByCode(dto.getCode());
 
         if (d == null) {
@@ -60,8 +63,9 @@ public class DiagnosisController {
     }
 
     @PutMapping(value = "/updateDiagnosis/{code}")
-    @ApiOperation("бновление(изменение) диагнозов согласно их кодам")
+    @ApiOperation("Обновление(изменение) диагнозов согласно их кодам")
     public ResponseEntity<Void> updateDiagnosis(@RequestBody DiagnosisDTO dto, @PathVariable("code") String code) {
+        log.info("Updating (changing) a diagnosis according to its code '{}'.", code);
         Diagnosis diagnosis = diagnosisService.findByCode(code);
 
         if (diagnosis != null) {
@@ -69,7 +73,7 @@ public class DiagnosisController {
             diagnosis.setTag(dto.getTag());
             diagnosisService.save(diagnosis);
         } else {
-            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -78,6 +82,7 @@ public class DiagnosisController {
     @DeleteMapping(value = "/deleteDiagnosis/{code}")
     @ApiOperation("Удаление диагнозов согласно их кодам")
     public ResponseEntity<Void> deleteDiagnosis(@PathVariable("code") String code) {
+        log.info("Deleting a diagnosis according to its code '{}'.", code);
         Diagnosis diagnosis = diagnosisService.findByCode(code);
 
         if (diagnosis == null) {

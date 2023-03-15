@@ -5,6 +5,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import model.ChargeRequest;
 import model.ChargeRequest.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import service.StripeService;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "api/charge")
 @Api
@@ -25,8 +27,8 @@ public class ChargeController {
 
     @PostMapping("/charge")
     @ApiOperation("Оформление оплаты заказов")
-    public String charge(ChargeRequest chargeRequest, Model model)
-            throws StripeException, APIException {
+    public String charge(ChargeRequest chargeRequest, Model model) throws StripeException, APIException {
+        log.info("Making payment for an order in the amount of '{}'.", chargeRequest.getAmount());
         chargeRequest.setDescription("Example charge");
         chargeRequest.setCurrency(Currency.EUR);
         chargeRequest.setCurrency(Currency.USD);
