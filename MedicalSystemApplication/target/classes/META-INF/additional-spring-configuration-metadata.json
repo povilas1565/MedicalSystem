@@ -10,5 +10,5 @@
       "type": "java.lang.String",
       "description": "Description for STRIPE_SECRET_KEY."
     }
-  ]
-}
+    ]
+    }
