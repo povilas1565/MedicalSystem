@@ -10,6 +10,7 @@ import lombok.Data;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User   {
 
+
 	public enum UserRole {Patient, Doctor, Nurse, CentreAdmin}
 	
 	@Id
@@ -87,6 +88,7 @@ public class User   {
 		this.deleted = false;
 		this.verified = true;
 	}
+
 	
 	
 

@@ -149,15 +149,15 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Patient patient = new Patient(req);
-        patient.setVerified(false);
-        String token = patient.getPassword();
+        User user = new User();
+        user.setVerified(false);
+        String token = user.getPassword();
 
         try {
             String hash = SecurePasswordHasher.getInstance().encode(token);
 
-            patient.setPassword(hash);
-            userService.save(patient);
+            user.setPassword(hash);
+            userService.save(user);
             String requestURL = httpRequest.getRequestURL().toString();
             String root = requestURL.split("api")[0] + req.getEmail();
             notificationService.sendNotification(req.getEmail(), "Registration Center",

@@ -11,8 +11,7 @@ import javax.persistence.Id;
 @Data
 @Entity
 public class RegistrationRequest{
-	
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,12 +30,13 @@ public class RegistrationRequest{
 		this.password = password;
 		this.email = email;
     }
-    
-    public RegistrationRequest(RegistrationRequest req)
-    {
+
+	public RegistrationRequest(RegistrationRequest req)
+	{
 		this.password = req.getPassword();
 		this.email = req.getEmail();
-    }
+	}
+
     
 
 	public Long getId() {
@@ -63,8 +63,5 @@ public class RegistrationRequest{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-
-
 
 }
