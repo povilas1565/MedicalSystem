@@ -177,7 +177,7 @@ public class AuthController {
     @ApiOperation("Отмена регистрации")
     public ResponseEntity<Void> denyRegistration(@PathVariable("reply") String reply) {
         log.info("Cancellation of registration: '{}'.", reply);
-        String[] parts = reply.split(",", 2);
+        String parts[]= reply.split(",", 2);
 
         String email = parts[0];
         String text = parts[1];
