@@ -149,15 +149,15 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        User user = new User();
-        user.setVerified(false);
-        String token = user.getPassword();
+        Patient patient = new Patient(req);
+        patient.setVerified(false);
+        String token = patient.getPassword();
 
         try {
             String hash = SecurePasswordHasher.getInstance().encode(token);
 
-            user.setPassword(hash);
-            userService.save(user);
+            patient.setPassword(hash);
+            userService.save(patient);
             String requestURL = httpRequest.getRequestURL().toString();
             String root = requestURL.split("api")[0] + req.getEmail();
             notificationService.sendNotification(req.getEmail(), "Registration Center",
@@ -177,7 +177,7 @@ public class AuthController {
     @ApiOperation("Отмена регистрации")
     public ResponseEntity<Void> denyRegistration(@PathVariable("reply") String reply) {
         log.info("Cancellation of registration: '{}'.", reply);
-        String parts[] = reply.split(",", 2);
+        String[] parts = reply.split(",", 2);
 
         String email = parts[0];
         String text = parts[1];
