@@ -165,6 +165,26 @@ public class ChatController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/updateChat/{id}")
+    @ApiOperation("Обновление(изменение) отчета по id")
+    public ResponseEntity<Void> updateChat(@PathVariable("id")long id, @RequestBody ChatDTO dto) {
+        HttpHeaders header = new HttpHeaders();
+
+        Chat chat = chatService.findById(id);
+        if (chat == null) {
+            header.set("responseText", "report not found: " + id);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
+        }
+
+        chat.setDescription(dto.getDescription());
+        chat.setName(dto.getName());
+        chat.setMessage(dto.getMessage());
+        chat.setDateAndTime(dto.getDateAndTime());
+        chatService.save(chat);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @DeleteMapping(value = "/removeChat1/{doctor}/{patient}")
     @ApiOperation("Удаление чатов между докторами и пациентами")
