@@ -19,17 +19,14 @@ public class ChatService {
        chatRepository.delete(chat);
     }
 
-    public Chat findByPatient(Patient patient) {
-        return chatRepository.findByPatient(patient);
+    public Chat findByNurseAndPatient(Nurse nurse, Patient patient) {
+        return chatRepository.findByNurseAndPatient(nurse,patient);
     }
 
-    public Chat findByDoctor(Doctor doctor) {
-        return chatRepository.findByDoctor(doctor);
+    public Chat findByDoctorAndPatient(Doctor doctor, Patient patient) {
+        return chatRepository.findByDoctorAndPatient(doctor, patient);
     }
 
-    public Chat findByNurse(Nurse nurse) {
-        return chatRepository.findByNurse(nurse);
-    }
 
     public Chat findById(long id) {
         return chatRepository.findById(id);

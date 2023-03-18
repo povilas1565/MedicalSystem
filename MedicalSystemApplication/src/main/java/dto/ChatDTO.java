@@ -99,5 +99,7 @@ public class ChatDTO {
     public void setNurse(String nurseEmail) {
         this.nurseEmail = nurseEmail;
     }
+
     }
+
 
