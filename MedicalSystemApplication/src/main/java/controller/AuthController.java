@@ -6,7 +6,6 @@ import helpers.SecurePasswordHasher;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import model.Patient;
 import model.RegistrationRequest;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +98,7 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value="/verifyAccount/{phone}")
+    @PutMapping(value="/verifyAccount2/{phone}")
     @ApiOperation("Проверка и обновление cозданного аккаунта")
     public ResponseEntity<Void> verifyAccountByPhone(@PathVariable("phone") String phone)
     {
@@ -149,15 +148,15 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        Patient patient = new Patient(req);
-        patient.setVerified(false);
-        String token = patient.getPassword();
+        User user = new User(req);
+        user.setVerified(true);
+        String token = user.getPassword();
 
         try {
             String hash = SecurePasswordHasher.getInstance().encode(token);
 
-            patient.setPassword(hash);
-            userService.save(patient);
+            user.setPassword(hash);
+            userService.save(user);
             String requestURL = httpRequest.getRequestURL().toString();
             String root = requestURL.split("api")[0] + req.getEmail();
             notificationService.sendNotification(req.getEmail(), "Registration Center",

@@ -89,6 +89,16 @@ public class User   {
 		this.verified = true;
 	}
 
+
+	public User(RegistrationRequest request)
+	{
+		super();
+		this.password = request.getPassword();
+		this.email = request.getEmail();
+		this.deleted = false;
+		this.verified = true;
+	}
+
 	
 	
 
