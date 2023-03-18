@@ -464,7 +464,7 @@ public class AppointmentController {
         Doctor d = null;
 
         try {
-            d = (Doctor)userService.findByEmail(email);
+            d = doctorService.findByEmail(email);
         }
         catch(ClassCastException e)
         {
@@ -598,7 +598,7 @@ public class AppointmentController {
 
         if (centre == null)
         {
-            header.set("responseText", "Centre " + dto.getCentreName() +" is not found");
+            header.set("responseText", "Centre " + dto.getCentreName() + " is not found");
             return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
         }
 
@@ -633,7 +633,7 @@ public class AppointmentController {
 
         if (p == null)
         {
-            header.set("responseText", "Priceslist " + dto.getTypeOfExamination() +" is not found");
+            header.set("responseText", "Priceslist " + dto.getTypeOfExamination() + " is not found");
             return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
         }
 
@@ -698,7 +698,7 @@ public class AppointmentController {
 
         if (request == null)
         {
-            header.set("responseText", "Request not found: " + dto.getDate() +" ,"+ dto.getHallNumber() +", "+ dto.getCentreName());
+            header.set("responseText", "Request not found: " + dto.getDate() + " ,"+ dto.getHallNumber() + ", " + dto.getCentreName());
             return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
         }
 
@@ -752,12 +752,12 @@ public class AppointmentController {
             if(appointment.getAppointmentType() == Appointment.AppointmentType.Examination){
                 for (Doctor doctor: doctors)
                 {
-                    notificationService.sendNotification(doctor.getEmail(), "A new reception is scheduled",  "A new reception is scheduled in your work calendar. The date of the reception is "+ desiredStartTime + ", in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + ".");
+                    notificationService.sendNotification(doctor.getEmail(), "A new reception is scheduled",  "A new reception is scheduled in your work calendar.\nThe date of the reception is "+ desiredStartTime + ", in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + ".");
 
                 }
 
                 if (!dat.equals("undefined")) {
-                    notificationService.sendNotification(request.getPatient().getEmail(), "Your reception is scheduled.", "Request for examination accepted. The date of the reception is "+  dto.getDate() + ", in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + "." );
+                    notificationService.sendNotification(request.getPatient().getEmail(), "Your reception is scheduled.", "Request for examination accepted.\nThe date of the reception is "+  dto.getDate() + ", in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + "." );
                 } else {
                     notificationService.sendNotification(request.getPatient().getEmail(), "Reception date changed.", "The date of the reception, which was scheduled " + dto.getDate() +  ", it has been changed to " + dto.getNewDate() + ". The reception is scheduled in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + "." );
                 }
@@ -778,7 +778,7 @@ public class AppointmentController {
                     .queryParam("hall", appointment.getHall().getNumber())
                     .queryParam("confirmed", false);
 
-            notificationService.sendNotification("prerecover07@gmail.com ", "Confirm preview","The centre administrator has approved your request for examination. Confirm by going to the link:" + builderRootAccept.toUriString() + " Refuse by going to the link:"+ builderRootDeny.toUriString());
+            notificationService.sendNotification("prerecover07@gmail.com", "Confirm preview","The centre administrator has approved your request for examination.\nConfirm by going to the link:" + builderRootAccept.toUriString() + " Refuse by going to the link:"+ builderRootDeny.toUriString());
 
             notificationService.sendNotification(appointment.getDoctors().get(0).getEmail(), "Admin has booked an appointment to review", "Admin booked a date review " + DateUtil.getInstance().getString(appointment.getDate(), "dd-MM-yyyy HH:mm") + ", in the centre "+appointment.getCentre().getName() + ", in Room № " + appointment.getHall().getNumber()+ " and he choose you as a doctor.");
 
