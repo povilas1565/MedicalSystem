@@ -20,10 +20,10 @@ public class User   {
 	@Column(name="deleted", nullable = true)
 	private Boolean deleted;
 	
-	@Column(name = "isFirstLog", nullable = false)
+	@Column(name = "isFirstLog")
 	private Boolean isFirstLog;
 
-	@Column(name = "username", nullable = false)
+	@Column(name = "username")
 	private String username;
 	
 	@Column(name = "password", nullable = false)
@@ -32,25 +32,25 @@ public class User   {
 	@Column(name = "email", nullable = false)
 	private String email;
 	
-	@Column(name = "firstname", nullable = false)
+	@Column(name = "firstname")
 	private String firstname;
 	
-	@Column(name = "lastname", nullable = false)
+	@Column(name = "lastname")
 	private String lastname;
 	
-	@Column(name = "city", nullable = false)
+	@Column(name = "city")
 	private String city;
 	
-	@Column(name = "state", nullable = false)
+	@Column(name = "state")
 	private String state;
 
-	@Column(name = "date_of_birth", nullable = false)
+	@Column(name = "date_of_birth")
 	private String date_of_birth;
 	
-	@Column(name = "phone", nullable = false)
+	@Column(name = "phone")
 	private String phone;
 
-	@Column(name = "role", nullable = false)
+	@Column(name = "role")
 	private UserRole role;
 
 	@Column(name = "verified")
@@ -98,9 +98,6 @@ public class User   {
 		this.deleted = false;
 		this.verified = true;
 	}
-
-	
-	
 
 	public User(User user) {
 		this.username = user.getUsername();

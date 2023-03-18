@@ -17,13 +17,11 @@ public class NotificationService {
     }
 
     public void sendNotification(String email, String subject, String content) throws MailException {
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(email);
-        mail.setFrom("prerecover07@gmail.com");
-        mail.setSubject(subject);
-        mail.setText(content);
-
-        javaMailSender.send(mail);
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setText(content);
+        javaMailSender.send(simpleMailMessage);
     }
 }
 

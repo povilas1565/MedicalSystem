@@ -1,5 +1,6 @@
 package controller;
 
+import dto.DenyRegisterDTO;
 import dto.LoginDTO;
 import dto.SessionUserDTO;
 import helpers.SecurePasswordHasher;
@@ -14,10 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import service.AuthService;
 import service.NotificationService;
 import service.UserService;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,20 +77,17 @@ public class AuthController {
     }
 
 
-    @PutMapping(value="/verifyAccount/{email}")
+    @GetMapping(value = "/verifyAccount/{email}")
     @ApiOperation("Проверка и обновление cозданного аккаунта")
-    public ResponseEntity<Void> verifyAccountByEmail(@PathVariable("email") String email)
-    {
+    public ResponseEntity<Void> verifyAccountByEmail(@PathVariable("email") String email) {
         log.info("Checking and updating the created account with email '{}'.", email);
         User u = userService.findByEmail(email);
 
-        if(u == null)
-        {
+        if (u == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(u.getVerified())
-        {
+        if (u.getVerified()) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
@@ -98,20 +96,17 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value="/verifyAccount2/{phone}")
+    @GetMapping(value = "/verifyAccount2/{phone}")
     @ApiOperation("Проверка и обновление cозданного аккаунта")
-    public ResponseEntity<Void> verifyAccountByPhone(@PathVariable("phone") String phone)
-    {
+    public ResponseEntity<Void> verifyAccountByPhone(@PathVariable("phone") String phone) {
         log.info("Checking and updating the created account with phone '{}'.", phone);
         User u = userService.findByPhone(phone);
 
-        if(u == null)
-        {
+        if (u == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if(u.getVerified())
-        {
+        if (u.getVerified()) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
@@ -149,18 +144,16 @@ public class AuthController {
         }
 
         User user = new User(req);
-        user.setVerified(true);
+        user.setDeleted(false);
         String token = user.getPassword();
 
         try {
             String hash = SecurePasswordHasher.getInstance().encode(token);
-
             user.setPassword(hash);
             userService.save(user);
-            String requestURL = httpRequest.getRequestURL().toString();
-            String root = requestURL.split("api")[0] + req.getEmail();
+            String verifyAccountUrl = getVerifyAccountUrl(httpRequest, email);
             notificationService.sendNotification(req.getEmail(), "Registration Center",
-                    "Your request for registration for the Medical Center has been accepted.\n\n Please confirm your registration by visiting the link:" + root);
+                    "Your request for registration for the Medical Center has been accepted.\nPlease confirm your registration by visiting the link:\n" + verifyAccountUrl);
             authService.delete(req);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (NoSuchAlgorithmException e) {
@@ -168,21 +161,16 @@ public class AuthController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
     }
 
-    @DeleteMapping(value = "/denyRegister/{reply}")
+    @DeleteMapping(value = "/denyRegister")
     @ApiOperation("Отмена регистрации")
-    public ResponseEntity<Void> denyRegistration(@PathVariable("reply") String reply) {
-        log.info("Cancellation of registration: '{}'.", reply);
-        String parts[]= reply.split(",", 2);
+    public ResponseEntity<Void> denyRegistration(@RequestBody DenyRegisterDTO denyRegisterDTO) {
+        String email = denyRegisterDTO.getEmail();
+        log.info("Cancellation of registration: '{}'.", email);
+        String rejectionReason = denyRegisterDTO.getRejectionReason();
 
-        String email = parts[0];
-        String text = parts[1];
-
-        RegistrationRequest req = authService.
-                findByEmail(email);
+        RegistrationRequest req = authService.findByEmail(email);
 
         if (req == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -190,10 +178,10 @@ public class AuthController {
 
         try {
             notificationService.sendNotification(req.getEmail(), "Registration Center",
-                    "Your request for registration of an order for a Medical Center has been denied. The reason for the refusal is as follows: " + text);
+                    "Your request for registration of an order for a Medical Center has been denied.\nThe reason for the refusal is as follows:\n" + "'" + rejectionReason + "'");
             authService.delete(req);
         } catch (MailException e) {
-
+            log.info("Unregistration message for user '{}' was not sent!.", email);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -237,6 +225,15 @@ public class AuthController {
         List<RegistrationRequest> ret = authService.getAll();
 
         return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
+
+    public String getVerifyAccountUrl(HttpServletRequest httpRequest, String email) {
+        String requestURL = httpRequest.getRequestURL().toString();
+        String url = requestURL.split("confirmRegister")[0];
+        return UriComponentsBuilder.fromHttpUrl(url)
+                .pathSegment("verifyAccount")
+                .pathSegment(email)
+                .toUriString();
     }
 
 }
