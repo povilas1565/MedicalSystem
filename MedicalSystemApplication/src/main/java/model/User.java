@@ -61,7 +61,7 @@ public class User   {
 	{
 		super();
 		this.deleted = false;
-		this.verified = true;
+		this.verified = false;
 	}
 
 	public User(String username, String password, String email, String firstname, String lastname, String city, String state, String date_of_birth, String phone, UserRole role) {
