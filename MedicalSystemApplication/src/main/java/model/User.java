@@ -76,7 +76,7 @@ public class User   {
 		this.date_of_birth = date_of_birth;
 		this.phone = phone;
 		this.deleted = false;
-		this.verified = true;
+		this.verified = false;
 	}
 	
 	public User(RegistrationRequest request, UserRole role)
@@ -86,7 +86,7 @@ public class User   {
 		this.email = request.getEmail();
 		this.role = role;
 		this.deleted = false;
-		this.verified = true;
+		this.verified = false;
 	}
 
 
@@ -96,7 +96,7 @@ public class User   {
 		this.password = request.getPassword();
 		this.email = request.getEmail();
 		this.deleted = false;
-		this.verified = true;
+		this.verified = false;
 	}
 
 	public User(User user) {
@@ -111,7 +111,7 @@ public class User   {
 		this.phone = user.getPhone();
 		this.role = user.getRole();
 		this.deleted = false;
-		this.verified = true;
+		this.verified = false;
 	}
 
 
@@ -128,7 +128,7 @@ public class User   {
 		this.phone = user.getPhone();
 		this.role = user.getRole();
 		this.deleted = false;
-		this.verified = true;
+		this.verified = false;
 	}
 
 	
