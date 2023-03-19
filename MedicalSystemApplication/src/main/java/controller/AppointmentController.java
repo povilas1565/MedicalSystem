@@ -5,6 +5,7 @@ import helpers.DateInterval;
 import helpers.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import model.*;
 import model.User.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 import java.util.*;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "api/appointments")
 @CrossOrigin
@@ -52,10 +54,10 @@ public class AppointmentController {
     @Autowired
     private PriceListService priceslistService;
 
-    @GetMapping(value ="/get")
+    @GetMapping(value = "/get")
     @ApiOperation("Записаться на приемы")
-    public ResponseEntity<AppointmentDTO> getAppointment(@RequestBody AppointmentDTO dto)
-    {
+    public ResponseEntity<AppointmentDTO> getAppointment(@RequestBody AppointmentDTO dto) {
+        log.info("Making an appointment at the medical center '{}'.", dto.getCentreName());
         String centre = dto.getCentreName();
         String date = dto.getDate();
         int hallNumber = dto.getHallNumber();
@@ -63,197 +65,174 @@ public class AppointmentController {
         Appointment appointment = appointmentService.findAppointment(date, hallNumber, centre);
 
         HttpHeaders header = new HttpHeaders();
-        if (appointment == null)
-        {
-            header.set("responseText", "Appointment not found for: ("+date+","+hallNumber+")");
+        if (appointment == null) {
+            header.set("responseText", "Appointment not found for: (" + date + "," + hallNumber + ")");
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-
-        return new ResponseEntity<>(new AppointmentDTO(appointment),HttpStatus.OK);
+        return new ResponseEntity<>(new AppointmentDTO(appointment), HttpStatus.OK);
     }
 
     //Get By doctor and patient
-    @GetMapping(value="/getAppointments/{doctorEmail}/{patientEmail}")
+    @GetMapping(value = "/getAppointments/{doctorEmail}/{patientEmail}")
     @ApiOperation("Назначить приемы")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatient(@PathVariable("doctorEmail") String doctorEmail, @PathVariable("patientEmail") String patientEmail )
-    {
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatient(@PathVariable("doctorEmail") String doctorEmail, @PathVariable("patientEmail") String patientEmail) {
+        log.info("Assigning a patient '{}' to an appointment with a doctor '{}'.", patientEmail, doctorEmail);
         Patient p = patientService.findByEmail(patientEmail);
-        Doctor d =  doctorService.findByEmail(doctorEmail);
+        Doctor d = doctorService.findByEmail(doctorEmail);
 
-
-        if (p == null )
-        {
+        if (p == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (d == null)
-        {
+        if (d == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> app = appointmentService.findAllByDoctorAndPatient(d, p);
         List<AppointmentDTO> appDTO = new ArrayList<>();
 
-        if (app == null)
-        {
+        if (app == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        for (Appointment a : app)
-        {
+        for (Appointment a : app) {
             appDTO.add(new AppointmentDTO(a));
         }
 
-        return new ResponseEntity<List<AppointmentDTO>>(appDTO,HttpStatus.OK);
-
+        return new ResponseEntity<List<AppointmentDTO>>(appDTO, HttpStatus.OK);
     }
 
-    @GetMapping(value ="/getAppointment/{centreName}/{date}/{hallNumber}")
+    @GetMapping(value = "/getAppointment/{centreName}/{date}/{hallNumber}")
     @ApiOperation("Записаться на конкретные приемы")
-    public ResponseEntity<AppointmentDTO> getAppointment(@PathVariable("centreName") String centre, @PathVariable("date") String date, @PathVariable("hallNumber") int hallNumber)
-    {
+    public ResponseEntity<AppointmentDTO> getAppointment(@PathVariable("centreName") String centre, @PathVariable("date") String date, @PathVariable("hallNumber") int hallNumber) {
+        log.info("Making an appointment at the medical center '{}' on '{}'.", centre, date);
         Appointment appointment = appointmentService.findAppointment(date, hallNumber, centre);
 
         HttpHeaders header = new HttpHeaders();
-        if (appointment == null)
-        {
-            header.set("responseText", "Appointment not found for: ("+date+","+hallNumber+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (appointment == null) {
+            header.set("responseText", "Appointment not found for: (" + date + "," + hallNumber + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-
-        return new ResponseEntity<>(new AppointmentDTO(appointment),HttpStatus.OK);
+        return new ResponseEntity<>(new AppointmentDTO(appointment), HttpStatus.OK);
     }
 
-    @GetMapping(value ="/getAll")
+    @GetMapping(value = "/getAll")
     @ApiOperation("Получение всевозможных назначений на приемы")
-    public ResponseEntity<List<AppointmentDTO>> getAllAppointments()
-    {
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointments() {
+        log.info("Getting all sorts of appointments for appointments.");
         List<Appointment> app = appointmentService.findAll();
         List<AppointmentDTO> appDTO = new ArrayList<AppointmentDTO>();
 
-        if (app == null)
-        {
+        if (app == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
         }
 
-        for (Appointment a : app)
-        {
+        for (Appointment a : app) {
             appDTO.add(new AppointmentDTO(a));
         }
 
-        return new ResponseEntity<>(appDTO,HttpStatus.OK);
+        return new ResponseEntity<>(appDTO, HttpStatus.OK);
     }
 
-    @GetMapping(value ="/getRequest")
+    @GetMapping(value = "/getRequest")
     @ApiOperation("Получение запросов на приемы")
-    public ResponseEntity<AppointmentDTO> getAppointmentRequest(@RequestBody AppointmentDTO dto)
-    {
+    public ResponseEntity<AppointmentDTO> getAppointmentRequest(@RequestBody AppointmentDTO dto) {
+        log.info("Receiving requests for appointments at the medical center '{}'.", dto.getCentreName());
         String centre = dto.getCentreName();
         String date = dto.getDate();
         int hallNumber = dto.getHallNumber();
         AppointmentRequest appointmentReq = appointmentRequestService.findAppointmentRequest(date, hallNumber, centre);
 
         HttpHeaders header = new HttpHeaders();
-        if (appointmentReq == null)
-        {
-            header.set("responseText", "Appointment not found for: ("+date+","+hallNumber+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+
+        if (appointmentReq == null) {
+            header.set("responseText", "Appointment not found for: (" + date + "," + hallNumber + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new AppointmentDTO(appointmentReq),HttpStatus.OK);
+
+        return new ResponseEntity<>(new AppointmentDTO(appointmentReq), HttpStatus.OK);
     }
 
-    @GetMapping(value ="/centre/getAllRequests/{centreName}")
+    @GetMapping(value = "/centre/getAllRequests/{centreName}")
     @ApiOperation("Получение всех запросов на приемы")
-    public ResponseEntity<AppointmentDTO[]> getAllAppointmentRequests(@PathVariable("centreName") String centre)
-    {
+    public ResponseEntity<AppointmentDTO[]> getAllAppointmentRequests(@PathVariable("centreName") String centre) {
+        log.info("Receiving all requests for appointments at the medical center '{}'.", centre);
         List<AppointmentRequest> list = appointmentRequestService.getAllByCentre(centre);
 
-        if (list == null)
-        {
+        if (list == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
-        for(AppointmentRequest req : list)
-        {
+        for (AppointmentRequest req : list) {
             dtos.add(new AppointmentDTO(req));
         }
 
-        return new ResponseEntity<>(dtos.toArray(new AppointmentDTO[dtos.size()]),HttpStatus.OK);
+        return new ResponseEntity<>(dtos.toArray(new AppointmentDTO[dtos.size()]), HttpStatus.OK);
     }
 
-    @GetMapping(value ="/centre/getAllAppointments/{centreName}")
+    @GetMapping(value = "/centre/getAllAppointments/{centreName}")
     @ApiOperation("Получение всех назначений центров")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentre(@PathVariable("centreName") String centreName)
-    {
-
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentre(@PathVariable("centreName") String centreName) {
+        log.info("Receipt of all appointments in the medical center '{}'.", centreName);
         Centre centre = centreService.findByName(centreName);
 
-        if (centre == null)
-        {
+        if (centre == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> list = appointmentService.findAllByCentre(centre);
 
-        if (list == null)
-        {
+        if (list == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
-        for (Appointment app : list)
-        {
+        for (Appointment app : list) {
             dtos.add(new AppointmentDTO(app));
         }
 
-        return new ResponseEntity<>(dtos,HttpStatus.OK);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping(value ="/centre/getAllAppointmentsToday/{centreName}")
+    @GetMapping(value = "/centre/getAllAppointmentsToday/{centreName}")
     @ApiOperation("Получение всех сегодняшних назначений центров")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreToday(@PathVariable("centreName") String centreName)
-    {
-
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreToday(@PathVariable("centreName") String centreName) {
+        log.info("Receiving all appointments for today at the medical center '{}'.", centreName);
         Date today = new Date();
 
         Centre centre = centreService.findByName(centreName);
 
-        if (centre == null)
-        {
+        if (centre == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> list = appointmentService.findAllByCentre(centre);
 
-        if (list == null)
-        {
+        if (list == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
-        for (Appointment app : list)
-        {
-            if (DateUtil.getInstance().isSameDay(today, app.getDate()))
-            {
+        for (Appointment app : list) {
+            if (DateUtil.getInstance().isSameDay(today, app.getDate())) {
                 dtos.add(new AppointmentDTO(app));
             }
         }
 
-        return new ResponseEntity<>(dtos,HttpStatus.OK);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
 
-    @GetMapping(value ="/centre/getAllAppointmentsWeek/{centreName}")
+    @GetMapping(value = "/centre/getAllAppointmentsWeek/{centreName}")
     @ApiOperation("Еженедельное получение всех назначений центров")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreWeekly(@PathVariable("centreName") String centreName)
-    {
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreWeekly(@PathVariable("centreName") String centreName) {
+        log.info("Weekly receipt of all appointments to the medical center '{}'.", centreName);
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.clear(Calendar.MINUTE);
@@ -265,40 +244,33 @@ public class AppointmentController {
         cal.add(Calendar.WEEK_OF_YEAR, 1);
         Date weekEnd = cal.getTime();
 
-
         Centre centre = centreService.findByName(centreName);
 
-        if (centre == null)
-        {
+        if (centre == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> list = appointmentService.findAllByCentre(centre);
 
-        if (list == null)
-        {
+        if (list == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
-        for (Appointment app : list)
-        {
-            if(app.getDate().after(weekStart) && app.getDate().before(weekEnd))
-            {
+        for (Appointment app : list) {
+            if (app.getDate().after(weekStart) && app.getDate().before(weekEnd)) {
                 dtos.add(new AppointmentDTO(app));
             }
         }
 
-
-        return new ResponseEntity<>(dtos,HttpStatus.OK);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-
-    @GetMapping(value ="/centre/getAllAppointmentsMonth/{centreName}")
+    @GetMapping(value = "/centre/getAllAppointmentsMonth/{centreName}")
     @ApiOperation("Месячное получение всех назначений центров")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreMonth(@PathVariable("centreName") String centreName)
-    {
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsCentreMonth(@PathVariable("centreName") String centreName) {
+        log.info("Monthly receipt of all appointments to the medical center '{}'.", centreName);
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.clear(Calendar.MINUTE);
@@ -312,54 +284,47 @@ public class AppointmentController {
 
         Centre centre = centreService.findByName(centreName);
 
-        if (centre == null)
-        {
+        if (centre == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> list = appointmentService.findAllByCentre(centre);
 
-        if (list == null)
-        {
+        if (list == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
-        for (Appointment app : list)
-        {
-            if(app.getDate().after(monthStart) && app.getDate().before(monthEnd))
-            {
+        for (Appointment app : list) {
+            if (app.getDate().after(monthStart) && app.getDate().before(monthEnd)) {
                 dtos.add(new AppointmentDTO(app));
             }
         }
 
-        return new ResponseEntity<>(dtos,HttpStatus.OK);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping(value="/hall/getAll/{centreName}/{hallNumber}")
+    @GetMapping(value = "/hall/getAll/{centreName}/{hallNumber}")
     @ApiOperation("Получение всех записей по аптекам")
-    public ResponseEntity<List<AppointmentDTO>> getAllByHall(@PathVariable("centreName") String centreName, @PathVariable("hallNumber") int hallNumber)
-    {
+    public ResponseEntity<List<AppointmentDTO>> getAllByHall(@PathVariable("centreName") String centreName, @PathVariable("hallNumber") int hallNumber) {
+        log.info("Getting all pharmacy records for '{}', '{}'.", centreName, hallNumber);
         Centre centre = centreService.findByName(centreName);
 
-        if (centre == null)
-        {
+        if (centre == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Hall hall = hallService.findByNumberAndCentre(hallNumber, centre);
 
-        if (hall == null)
-        {
+        if (hall == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> apps = appointmentService.findAllByHallAndCentre(hall, centre);
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
-        for (Appointment app : apps)
-        {
+        for (Appointment app : apps) {
             AppointmentDTO dto = new AppointmentDTO(app);
             dto.setDate(app.getDate().toString());
             dto.setEndDate(app.getEndDate().toString());
@@ -369,14 +334,13 @@ public class AppointmentController {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping(value ="/patient/getAllRequests/{email}")
+    @GetMapping(value = "/patient/getAllRequests/{email}")
     @ApiOperation("Получение всех запросов пациентов")
-    public ResponseEntity<List<AppointmentDTO>> getPatientRequests(@PathVariable("email") String email)
-    {
+    public ResponseEntity<List<AppointmentDTO>> getPatientRequests(@PathVariable("email") String email) {
+        log.info("Receiving all patient requests by email '{}'.", email);
         Patient p = patientService.findByEmail(email);
 
-        if (p == null)
-        {
+        if (p == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -384,191 +348,162 @@ public class AppointmentController {
 
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
-        for (AppointmentRequest req : list)
-        {
+        for (AppointmentRequest req : list) {
             dtos.add(new AppointmentDTO(req));
         }
 
-        return new ResponseEntity<>(dtos,HttpStatus.OK);
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping(value="/patient/getAll/{email}")
+    @GetMapping(value = "/patient/getAll/{email}")
     @ApiOperation("Получение всех назначений пациентов")
-    public ResponseEntity<List<AppointmentDTO>> getAllAppointments(@PathVariable("email") String email)
-    {
-        Patient  p = null;
+    public ResponseEntity<List<AppointmentDTO>> getAllAppointments(@PathVariable("email") String email) {
+        log.info("Receiving all appointments of patients by email '{}'.", email);
+        Patient p = null;
 
         try {
             p = patientService.findByEmail(email);
-        }
-        catch(ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         HttpHeaders header = new HttpHeaders();
 
-        if (p == null)
-        {
-            header.set("responseText", "User not found : ("+email+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (p == null) {
+            header.set("responseText", "User not found : (" + email + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> appointments = appointmentService.findAllByPatient(p);
         List<AppointmentDTO> dto = new ArrayList<AppointmentDTO>();
 
-        for(Appointment app : appointments)
-        {
+        for (Appointment app : appointments) {
             dto.add(new AppointmentDTO(app));
         }
 
-        if (appointments == null)
-        {
-            header.set("responseText", "Appointments not found : ("+email+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (appointments == null) {
+            header.set("responseText", "Appointments not found : (" + email + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(dto,HttpStatus.OK);
-
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
-    @GetMapping(value ="/getAllPredefined")
+    @GetMapping(value = "/getAllPredefined")
     @ApiOperation("Получение всех заданий")
-    public ResponseEntity<AppointmentDTO[]> getPredefined()
-    {
+    public ResponseEntity<AppointmentDTO[]> getPredefined() {
+        log.info("Getting all tasks.");
         List<Appointment> appointments = appointmentService.findAllByPredefined();
 
-        if (appointments.size() == 0)
-        {
+        if (appointments.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
-        for (Appointment app : appointments)
-        {
-            if (app.getPatient() == null)
-            {
+        for (Appointment app : appointments) {
+            if (app.getPatient() == null) {
                 dtos.add(new AppointmentDTO(app));
             }
         }
 
-        return new ResponseEntity<>(dtos.toArray(new AppointmentDTO[dtos.size()]),HttpStatus.OK);
+        return new ResponseEntity<>(dtos.toArray(new AppointmentDTO[dtos.size()]), HttpStatus.OK);
     }
 
-    @GetMapping(value ="/doctor/getAllAppointments/{email}")
+    @GetMapping(value = "/doctor/getAllAppointments/{email}")
     @ApiOperation("Получение всех записей на приемы к докторам")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctor(@PathVariable("email") String email)
-    {
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctor(@PathVariable("email") String email) {
+        log.info("Receiving all records for appointments with doctors by email '{}'.", email);
         Doctor d = null;
 
         try {
             d = doctorService.findByEmail(email);
-        }
-        catch(ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         HttpHeaders header = new HttpHeaders();
 
-        if (d == null)
-        {
-            header.set("responseText", "User not found : ("+email+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (d == null) {
+            header.set("responseText", "User not found : (" + email + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> appointments = d.getAppointments();
         List<AppointmentDTO> dto = new ArrayList<AppointmentDTO>();
 
-        for (Appointment app : appointments)
-        {
+        for (Appointment app : appointments) {
             dto.add(new AppointmentDTO(app));
         }
 
-        if (appointments == null)
-        {
-            header.set("responseText","Appointments not found : ("+email+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (appointments == null) {
+            header.set("responseText", "Appointments not found : (" + email + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(dto,HttpStatus.OK);
-
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping(value ="/doctor/getAllAppointmentsByDate/{email}/{date}")
+    @GetMapping(value = "/doctor/getAllAppointmentsByDate/{email}/{date}")
     @ApiOperation("Получение всех записей на приемы к докторам по дате")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctorByDate(@PathVariable("email") String email, @PathVariable("date") String date)
-    {
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctorByDate(@PathVariable("email") String email, @PathVariable("date") String date) {
+        log.info("Retrieve all records for appointments with doctors by email '{}' and date '{}'.", email, date);
         Doctor d = null;
 
         try {
             d = doctorService.findByEmail(email);
-        }
-        catch(ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         HttpHeaders header = new HttpHeaders();
 
-        if (d == null)
-        {
-            header.set("responseText", "User not found : ("+email+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (d == null) {
+            header.set("responseText", "User not found : (" + email + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> appointments = d.getAppointments();
         List<AppointmentDTO> dto = new ArrayList<AppointmentDTO>();
 
-        for (Appointment app : appointments)
-        {
+        for (Appointment app : appointments) {
             Boolean sameDay = DateUtil.getInstance().isSameDay(app.getDate(), DateUtil.getInstance().getDate(date, "dd-MM-yyyy"));
-            if(sameDay)
-            {
+            if (sameDay) {
                 dto.add(new AppointmentDTO(app));
             }
         }
 
-        if (appointments == null)
-        {
-            header.set("responseText", "Appointments not found : ("+email+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (appointments == null) {
+            header.set("responseText", "Appointments not found : (" + email + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(dto,HttpStatus.OK);
-
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
-    @GetMapping(value ="/doctor/getAllAppointmentsCalendar/{email}")
+    @GetMapping(value = "/doctor/getAllAppointmentsCalendar/{email}")
     @ApiOperation("Получение всех записей на приемы к докторам в календаре")
-    public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctorCalendar(@PathVariable("email") String email)
-    {
+    public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctorCalendar(@PathVariable("email") String email) {
+        log.info("Receiving all entries for appointments with doctors in the calendar by email '{}'.", email);
         Doctor d = null;
 
         try {
             d = doctorService.findByEmail(email);
-        }
-        catch(ClassCastException e)
-        {
+        } catch (ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         HttpHeaders header = new HttpHeaders();
 
-        if(d == null)
-        {
-            header.set("responseText", "User not found : ("+email+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (d == null) {
+            header.set("responseText", "User not found : (" + email + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> appointments = d.getAppointments();
         List<AppointmentDTO> dto = new ArrayList<AppointmentDTO>();
 
-        for(Appointment app : appointments)
-        {
+        for (Appointment app : appointments) {
             //if(app.getPatient() != null && !app.getPredefined())
             {
                 AppointmentDTO dt = new AppointmentDTO(app);
@@ -578,78 +513,66 @@ public class AppointmentController {
             }
         }
 
-        if (appointments == null)
-        {
-            header.set("responseText", "Appointments not found : ("+email+")");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (appointments == null) {
+            header.set("responseText", "Appointments not found : (" + email + ")");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(dto,HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
 
     }
 
 
-    @PostMapping(value ="/makePredefined")
+    @PostMapping(value = "/makePredefined")
     @ApiOperation("Cоздание заданий")
-    public ResponseEntity<Void> makePredefined(@RequestBody AppointmentDTO dto)
-    {
+    public ResponseEntity<Void> makePredefined(@RequestBody AppointmentDTO dto) {
+        log.info("Creating tasks in the medical center '{}'.", dto.getCentreName());
         HttpHeaders header = new HttpHeaders();
         Centre centre = centreService.findByName(dto.getCentreName());
 
-        if (centre == null)
-        {
+        if (centre == null) {
             header.set("responseText", "Centre " + dto.getCentreName() + " is not found");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         Date date = DateUtil.getInstance().getDate(dto.getDate(), "dd-MM-yyyy HH:mm");
         Date endDate = DateUtil.getInstance().getDate(dto.getEndDate(), "dd-MM-yyyy HH:mm");
 
-
         Hall hall = hallService.findByNumberAndCentre(dto.getHallNumber(), centre);
 
-        if (hall == null)
-        {
+        if (hall == null) {
             header.set("responseText", "Hall " + dto.getHallNumber() + " is not found");
 
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> appointments = appointmentService.findAllByHallAndCentre(hall, centre);
 
-
-        for(Appointment app : appointments)
-        {
-            DateInterval d1 = new DateInterval(app.getDate(),app.getEndDate());
+        for (Appointment app : appointments) {
+            DateInterval d1 = new DateInterval(app.getDate(), app.getEndDate());
             DateInterval d2 = new DateInterval(date, endDate);
-            if(DateUtil.getInstance().overlappingInterval(d1, d2))
-            {
+            if (DateUtil.getInstance().overlappingInterval(d1, d2)) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
 
-
         Priceslist p = priceslistService.findByTypeOfExaminationAndCentre(dto.getTypeOfExamination(), dto.getCentreName());
 
-        if (p == null)
-        {
+        if (p == null) {
             header.set("responseText", "Priceslist " + dto.getTypeOfExamination() + " is not found");
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         ArrayList<Doctor> doctors = new ArrayList<Doctor>();
 
-        for (String email : dto.getDoctors())
-        {
+        for (String email : dto.getDoctors()) {
             Doctor d = doctorService.findByEmail(email);
 
-            for (Appointment app : d.getAppointments())
-            {
-                DateInterval d1 = new DateInterval(app.getDate(),app.getEndDate());
+            for (Appointment app : d.getAppointments()) {
+                DateInterval d1 = new DateInterval(app.getDate(), app.getEndDate());
                 DateInterval d2 = new DateInterval(date, endDate);
 
-                if (DateUtil.getInstance().overlappingInterval(d1, d2))
-                {
+                if (DateUtil.getInstance().overlappingInterval(d1, d2)) {
                     return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
                 }
             }
@@ -657,12 +580,9 @@ public class AppointmentController {
             doctors.add(d);
         }
 
-
-
         Appointment a = appointmentService.findAppointment(date, hall, centre);
 
-        if (a != null)
-        {
+        if (a != null) {
             return new ResponseEntity<>(HttpStatus.ALREADY_REPORTED);
         }
 
@@ -678,8 +598,7 @@ public class AppointmentController {
         app.setPredefined(true);
         appointmentService.save(app);
 
-        for (Doctor d : doctors)
-        {
+        for (Doctor d : doctors) {
             d.getAppointments().add(app);
             userService.save(d);
         }
@@ -687,28 +606,23 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-
-    @PostMapping(value ="/confirmRequest")
+    @PostMapping(value = "/confirmRequest")
     @ApiOperation("Подтверждение запросов на приемы")
-    public ResponseEntity<Void> confirmAppointmentRequest(@RequestBody AppointmentDTO dto, HttpServletRequest httpRequest)
-    {
+    public ResponseEntity<Void> confirmAppointmentRequest(@RequestBody AppointmentDTO dto, HttpServletRequest httpRequest) {
+        log.info("Confirmation of requests for appointments at the medical center '{}'.", dto.getCentreName());
         HttpHeaders header = new HttpHeaders();
         AppointmentRequest request = appointmentRequestService.findAppointmentRequest(dto.getDate(), 0, dto.getCentreName());
 
-
-        if (request == null)
-        {
-            header.set("responseText", "Request not found: " + dto.getDate() + " ,"+ dto.getHallNumber() + ", " + dto.getCentreName());
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (request == null) {
+            header.set("responseText", "Request not found: " + dto.getDate() + " ," + dto.getHallNumber() + ", " + dto.getCentreName());
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
-
 
         Hall hall = hallService.findByNumberAndCentre(dto.getHallNumber(), request.getCentre());
 
-        if (hall == null)
-        {
+        if (hall == null) {
             header.set("responseText", "Hall not found " + dto.getHallNumber());
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> apps = appointmentService.findAllByHall(hall);
@@ -720,14 +634,12 @@ public class AppointmentController {
         String parts[] = dto.getNewDate().split(" ");
         String dat = parts[0];
 
-        if(!dat.equals("undefined")){
+        if (!dat.equals("undefined")) {
             desiredStartTime = util.getDate(dto.getNewDate(), "dd-MM-yyyy HH:mm");
             desiredEndTime = util.getDate(dto.getNewEndDate(), "dd-MM-yyyy HH:mm");
         }
 
-
-        for (String email : dto.getDoctors())
-        {
+        for (String email : dto.getDoctors()) {
             Doctor doctor = doctorService.findByEmail(email);
             doctors.add(doctor);
         }
@@ -744,26 +656,23 @@ public class AppointmentController {
 
         appointment.setConfirmed(false);
 
-        try
-        {
+        try {
             appointmentService.confirmAppointmentRequest(appointment, dto);
             appointmentRequestService.delete(request);
 
-            if(appointment.getAppointmentType() == Appointment.AppointmentType.Examination){
-                for (Doctor doctor: doctors)
-                {
-                    notificationService.sendNotification(doctor.getEmail(), "A new reception is scheduled",  "A new reception is scheduled in your work calendar.\nThe date of the reception is "+ desiredStartTime + ", in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + ".");
+            if (appointment.getAppointmentType() == Appointment.AppointmentType.Examination) {
+                for (Doctor doctor : doctors) {
+                    notificationService.sendNotification(doctor.getEmail(), "A new reception is scheduled", "A new reception is scheduled in your work calendar.\nThe date of the reception is " + desiredStartTime + ", in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + ".");
 
                 }
 
                 if (!dat.equals("undefined")) {
-                    notificationService.sendNotification(request.getPatient().getEmail(), "Your reception is scheduled.", "Request for examination accepted.\nThe date of the reception is "+  dto.getDate() + ", in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + "." );
+                    notificationService.sendNotification(request.getPatient().getEmail(), "Your reception is scheduled.", "Request for examination accepted.\nThe date of the reception is " + dto.getDate() + ", in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + ".");
                 } else {
-                    notificationService.sendNotification(request.getPatient().getEmail(), "Reception date changed.", "The date of the reception, which was scheduled " + dto.getDate() +  ", it has been changed to " + dto.getNewDate() + ". The reception is scheduled in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + "." );
+                    notificationService.sendNotification(request.getPatient().getEmail(), "Reception date changed.", "The date of the reception, which was scheduled " + dto.getDate() + ", it has been changed to " + dto.getNewDate() + ". The reception is scheduled in the centre  " + appointment.getCentre().getName() + ", in the hall " + appointment.getHall().getName() + ", number " + appointment.getHall().getNumber() + ".");
                 }
 
             }
-
 
             String requestURL = httpRequest.getRequestURL().toString();
             UriComponentsBuilder builderRootAccept = UriComponentsBuilder.fromUriString(requestURL.split("api")[0])
@@ -778,42 +687,34 @@ public class AppointmentController {
                     .queryParam("hall", appointment.getHall().getNumber())
                     .queryParam("confirmed", false);
 
-            notificationService.sendNotification("prerecover07@gmail.com", "Confirm preview","The centre administrator has approved your request for examination.\nConfirm by going to the link:" + builderRootAccept.toUriString() + " Refuse by going to the link:"+ builderRootDeny.toUriString());
+            notificationService.sendNotification("prerecover07@gmail.com", "Confirm preview", "The centre administrator has approved your request for examination.\nConfirm by going to the link:" + builderRootAccept.toUriString() + " Refuse by going to the link:" + builderRootDeny.toUriString());
 
-            notificationService.sendNotification(appointment.getDoctors().get(0).getEmail(), "Admin has booked an appointment to review", "Admin booked a date review " + DateUtil.getInstance().getString(appointment.getDate(), "dd-MM-yyyy HH:mm") + ", in the centre "+appointment.getCentre().getName() + ", in Room № " + appointment.getHall().getNumber()+ " and he choose you as a doctor.");
+            notificationService.sendNotification(appointment.getDoctors().get(0).getEmail(), "Admin has booked an appointment to review", "Admin booked a date review " + DateUtil.getInstance().getString(appointment.getDate(), "dd-MM-yyyy HH:mm") + ", in the centre " + appointment.getCentre().getName() + ", in Room № " + appointment.getHall().getNumber() + " and he choose you as a doctor.");
 
-
-        }
-        catch(ConcurrentModificationException e)
-        {
+        } catch (ConcurrentModificationException e) {
             header.set("responseText", "conflict");
             return new ResponseEntity<>(header, HttpStatus.CONFLICT);
-        }
-
-        catch (ValidationException e)
-        {
-            if (e.getMessage() == "Hall"){
-                header.set("responseText","hall");
+        } catch (ValidationException e) {
+            if (e.getMessage() == "Hall") {
+                header.set("responseText", "hall");
                 return new ResponseEntity<>(header, HttpStatus.CONFLICT);
-            } else{
+            } else {
                 header.set("responseText", e.getMessage());
             }
             return new ResponseEntity<>(header, HttpStatus.CONFLICT);
 
         }
 
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value ="/confirmAppointment")
+    @PutMapping(value = "/confirmAppointment")
     @ApiOperation("Подтвердить приемы")
-    public ResponseEntity<Void> confirmAppointment(@RequestBody AppointmentDTO dto)
-    {
+    public ResponseEntity<Void> confirmAppointment(@RequestBody AppointmentDTO dto) {
+        log.info("Confirmation of appointments at the medical center '{}'.", dto.getCentreName());
         Appointment app = appointmentService.findAppointment(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
 
-        if(app == null)
-        {
+        if (app == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -823,14 +724,13 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value ="/denyAppointment")
+    @DeleteMapping(value = "/denyAppointment")
     @ApiOperation("Удаление записей на приемы")
-    public ResponseEntity<Void> denyAppointment(@RequestBody AppointmentDTO dto)
-    {
+    public ResponseEntity<Void> denyAppointment(@RequestBody AppointmentDTO dto) {
+        log.info("Deleting appointments at the medical center '{}'.", dto.getCentreName());
         Appointment app = appointmentService.findAppointment(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
 
-        if (app == null)
-        {
+        if (app == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -842,29 +742,28 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(value ="/denyRequest")
+    @DeleteMapping(value = "/denyRequest")
     @ApiOperation("Отклонение запросов на приемы")
-    public ResponseEntity<Void> denyAppointmentRequest(@RequestBody AppointmentDTO dto)
-    {
+    public ResponseEntity<Void> denyAppointmentRequest(@RequestBody AppointmentDTO dto) {
+        log.info("Rejection of appointments at the medical center '{}'.", dto.getCentreName());
         HttpHeaders header = new HttpHeaders();
         AppointmentRequest request = appointmentRequestService.findAppointmentRequest(dto.getDate(), dto.getPatientEmail(), dto.getCentreName());
 
-        if (request == null)
-        {
-            header.set("responseText", "Request not found: " + dto.getDate() +" ,"+ dto.getHallNumber() +", "+ dto.getCentreName());
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+        if (request == null) {
+            header.set("responseText", "Request not found: " + dto.getDate() + " ," + dto.getHallNumber() + ", " + dto.getCentreName());
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         //Send mail
-        notificationService.sendNotification(dto.getPatientEmail(), "Your request for examination has been denied", "Your request for review("+request.getPriceslist().getTypeOfExamination()+") date "+ dto.getDate() + " was rejected by the centre administrator.");
+        notificationService.sendNotification(dto.getPatientEmail(), "Your request for examination has been denied", "Your request for review(" + request.getPriceslist().getTypeOfExamination() + ") date " + dto.getDate() + " was rejected by the centre administrator.");
         appointmentRequestService.delete(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value ="/sendRequest")
+    @PostMapping(value = "/sendRequest")
     @ApiOperation("Добавление новых записей на приемы")
-    public ResponseEntity<Void> addAppointmentRequest(@RequestBody AppointmentDTO dto)
-    {
+    public ResponseEntity<Void> addAppointmentRequest(@RequestBody AppointmentDTO dto) {
+        log.info("Adding new entries for appointments at the medical center '{}'.", dto.getCentreName());
         HttpHeaders header = new HttpHeaders();
         AppointmentRequest request = new AppointmentRequest();
         request.setTimestamp(DateUtil.getInstance().getDate(new Date().getTime(), "dd-MM-yyyy HH:mm"));
@@ -872,28 +771,23 @@ public class AppointmentController {
 
         AppointmentRequest databaseRequest = appointmentRequestService.findAppointmentRequest(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
 
-        if (databaseRequest != null)
-        {
+        if (databaseRequest != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-
-        if (centre == null)
-        {
+        if (centre == null) {
             System.out.println("CENTRE");
             header.set("message", "Centre not found: " + dto.getCentreName());
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
         request.setCentre(centre);
 
-
         Patient patient = patientService.findByEmail(dto.getPatientEmail());
 
-        if (patient == null)
-        {
+        if (patient == null) {
             System.out.println("PATIENT");
             header.set("message", "Patient not found: " + dto.getPatientEmail());
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
         request.setPatient(patient);
 
@@ -902,17 +796,13 @@ public class AppointmentController {
         request.setDate(date);
         request.setAppointmentType(dto.getType());
 
-
-        for (String email : dto.getDoctors())
-        {
+        for (String email : dto.getDoctors()) {
             Doctor doctor = doctorService.findByEmail(email);
 
-
-            if (doctor == null)
-            {
+            if (doctor == null) {
                 System.out.println("DOCTOR");
                 header.set("message", "Doctor not found: " + email);
-                return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
             }
 
             request.getDoctors().add(doctor);
@@ -920,36 +810,29 @@ public class AppointmentController {
 
         Priceslist pl = priceslistService.findByTypeOfExaminationAndCentre(dto.getTypeOfExamination(), centre);
 
-        if (pl == null)
-        {
+        if (pl == null) {
             System.out.println("PRICELIST");
             header.set("message", "Priceslist not found: " + dto.getTypeOfExamination());
-            return new ResponseEntity<>(header,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
         request.setPriceslist(pl);
 
-
         List<User> admins = userService.getAll(UserRole.CentreAdmin);
 
-        for (User user : admins)
-        {
-            CentreAdmin admin = (CentreAdmin)user;
+        for (User user : admins) {
+            CentreAdmin admin = (CentreAdmin) user;
 
-            if(admin.getCentre().getName().equals(centre.getName()))
-            {
+            if (admin.getCentre().getName().equals(centre.getName())) {
                 notificationService.sendNotification(admin.getEmail(), "New review request.", "You have a new examination request..");
             }
         }
-
 
         request.setAppointmentType(dto.getType());
 
         try {
             appointmentRequestService.saveLock(request);
-        }
-        catch(ConcurrentModificationException e)
-        {
+        } catch (ConcurrentModificationException e) {
             return new ResponseEntity<>(HttpStatus.LOCKED);
         }
 
@@ -957,14 +840,13 @@ public class AppointmentController {
     }
 
 
-    @DeleteMapping(value ="/cancelRequest/{role}")
+    @DeleteMapping(value = "/cancelRequest/{role}")
     @ApiOperation("Отмены запросов на приемы")
-    public ResponseEntity<Void> cancelAppointmentRequest(@RequestBody AppointmentDTO dto, @PathVariable("role") UserRole role)
-    {
+    public ResponseEntity<Void> cancelAppointmentRequest(@RequestBody AppointmentDTO dto, @PathVariable("role") UserRole role) {
+        log.info("Cancellation of requests for appointments at the medical center '{}' for '{}'.", dto.getCentreName(), role);
         AppointmentRequest req = appointmentRequestService.findAppointmentRequest(dto.getDate(), dto.getPatientEmail(), dto.getCentreName());
 
-        if (req == null)
-        {
+        if (req == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -972,97 +854,77 @@ public class AppointmentController {
 
         Date date = new Date();
 
-        if (date.getTime() > tm.getTime() + 24 * DateUtil.HOUR_MILLIS)
-        {
+        if (date.getTime() > tm.getTime() + 24 * DateUtil.HOUR_MILLIS) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         List<User> admins = userService.getAll(UserRole.CentreAdmin);
         Patient p = req.getPatient();
 
-
-
-        if(role == UserRole.Patient)
-        {
-            for (User user : admins)
-            {
+        if (role == UserRole.Patient) {
+            for (User user : admins) {
                 CentreAdmin admin = (CentreAdmin) user;
 
-                if (admin.getCentre().getName().equals(dto.getCentreName()))
-                {
+                if (admin.getCentre().getName().equals(dto.getCentreName())) {
 
                     notificationService.sendNotification(admin.getEmail(), "The patient cancelled the examination.", "Request for review scheduled for " + dto.getDate() + " is canceled by the patient: " + p.getEmail());
                 }
             }
 
-
             notificationService.sendNotification(p.getEmail(), "Your examination request has been cancelled.", "Request for review scheduled for " + dto.getDate() + "has been cancelled at your request.");
-        }
-        else
-        {
-            for (User user : admins)
-            {
+        } else {
+            for (User user : admins) {
                 CentreAdmin admin = (CentreAdmin) user;
 
-                if(admin.getCentre().getName().equals(dto.getCentreName()))
-                {
+                if (admin.getCentre().getName().equals(dto.getCentreName())) {
 
                     notificationService.sendNotification(admin.getEmail(), "Review cancelled.", "Request for review scheduled for " + dto.getDate() + " was canceled by the centre administrator.");
                 }
             }
 
-
             notificationService.sendNotification(p.getEmail(), "Your examination request has been cancelled.", "Request for review scheduled for " + dto.getDate() + " cancelled by admin.");
         }
-
 
         appointmentRequestService.delete(req);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    @PutMapping(value ="/reservePredefined/{email}")
+    @PutMapping(value = "/reservePredefined/{email}")
     @ApiOperation("Зарезирвировать заранее")
-    public ResponseEntity<Void> reservePredefined(@RequestBody AppointmentDTO dto, @PathVariable("email") String email)
-    {
+    public ResponseEntity<Void> reservePredefined(@RequestBody AppointmentDTO dto, @PathVariable("email") String email) {
+        log.info("Book in advance at the medical center '{}' for '{}'.", dto.getCentreName(), email);
         HttpHeaders headers = new HttpHeaders();
 
         Patient p = patientService.findByEmail(email);
 
-        if(p == null)
-        {
+        if (p == null) {
             headers.set("responseText", "Patient with email " + email + " not found");
-            return new ResponseEntity<>(headers,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(headers, HttpStatus.NOT_FOUND);
         }
 
         Appointment app = appointmentService.findAppointment(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
 
-        if(app == null)
-        {
+        if (app == null) {
             headers.set("responseText", "Appointment not found for: " + dto.getDate() + " " + dto.getHallNumber() + " " + dto.getCentreName());
-            return new ResponseEntity<>(headers,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(headers, HttpStatus.NOT_FOUND);
         }
 
         List<Appointment> appointments = appointmentService.findAllByPatient(p);
 
-        for(Appointment appointment : appointments)
-        {
+        for (Appointment appointment : appointments) {
             DateInterval interval1 = new DateInterval(appointment.getDate(), appointment.getEndDate());
             DateInterval interval2 = new DateInterval(app.getDate(), app.getEndDate());
 
-            if(DateUtil.getInstance().overlappingInterval(interval1, interval2))
-            {
+            if (DateUtil.getInstance().overlappingInterval(interval1, interval2)) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
         }
 
-
         app.setPatient(p);
         app.setVersion(dto.getVersion());
 
-        try
-        {
+        try {
             StringBuilder strBuilder = new StringBuilder();
             strBuilder.append("You have successfully scheduled an examination(");
             strBuilder.append(app.getPriceslist().getTypeOfExamination());
@@ -1079,28 +941,24 @@ public class AppointmentController {
             strBuilder.append("rsd.");
             notificationService.sendNotification(p.getEmail(), "You made an appointment!", strBuilder.toString());
             appointmentService.saveLock(app);
-        }
-        catch(ObjectOptimisticLockingFailureException e)
-        {
+        } catch (ObjectOptimisticLockingFailureException e) {
             return new ResponseEntity<>(HttpStatus.LOCKED);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    @PutMapping(value="/appointmentIsDone")
+    @PutMapping(value = "/appointmentIsDone")
     @ApiOperation("Приемы закончены")
-    public ResponseEntity<Void> appointmentIsDone(@RequestBody AppointmentDTO dto)
-    {
+    public ResponseEntity<Void> appointmentIsDone(@RequestBody AppointmentDTO dto) {
+        log.info("Completed appointments at the medical center '{}'.", dto.getCentreName());
         HttpHeaders headers = new HttpHeaders();
 
         Appointment app = appointmentService.findAppointment(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
 
-        if(app == null)
-        {
+        if (app == null) {
             headers.set("responseText", "Appointment not found for: " + dto.getDate() + " " + dto.getHallNumber() + " " + dto.getCentreName());
-            return new ResponseEntity<>(headers,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(headers, HttpStatus.NOT_FOUND);
         }
 
         app.setDone(true);
