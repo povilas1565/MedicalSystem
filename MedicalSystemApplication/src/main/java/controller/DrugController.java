@@ -3,6 +3,7 @@ package controller;
 import dto.DrugDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import model.Drug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import service.DrugService;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 @RestController
 @RequestMapping(value = "api/drug")
 @CrossOrigin
@@ -26,6 +27,7 @@ public class DrugController {
     @GetMapping(value = "/getAllDrugs")
     @ApiOperation("Получение списка всех доступных лекарств")
     public ResponseEntity<List<DrugDTO>> getDrugs() {
+        log.info("Get a list of all available drugs.");
         List<Drug> drugs = drugService.findAll();
         List<DrugDTO> drugsDTO = new ArrayList<DrugDTO>();
         if (drugs == null) {
@@ -43,6 +45,7 @@ public class DrugController {
     @PostMapping(value = "/addDrug", consumes = "application/json")
     @ApiOperation("Добавление лекарств")
     public ResponseEntity<Void> addDrug(@RequestBody DrugDTO dto) {
+        log.info("Adding drugs '{}'.", dto.getName());
         Drug d = drugService.findByCode(dto.getCode());
 
         if (d == null) {
@@ -58,13 +61,13 @@ public class DrugController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(value ="/updateDrug/{code}")
+    @PutMapping(value = "/updateDrug/{code}")
     @ApiOperation("Обновление(изменение) лекарств согласно их кодам")
-    public ResponseEntity<Void> updateDrug(@RequestBody DrugDTO dto, @PathVariable("code") String code)
-    {
+    public ResponseEntity<Void> updateDrug(@RequestBody DrugDTO dto, @PathVariable("code") String code) {
+        log.info("Update (change) of the drug according to its code '{}'.", code);
         Drug drug = drugService.findByCode(code);
 
-        if(drug != null) {
+        if (drug != null) {
             drug.setName(dto.getName());
             drugService.save(drug);
         } else {
@@ -74,16 +77,13 @@ public class DrugController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(value ="/deleteDrug/{code}")
+    @DeleteMapping(value = "/deleteDrug/{code}")
     @ApiOperation("Удаление лекарств согласно их кодам")
-    public ResponseEntity<Void> deleteDrug(@PathVariable("code") String code)
-    {
-
+    public ResponseEntity<Void> deleteDrug(@PathVariable("code") String code) {
+        log.info("Removing a drug according to its code '{}'.", code);
         Drug drug = drugService.findByCode(code);
 
-
-        if(drug == null)
-        {
+        if (drug == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             drugService.delete(drug);
