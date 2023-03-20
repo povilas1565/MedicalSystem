@@ -8,6 +8,7 @@ import helpers.DateUtil;
 import helpers.Scheduler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import model.Appointment;
 import model.Centre;
 import model.Doctor;
@@ -23,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "api/utility")
 @CrossOrigin
@@ -35,10 +37,10 @@ public class UtilityController {
     @Autowired
     private DoctorService doctorService;
 
-    @GetMapping(value="/date/getWeekInfo")
+    @GetMapping(value = "/date/getWeekInfo")
     @ApiOperation("Получение информации о неделе")
-    public ResponseEntity<WeekDTO> getWeekInfo()
-    {
+    public ResponseEntity<WeekDTO> getWeekInfo() {
+        log.info("Getting information about the current week.");
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.clear(Calendar.MINUTE);
@@ -53,11 +55,10 @@ public class UtilityController {
         return new ResponseEntity<WeekDTO>(new WeekDTO(weekStart, weekEnd), HttpStatus.OK);
     }
 
-    @GetMapping(value="/date/getMonthInfo")
+    @GetMapping(value = "/date/getMonthInfo")
     @ApiOperation("Получение информации о месяце")
-    public ResponseEntity<MonthDTO> getMonthInfo()
-    {
-
+    public ResponseEntity<MonthDTO> getMonthInfo() {
+        log.info("Getting information about the current month.");
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.clear(Calendar.MINUTE);
@@ -81,21 +82,20 @@ public class UtilityController {
         return new ResponseEntity<>(new MonthDTO(monthStart, monthEnd), HttpStatus.OK);
     }
 
-    @GetMapping(value="/testDate/{date1}/{date2}/{date3}/{date4}")
+    @GetMapping(value = "/testDate/{date1}/{date2}/{date3}/{date4}")
     @ApiOperation("Проверка дат")
-    public ResponseEntity<Void> testDate(@PathVariable("date1") String d1, @PathVariable("date2") String d2, @PathVariable("date3") String d3, @PathVariable("date4") String d4)
-    {
+    public ResponseEntity<Void> testDate(@PathVariable("date1") String d1, @PathVariable("date2") String d2, @PathVariable("date3") String d3, @PathVariable("date4") String d4) {
+        log.info("Checking available dates ('{}', '{}', '{}', '{}').", d1, d2, d3, d4);
         DateUtil util = DateUtil.getInstance();
-        Date date1 = util.getDate(d1,"dd-MM-yyyy HH:mm");
+        Date date1 = util.getDate(d1, "dd-MM-yyyy HH:mm");
         Date date2 = util.getDate(d2, "dd-MM-yyyy HH:mm");
-        Date date3 = util.getDate(d3,"dd-MM-yyyy HH:mm");
+        Date date3 = util.getDate(d3, "dd-MM-yyyy HH:mm");
         Date date4 = util.getDate(d4, "dd-MM-yyyy HH:mm");
 
-        DateInterval di1 = new DateInterval(date1,date2);
-        DateInterval di2 = new DateInterval(date3,date4);
+        DateInterval di1 = new DateInterval(date1, date2);
+        DateInterval di2 = new DateInterval(date3, date4);
 
-        if(util.overlappingInterval(di1,di2))
-        {
+        if (util.overlappingInterval(di1, di2)) {
             return new ResponseEntity<>(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
         }
 
@@ -104,15 +104,14 @@ public class UtilityController {
 
     @GetMapping(value = "/getBusyTime/{doctor}")
     @ApiOperation("Получение времен занятости докторов")
-    public ResponseEntity<List<DateIntervalDTO>> getBusy(@PathVariable("doctor") String doctorEmail)
-    {
+    public ResponseEntity<List<DateIntervalDTO>> getBusy(@PathVariable("doctor") String doctorEmail) {
+        log.info("Getting the doctor's busy time by '{}'.", doctorEmail);
         Doctor d = doctorService.findByEmail(doctorEmail);
 
-        List<DateInterval> intervals =  Scheduler.getFreeIntervals(d, DateUtil.getInstance().getDate("21-01-2020", "dd-mm-yyyy"));
+        List<DateInterval> intervals = Scheduler.getFreeIntervals(d, DateUtil.getInstance().getDate("21-01-2020", "dd-mm-yyyy"));
         List<DateIntervalDTO> dtos = new ArrayList<DateIntervalDTO>();
 
-        for(DateInterval di : intervals)
-        {
+        for (DateInterval di : intervals) {
             dtos.add(new DateIntervalDTO(di, "HH:mm"));
         }
 
@@ -128,16 +127,14 @@ public class UtilityController {
     @Autowired
     private CentreService centreService;
 
-    @GetMapping(value="/hall/getBusyTime/{hallNumber}/{date}/{centreName}")
+    @GetMapping(value = "/hall/getBusyTime/{hallNumber}/{date}/{centreName}")
     @ApiOperation("Получение времени загруженности аптек")
-    public ResponseEntity<List<DateIntervalDTO>> getBusyHall(@PathVariable("hallNumber") int num, @PathVariable("date") String date,@PathVariable("centreName") String centreName)
-    {
+    public ResponseEntity<List<DateIntervalDTO>> getBusyHall(@PathVariable("hallNumber") int num, @PathVariable("date") String date, @PathVariable("centreName") String centreName) {
+        log.info("Getting the workload of pharmacies '{}' in '{}'.", num, centreName);
         Centre centre = centreService.findByName(centreName);
 
-        if(centre == null)
-        {
+        if (centre == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
         }
 
         Hall hall = hallService.findByNumberAndCentre(num, centre);
@@ -147,8 +144,7 @@ public class UtilityController {
         List<DateInterval> intervals = Scheduler.getBusyIntervals(apps, DateUtil.getInstance().getDate(date, "dd-mm-yyyy"));
         List<DateIntervalDTO> dtos = new ArrayList<DateIntervalDTO>();
 
-        for(DateInterval di : intervals)
-        {
+        for (DateInterval di : intervals) {
             dtos.add(new DateIntervalDTO(di, "HH:mm"));
         }
 
