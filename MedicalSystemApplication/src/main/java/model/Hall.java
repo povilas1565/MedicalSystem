@@ -2,6 +2,8 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +23,8 @@ public class Hall
 	private Long id;
 
 	@JsonIgnore
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne()
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "centre_id")
 	private Centre centre;
 	
