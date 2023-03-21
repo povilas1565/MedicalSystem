@@ -37,7 +37,8 @@ public class PatientMedicalReport {
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne()
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinColumn(name = "prescription_id", nullable = true)
 	private Prescription prescription;
 

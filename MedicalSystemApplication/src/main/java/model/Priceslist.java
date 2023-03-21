@@ -1,6 +1,8 @@
 package model;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 
@@ -12,7 +14,8 @@ public class Priceslist {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne()
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private Centre centre;
 
 	@Column(name = "typeOfExamination", nullable = false)
