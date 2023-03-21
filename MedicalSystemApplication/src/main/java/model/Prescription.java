@@ -1,12 +1,11 @@
 package model;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.*;
 
 @Data
@@ -20,7 +19,8 @@ public class Prescription {
 	@Column(name = "description", nullable = true)
 	private String description;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany()
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Drug> drugs = new ArrayList<>();
 
 	@Column(name = "date", nullable = true)

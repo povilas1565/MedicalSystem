@@ -130,7 +130,7 @@ public class PatientMedicalReport {
 		this.patient = patient;
 	}
 	
-	public static class Builder{
+	public static class Builder {
 	    private String description;
 	    private Date dateAndTime;
 	    private Doctor doctor;
