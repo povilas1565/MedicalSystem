@@ -74,7 +74,7 @@ public class ImageService {
 
     public Image uploadImageToProfile(MultipartFile file, Principal principal) throws IOException {
         User user = getUserByPrincipal(principal);
-        Image userProfileImage = imageRepository.findById(user.getId()).orElse( null);
+        Image userProfileImage = imageRepository.findByUserId(user.getId()).orElse( null);
 
         if (!ObjectUtils.isEmpty(userProfileImage)) {
             imageRepository.delete(userProfileImage);
@@ -82,6 +82,7 @@ public class ImageService {
         Image image = new Image();
         image.setUserId(user.getId());
         image.setImageBytes(compressImage(file.getBytes()));
+        image.setName(file.getName());
         LOG.info("Create image to user {}", user.getId());
 
         return imageRepository.save(image);
@@ -90,7 +91,7 @@ public class ImageService {
     public Image getUserProfileImage(Principal principal) {
         User user = getUserByPrincipal(principal);
 
-        Image userProfileImage = imageRepository.findById(user.getId()).orElse(null);
+        Image userProfileImage = imageRepository.findByUserId(user.getId()).orElse(null);
         if (!ObjectUtils.isEmpty(userProfileImage)) {
             userProfileImage.setImageBytes(decompressImage(userProfileImage.getImageBytes()));
         }

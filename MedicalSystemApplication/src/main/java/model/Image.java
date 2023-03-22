@@ -16,6 +16,9 @@ import javax.persistence.*;
         @Column(name="deleted", nullable = true)
         private Boolean deleted;
 
+        @Column(name = "name", nullable = false)
+        private String name;
+
         @Lob
         @Column(name = "bytea")
         private byte[] imageBytes;
@@ -29,9 +32,10 @@ import javax.persistence.*;
             deleted = false;
         }
 
-        public Image(Long id) {
+        public Image(Long id, String name) {
             super();
             this.id = id;
+            this.name = name;
             deleted = false;
         }
 
@@ -46,6 +50,10 @@ import javax.persistence.*;
         public void setUserId(Long userId) {
         this.userId = userId;
         }
+
+        public String getName() { return name; }
+
+        public void setName(String name) { this.name = name; }
 
         public Long getId() {
             return id;
