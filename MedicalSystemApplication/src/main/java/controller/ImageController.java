@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import model.Image;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +21,14 @@ import java.security.Principal;
 @RequestMapping(value = "api/image")
 @CrossOrigin
 @Api
-@RequiredArgsConstructor
 public class ImageController {
 
-    private final ImageService imageService;
+    @Autowired
+    ImageService imageService;
 
     @PostMapping("/upload")
     @ApiOperation("Загрузка фоток для профилей пользователей")
-    public ResponseEntity<MessageResponse> uploadImageToProfile(@RequestParam("file") MultipartFile file,
-                                                                Principal principal) throws IOException {
+    public ResponseEntity<MessageResponse> uploadImageToProfile(@RequestParam("file") MultipartFile file, Principal principal) throws IOException {
         log.info("Uploading a photo for the user profile '{}'.", principal.getName());
         imageService.uploadImageToProfile(file, principal);
         return ResponseEntity.ok(new MessageResponse("Image upload successfully"));
