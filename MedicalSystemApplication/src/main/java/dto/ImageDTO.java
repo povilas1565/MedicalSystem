@@ -4,15 +4,16 @@ import model.Image;
 public class ImageDTO {
 
     private Long id;
+    private String name;
 
-    public ImageDTO(){
+    public ImageDTO() {
         super();
     }
 
-    public ImageDTO(Image image)
-    {
+    public ImageDTO(Image image) {
         super();
         this.id = image.getId();
+        this.name = image.getName();
     }
 
     public long getId() {
@@ -23,4 +24,11 @@ public class ImageDTO {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

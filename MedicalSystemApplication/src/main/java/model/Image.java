@@ -1,7 +1,4 @@
 package model;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import dto.ImageDTO;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,16 +13,12 @@ import javax.persistence.*;
         @Column(name="deleted", nullable = true)
         private Boolean deleted;
 
-        @Column(name = "name", nullable = false)
+        @Column(name = "name")
         private String name;
 
         @Lob
         @Column(name = "bytea")
         private byte[] imageBytes;
-
-        @JsonIgnore
-        private Long userId;
-
 
         public Image() {
             super();
@@ -42,14 +35,6 @@ import javax.persistence.*;
         public byte[] getImageBytes() { return imageBytes; }
 
         public void setImageBytes(byte[] imageBytes) { this.imageBytes = imageBytes; }
-
-        public Long getUserId() {
-        return userId;
-        }
-
-        public void setUserId(Long userId) {
-        this.userId = userId;
-        }
 
         public String getName() { return name; }
 

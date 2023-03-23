@@ -23,6 +23,7 @@ import java.util.zip.Inflater;
 public class ImageService {
 
     public static final Logger LOG = LoggerFactory.getLogger(ImageService.class);
+
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
 
@@ -30,6 +31,35 @@ public class ImageService {
     public ImageService(ImageRepository imageRepository, UserRepository userRepository) {
         this.imageRepository = imageRepository;
         this.userRepository = userRepository;
+    }
+
+    public Image uploadImageToProfile(MultipartFile file, Principal principal) throws IOException {
+        User user = getUserByPrincipal(principal);
+        Image userProfileImage = imageRepository.findById(user.getId()).orElse(null);
+
+        // проверяем - есть ли уже фотография пользователя в базе.
+        // если есть - тогда удаляем и загружаем новую
+        if (!ObjectUtils.isEmpty(userProfileImage)) {
+            imageRepository.delete(userProfileImage);
+        }
+
+        Image image = new Image();
+        image.setId(user.getId());
+        image.setImageBytes(compressImage(file.getBytes()));
+        image.setName(file.getName());
+        LOG.info("Create image to user {}", user.getId());
+
+        return imageRepository.save(image);
+    }
+
+    public Image getUserProfileImage(Principal principal) {
+        User user = getUserByPrincipal(principal);
+
+        Image userProfileImage = imageRepository.findById(user.getId()).orElse(null);
+        if (!ObjectUtils.isEmpty(userProfileImage)) {
+            userProfileImage.setImageBytes(decompressImage(userProfileImage.getImageBytes()));
+        }
+        return userProfileImage;
     }
 
     public static byte[] compressImage(byte[] data) {
@@ -70,32 +100,6 @@ public class ImageService {
         }
         return byteArrayOutputStream.toByteArray();
 
-    }
-
-    public Image uploadImageToProfile(MultipartFile file, Principal principal) throws IOException {
-        User user = getUserByPrincipal(principal);
-        Image userProfileImage = imageRepository.findByUserId(user.getId()).orElse( null);
-
-        if (!ObjectUtils.isEmpty(userProfileImage)) {
-            imageRepository.delete(userProfileImage);
-        }
-        Image image = new Image();
-        image.setUserId(user.getId());
-        image.setImageBytes(compressImage(file.getBytes()));
-        image.setName(file.getName());
-        LOG.info("Create image to user {}", user.getId());
-
-        return imageRepository.save(image);
-    }
-
-    public Image getUserProfileImage(Principal principal) {
-        User user = getUserByPrincipal(principal);
-
-        Image userProfileImage = imageRepository.findByUserId(user.getId()).orElse(null);
-        if (!ObjectUtils.isEmpty(userProfileImage)) {
-            userProfileImage.setImageBytes(decompressImage(userProfileImage.getImageBytes()));
-        }
-        return userProfileImage;
     }
 
     private User getUserByPrincipal(Principal principal) {
