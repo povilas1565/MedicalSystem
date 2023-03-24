@@ -33,7 +33,7 @@ public class ImageService {
         this.userRepository = userRepository;
     }
 
-    public Image uploadImageToProfile(MultipartFile file, Principal principal) throws IOException {
+    public void uploadImageToProfile(MultipartFile file, Principal principal) throws IOException {
         User user = getUserByPrincipal(principal);
         Image userProfileImage = imageRepository.findById(user.getId()).orElse(null);
 
@@ -49,7 +49,7 @@ public class ImageService {
         image.setName(file.getName());
         LOG.info("Create image to user {}", user.getId());
 
-        return imageRepository.save(image);
+        imageRepository.save(image);
     }
 
     public Image getUserProfileImage(Principal principal) {
