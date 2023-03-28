@@ -92,7 +92,7 @@ public class ChatController {
 
     @PostMapping(value ="/addChat3/{nurse}/{patient}/{doctor}")
     @ApiOperation("Cоздание новых чатов")
-    public ResponseEntity<Void> addChat(@PathVariable("nurse") String nurseEmail, @PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
+    public ResponseEntity<ChatDTO> addChat(@PathVariable("nurse") String nurseEmail, @PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
         HttpHeaders header = new HttpHeaders();
 
         Nurse nurse = nurseService.findByEmail(dto.getNurse());

@@ -20,7 +20,7 @@ public class ChatService {
     }
 
     public Chat findByNurseAndPatient(Nurse nurse, Patient patient) {
-        return chatRepository.findByNurseAndPatient(nurse,patient);
+        return chatRepository.findByNurseAndPatient(nurse, patient);
     }
 
     public Chat findByDoctorAndPatient(Doctor doctor, Patient patient) {
