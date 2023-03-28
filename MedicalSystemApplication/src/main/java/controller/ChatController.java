@@ -94,7 +94,6 @@ public class ChatController {
     @ApiOperation("Cоздание новых чатов")
     public ResponseEntity<ChatDTO> addChat(@PathVariable("nurse") String nurseEmail, @PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
         HttpHeaders header = new HttpHeaders();
-
         Nurse nurse = nurseService.findByEmail(dto.getNurse());
         if (nurse == null) {
             header.set("responseText", "nurse not found: " + nurseEmail);
@@ -130,38 +129,44 @@ public class ChatController {
     @GetMapping(value = "/getChat1/{doctor}/{patient}")
     @ApiOperation("Получение чатов между докторами и пациентами")
     public ResponseEntity<ChatDTO> getChatBetweenDoctorAndPatient(@PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail) {
-        Doctor d = doctorService.findByEmail(doctorEmail);
-        Patient p = patientService.findByEmail(patientEmail);
+        HttpHeaders header = new HttpHeaders();
+        Doctor doctor = doctorService.findByEmail(doctorEmail);
+        Patient patient = patientService.findByEmail(patientEmail);
 
-        if (d == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (doctor == null) {
+            header.set("responseText", "doctor not found: " + doctorEmail);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        if (p == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (patient == null) {
+            header.set("responseText", "patient not found: " + patientEmail);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        Chat c = chatService.findByDoctorAndPatient(d, p);
-        ChatDTO dto = new ChatDTO(c);
+        Chat chat = chatService.findByDoctorAndPatient(doctor, patient);
+        ChatDTO dto = new ChatDTO(chat);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getChat2/{nurse}/{patient}")
     @ApiOperation("Получение чатов между медперсоналом и пациентами")
     public ResponseEntity<ChatDTO> getChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail)  {
-        Nurse n = nurseService.findByEmail(nurseEmail);
-        Patient p = patientService.findByEmail(patientEmail);
+        HttpHeaders header = new HttpHeaders();
+        Nurse nurse = nurseService.findByEmail(nurseEmail);
+        Patient patient = patientService.findByEmail(patientEmail);
 
-        if (n == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (nurse == null) {
+            header.set("responseText", "nurse not found: " + nurseEmail);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        if (p == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (patient == null) {
+            header.set("responseText", "patient not found: " + patientEmail);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        Chat c = chatService.findByNurseAndPatient(n, p);
-        ChatDTO dto = new ChatDTO(c);
+        Chat chat = chatService.findByNurseAndPatient(nurse, patient);
+        ChatDTO dto = new ChatDTO(chat);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
@@ -169,7 +174,6 @@ public class ChatController {
     @ApiOperation("Обновление(изменение) отчета по id")
     public ResponseEntity<Void> updateChat(@PathVariable("id")long id, @RequestBody ChatDTO dto) {
         HttpHeaders header = new HttpHeaders();
-
         Chat chat = chatService.findById(id);
         if (chat == null) {
             header.set("responseText", "report not found: " + id);
@@ -190,25 +194,27 @@ public class ChatController {
     @ApiOperation("Удаление чатов между докторами и пациентами")
     public ResponseEntity<Void> removeChatBetweenDoctorAndPatient(@PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail) {
         HttpHeaders header = new HttpHeaders();
-        Doctor d = doctorService.findByEmail(doctorEmail);
-        Patient p = patientService.findByEmail(patientEmail);
+        Doctor doctor = doctorService.findByEmail(doctorEmail);
+        Patient patient = patientService.findByEmail(patientEmail);
 
-        if (d == null) {
+        if (doctor == null) {
+            header.set("responseText", "doctor not found: " + doctorEmail);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
+        }
+
+        if (patient == null) {
+            header.set("responseText", "patient not found: " + patientEmail);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
+        }
+
+        Chat chat = chatService.findByDoctorAndPatient(doctor, patient);
+
+        if (chat == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (p == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        Chat c = chatService.findByDoctorAndPatient(d, p);
-
-        if (c == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        c.setDeleted(true);
-        chatService.save(c);
+        chat.setDeleted(true);
+        chatService.save(chat);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -216,26 +222,28 @@ public class ChatController {
     @ApiOperation("Удаление чатов между медперсоналом и пациентами")
     public ResponseEntity<Void> removeChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail) {
         HttpHeaders header = new HttpHeaders();
-        Nurse n = nurseService.findByEmail(nurseEmail);
-        Patient p = patientService.findByEmail(patientEmail);
+        Nurse nurse = nurseService.findByEmail(nurseEmail);
+        Patient patient = patientService.findByEmail(patientEmail);
 
-        if (n == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (nurse == null) {
+            header.set("responseText", "nurse not found: " + nurseEmail);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        if (p == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (patient == null) {
+            header.set("responseText", "patient not found: " + patientEmail);
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        Chat c = chatService.findByNurseAndPatient(n, p);
+        Chat chat = chatService.findByNurseAndPatient(nurse, patient);
 
 
-        if (c == null) {
+        if (chat == null) {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        c.setDeleted(true);
-        chatService.save(c);
+        chat.setDeleted(true);
+        chatService.save(chat);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
