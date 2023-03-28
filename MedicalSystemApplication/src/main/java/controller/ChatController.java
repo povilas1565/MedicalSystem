@@ -94,6 +94,7 @@ public class ChatController {
     @ApiOperation("Cоздание новых чатов")
     public ResponseEntity<Void> addChat(@PathVariable("nurse") String nurseEmail, @PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
         HttpHeaders header = new HttpHeaders();
+
         Nurse nurse = nurseService.findByEmail(dto.getNurse());
         if (nurse == null) {
             header.set("responseText", "nurse not found: " + nurseEmail);
@@ -129,7 +130,6 @@ public class ChatController {
     @GetMapping(value = "/getChat1/{doctor}/{patient}")
     @ApiOperation("Получение чатов между докторами и пациентами")
     public ResponseEntity<ChatDTO> getChatBetweenDoctorAndPatient(@PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail) {
-        HttpHeaders header = new HttpHeaders();
         Doctor d = doctorService.findByEmail(doctorEmail);
         Patient p = patientService.findByEmail(patientEmail);
 
@@ -149,7 +149,6 @@ public class ChatController {
     @GetMapping(value = "/getChat2/{nurse}/{patient}")
     @ApiOperation("Получение чатов между медперсоналом и пациентами")
     public ResponseEntity<ChatDTO> getChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail)  {
-        HttpHeaders header = new HttpHeaders();
         Nurse n = nurseService.findByEmail(nurseEmail);
         Patient p = patientService.findByEmail(patientEmail);
 
@@ -170,6 +169,7 @@ public class ChatController {
     @ApiOperation("Обновление(изменение) отчета по id")
     public ResponseEntity<Void> updateChat(@PathVariable("id")long id, @RequestBody ChatDTO dto) {
         HttpHeaders header = new HttpHeaders();
+
         Chat chat = chatService.findById(id);
         if (chat == null) {
             header.set("responseText", "report not found: " + id);
