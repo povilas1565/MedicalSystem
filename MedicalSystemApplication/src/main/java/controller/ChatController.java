@@ -2,6 +2,7 @@ package controller;
 import dto.ChatDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +14,7 @@ import service.DoctorService;
 import service.NurseService;
 import service.PatientService;
 
-
+@Slf4j
 @RestController
 @RequestMapping(value = "api/chats")
 @CrossOrigin
@@ -34,8 +35,9 @@ public class ChatController {
 
 
     @PostMapping(value="/addChat1/{doctor}/{patient}")
-    @ApiOperation("Cоздание новцых чатов между докторами и пациентами")
+    @ApiOperation("Cоздание новых чатов между докторами и пациентами")
     public ResponseEntity<Void> addChatBetweenDoctorAndPatient(@PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
+        log.info("Creation of new chats between doctor '{}' and patient '{}'.", doctorEmail, patientEmail);
         HttpHeaders header = new HttpHeaders();
         Patient patient = patientService.findByEmail(dto.getPatient());
         if (patient == null) {
@@ -64,6 +66,7 @@ public class ChatController {
     @PostMapping(value ="/addChat2/{nurse}/{patient}")
     @ApiOperation("Cоздание новых чатов между медперсоналом и пациентами")
     public ResponseEntity<Void> addChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
+        log.info("Creation of new chats between nurse '{}' and patient '{}'.", nurseEmail, patientEmail);
         HttpHeaders header = new HttpHeaders();
         Patient patient = patientService.findByEmail(dto.getPatient());
         if (patient == null) {
@@ -93,6 +96,7 @@ public class ChatController {
     @PostMapping(value ="/addChat3/{nurse}/{patient}/{doctor}")
     @ApiOperation("Cоздание новых чатов")
     public ResponseEntity<ChatDTO> addChat(@PathVariable("nurse") String nurseEmail, @PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
+        log.info("Creation of new chats between nurse '{}', doctor '{}' and patient '{}'.", nurseEmail, doctorEmail, patientEmail);
         HttpHeaders header = new HttpHeaders();
         Nurse nurse = nurseService.findByEmail(dto.getNurse());
         if (nurse == null) {
@@ -128,7 +132,8 @@ public class ChatController {
 
     @GetMapping(value = "/getChat1/{doctor}/{patient}")
     @ApiOperation("Получение чатов между докторами и пациентами")
-    public ResponseEntity<ChatDTO> getChatBetweenDoctorAndPatient(@PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail) {
+    public ResponseEntity<Void> getChatBetweenDoctorAndPatient(@PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
+        log.info("Getting a chat between doctor '{}' and patient '{}'.", doctorEmail, patientEmail);
         HttpHeaders header = new HttpHeaders();
         Doctor doctor = doctorService.findByEmail(doctorEmail);
         Patient patient = patientService.findByEmail(patientEmail);
@@ -143,14 +148,22 @@ public class ChatController {
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        Chat chat = chatService.findByDoctorAndPatient(doctor, patient);
-        ChatDTO dto = new ChatDTO(chat);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        Chat chat = new Chat();
+        chat.setPatient(patient);
+        chat.setDoctor(doctor);
+        chat.setDescription(dto.getDescription());
+        chat.setName(dto.getName());
+        chat.setMessage(dto.getMessage());
+        chat.setDateAndTime(dto.getDateAndTime());
+        chatService.save(chat);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "/getChat2/{nurse}/{patient}")
     @ApiOperation("Получение чатов между медперсоналом и пациентами")
-    public ResponseEntity<ChatDTO> getChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail)  {
+    public ResponseEntity<Void> getChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto)  {
+        log.info("Getting a chat between nurse '{}' and patient '{}'.", nurseEmail, patientEmail);
         HttpHeaders header = new HttpHeaders();
         Nurse nurse = nurseService.findByEmail(nurseEmail);
         Patient patient = patientService.findByEmail(patientEmail);
@@ -165,14 +178,22 @@ public class ChatController {
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        Chat chat = chatService.findByNurseAndPatient(nurse, patient);
-        ChatDTO dto = new ChatDTO(chat);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        Chat chat = new Chat();
+        chat.setPatient(patient);
+        chat.setNurse(nurse);
+        chat.setDescription(dto.getDescription());
+        chat.setName(dto.getName());
+        chat.setMessage(dto.getMessage());
+        chat.setDateAndTime(dto.getDateAndTime());
+        chatService.save(chat);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value = "/updateChat/{id}")
     @ApiOperation("Обновление(изменение) отчета по id")
     public ResponseEntity<Void> updateChat(@PathVariable("id")long id, @RequestBody ChatDTO dto) {
+        log.info("Update (change) report by id '{}'.", id);
         HttpHeaders header = new HttpHeaders();
         Chat chat = chatService.findById(id);
         if (chat == null) {
@@ -193,6 +214,7 @@ public class ChatController {
     @DeleteMapping(value = "/removeChat1/{doctor}/{patient}")
     @ApiOperation("Удаление чатов между докторами и пациентами")
     public ResponseEntity<Void> removeChatBetweenDoctorAndPatient(@PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail) {
+        log.info("Deleting a chat between doctor '{}' and patient '{}'.", doctorEmail, patientEmail);
         HttpHeaders header = new HttpHeaders();
         Doctor doctor = doctorService.findByEmail(doctorEmail);
         Patient patient = patientService.findByEmail(patientEmail);
@@ -221,6 +243,7 @@ public class ChatController {
     @DeleteMapping(value = "/removeChat2/{nurse}/{patient}")
     @ApiOperation("Удаление чатов между медперсоналом и пациентами")
     public ResponseEntity<Void> removeChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail) {
+        log.info("Deleting a chat between nurse '{}' and patient '{}'.", nurseEmail, patientEmail);
         HttpHeaders header = new HttpHeaders();
         Nurse nurse = nurseService.findByEmail(nurseEmail);
         Patient patient = patientService.findByEmail(patientEmail);
