@@ -3,6 +3,7 @@ package model;
 import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -43,9 +44,8 @@ public class Chat {
         this.deleted = false;
     }
 
-    public Chat(Long id, Date dateAndTime, String name, String message, String description, Doctor doctor, Patient patient, Nurse nurse) {
+    public Chat(Date dateAndTime, String name, String message, String description, Doctor doctor, Patient patient, Nurse nurse) {
         super();
-        this.id = id;
         this.dateAndTime = dateAndTime;
         this.name = name;
         this.message = message;
@@ -121,5 +121,4 @@ public class Chat {
         this.deleted = deleted;
     }
 
-
-}
+    }
