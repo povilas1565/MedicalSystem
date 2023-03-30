@@ -35,8 +35,9 @@ public class Centre
     @Column(name="rating", nullable = false)
     private float rating;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Hall> halls;
+	@OneToMany()
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<Hall> halls;
 
 	@OneToMany()
 	@LazyCollection(LazyCollectionOption.FALSE)
