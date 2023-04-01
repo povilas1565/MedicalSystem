@@ -1,5 +1,4 @@
 package controller;
-
 import dto.PrescriptionDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +11,6 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 import service.PrescriptionService;
 import service.UserService;
-
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +30,16 @@ public class PrescriptionController {
     @GetMapping(value = "/getAllPrescriptions")
     @ApiOperation("Получение всех рецептов")
     public ResponseEntity<List<PrescriptionDTO>> getDrugs() {
-        log.info("Getting all recipes.");
+        log.info("Getting all prescriptions.");
         List<Prescription> prescriptions = prescriptionService.findAll();
-        List<PrescriptionDTO> prescriptionsDTO = new ArrayList<PrescriptionDTO>();
+        List<PrescriptionDTO> prescriptionsDTO = new ArrayList<>();
         if (prescriptions == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         for (Prescription p : prescriptions) {
             PrescriptionDTO dto = new PrescriptionDTO(p);
-            if (p.getIsValid() == false) {
+            if (p.getIsValid() == true) {
                 prescriptionsDTO.add(dto);
             }
         }
