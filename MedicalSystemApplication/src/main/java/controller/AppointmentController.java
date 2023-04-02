@@ -776,7 +776,7 @@ public class AppointmentController {
         }
 
         if (centre == null) {
-            System.out.println("CENTRE");
+            log.info("CENTRE='{}' was not found.", dto.getCentreName());
             header.set("message", "Centre not found: " + dto.getCentreName());
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
@@ -785,7 +785,7 @@ public class AppointmentController {
         Patient patient = patientService.findByEmail(dto.getPatientEmail());
 
         if (patient == null) {
-            System.out.println("PATIENT");
+            log.info("PATIENT='{}' was not found.", dto.getPatientEmail());
             header.set("message", "Patient not found: " + dto.getPatientEmail());
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
@@ -800,13 +800,22 @@ public class AppointmentController {
             Doctor doctor = doctorService.findByEmail(email);
 
             if (doctor == null) {
-                System.out.println("DOCTOR");
+                log.info("DOCTOR='{}' was not found.", email);
                 header.set("message", "Doctor not found: " + email);
                 return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
             }
 
             request.getDoctors().add(doctor);
         }
+
+        Hall hall = hallService.findByNumberAndCentre(dto.getHallNumber(), centre);
+
+        if (hall == null) {
+            log.info("HALL='{}' was not found.", dto.getHallNumber());
+            header.set("message", "Hall not found: " + dto.getHallNumber());
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
+        }
+        request.setHall(hall);
 
         Priceslist pl = priceslistService.findByTypeOfExaminationAndCentre(dto.getTypeOfExamination(), centre);
 
