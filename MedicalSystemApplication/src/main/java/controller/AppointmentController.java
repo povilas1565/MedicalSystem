@@ -78,18 +78,18 @@ public class AppointmentController {
     @ApiOperation("Назначить приемы")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatient(@PathVariable("doctorEmail") String doctorEmail, @PathVariable("patientEmail") String patientEmail) {
         log.info("Assigning a patient '{}' to an appointment with a doctor '{}'.", patientEmail, doctorEmail);
-        Patient p = patientService.findByEmail(patientEmail);
-        Doctor d = doctorService.findByEmail(doctorEmail);
+        Patient patient = patientService.findByEmail(patientEmail);
+        Doctor doctor = doctorService.findByEmail(doctorEmail);
 
-        if (p == null) {
+        if (patient == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (d == null) {
+        if (doctor == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        List<Appointment> app = appointmentService.findAllByDoctorAndPatient(d, p);
+        List<Appointment> app = appointmentService.findAllByDoctorAndPatient(doctor, patient);
         List<AppointmentDTO> appDTO = new ArrayList<>();
 
         if (app == null) {
@@ -338,13 +338,13 @@ public class AppointmentController {
     @ApiOperation("Получение всех запросов пациентов")
     public ResponseEntity<List<AppointmentDTO>> getPatientRequests(@PathVariable("email") String email) {
         log.info("Receiving all patient requests by email '{}'.", email);
-        Patient p = patientService.findByEmail(email);
+        Patient patient = patientService.findByEmail(email);
 
-        if (p == null) {
+        if (patient == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        List<AppointmentRequest> list = appointmentRequestService.getAllByPatient(p);
+        List<AppointmentRequest> list = appointmentRequestService.getAllByPatient(patient);
 
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
@@ -359,22 +359,22 @@ public class AppointmentController {
     @ApiOperation("Получение всех назначений пациентов")
     public ResponseEntity<List<AppointmentDTO>> getAllAppointments(@PathVariable("email") String email) {
         log.info("Receiving all appointments of patients by email '{}'.", email);
-        Patient p = null;
+        Patient patient = null;
 
         try {
-            p = patientService.findByEmail(email);
+            patient = patientService.findByEmail(email);
         } catch (ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         HttpHeaders header = new HttpHeaders();
 
-        if (p == null) {
+        if (patient == null) {
             header.set("responseText", "User not found : (" + email + ")");
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        List<Appointment> appointments = appointmentService.findAllByPatient(p);
+        List<Appointment> appointments = appointmentService.findAllByPatient(patient);
         List<AppointmentDTO> dto = new ArrayList<AppointmentDTO>();
 
         for (Appointment app : appointments) {
@@ -414,22 +414,22 @@ public class AppointmentController {
     @ApiOperation("Получение всех записей на приемы к докторам")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctor(@PathVariable("email") String email) {
         log.info("Receiving all records for appointments with doctors by email '{}'.", email);
-        Doctor d = null;
+        Doctor doctor = null;
 
         try {
-            d = doctorService.findByEmail(email);
+            doctor = doctorService.findByEmail(email);
         } catch (ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         HttpHeaders header = new HttpHeaders();
 
-        if (d == null) {
-            header.set("responseText", "User not found : (" + email + ")");
+        if (doctor == null) {
+            header.set("responseText", "Doctor not found : (" + email + ")");
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        List<Appointment> appointments = d.getAppointments();
+        List<Appointment> appointments = doctor.getAppointments();
         List<AppointmentDTO> dto = new ArrayList<AppointmentDTO>();
 
         for (Appointment app : appointments) {
@@ -448,22 +448,22 @@ public class AppointmentController {
     @ApiOperation("Получение всех записей на приемы к докторам по дате")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctorByDate(@PathVariable("email") String email, @PathVariable("date") String date) {
         log.info("Retrieve all records for appointments with doctors by email '{}' and date '{}'.", email, date);
-        Doctor d = null;
+        Doctor doctor = null;
 
         try {
-            d = doctorService.findByEmail(email);
+            doctor = doctorService.findByEmail(email);
         } catch (ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         HttpHeaders header = new HttpHeaders();
 
-        if (d == null) {
-            header.set("responseText", "User not found : (" + email + ")");
+        if (doctor == null) {
+            header.set("responseText", "Doctor not found : (" + email + ")");
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        List<Appointment> appointments = d.getAppointments();
+        List<Appointment> appointments = doctor.getAppointments();
         List<AppointmentDTO> dto = new ArrayList<AppointmentDTO>();
 
         for (Appointment app : appointments) {
@@ -485,22 +485,22 @@ public class AppointmentController {
     @ApiOperation("Получение всех записей на приемы к докторам в календаре")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsDoctorCalendar(@PathVariable("email") String email) {
         log.info("Receiving all entries for appointments with doctors in the calendar by email '{}'.", email);
-        Doctor d = null;
+        Doctor doctor = null;
 
         try {
-            d = doctorService.findByEmail(email);
+            doctor = doctorService.findByEmail(email);
         } catch (ClassCastException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         HttpHeaders header = new HttpHeaders();
 
-        if (d == null) {
-            header.set("responseText", "User not found : (" + email + ")");
+        if (doctor == null) {
+            header.set("responseText", "Doctor not found : (" + email + ")");
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        List<Appointment> appointments = d.getAppointments();
+        List<Appointment> appointments = doctor.getAppointments();
         List<AppointmentDTO> dto = new ArrayList<AppointmentDTO>();
 
         for (Appointment app : appointments) {
@@ -522,7 +522,6 @@ public class AppointmentController {
 
     }
 
-
     @PostMapping(value = "/makePredefined")
     @ApiOperation("Cоздание заданий")
     public ResponseEntity<Void> makePredefined(@RequestBody AppointmentDTO dto) {
@@ -532,6 +531,14 @@ public class AppointmentController {
 
         if (centre == null) {
             header.set("responseText", "Centre " + dto.getCentreName() + " is not found");
+            return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
+        }
+
+        Patient patient = patientService.findByEmail(dto.getPatientEmail());
+
+        if (patient == null) {
+            log.info("PATIENT='{}' was not found.", dto.getPatientEmail());
+            header.set("message", "Patient not found: " + dto.getPatientEmail());
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
@@ -593,6 +600,7 @@ public class AppointmentController {
                 .withType(dto.getType())
                 .withPriceslist(p)
                 .withDoctors(doctors)
+                .withPatient(patient)
                 .build();
 
         app.setPredefined(true);
@@ -611,7 +619,7 @@ public class AppointmentController {
     public ResponseEntity<Void> confirmAppointmentRequest(@RequestBody AppointmentDTO dto, HttpServletRequest httpRequest) {
         log.info("Confirmation of requests for appointments at the medical center '{}'.", dto.getCentreName());
         HttpHeaders header = new HttpHeaders();
-        AppointmentRequest request = appointmentRequestService.findAppointmentRequest(dto.getDate(), 0, dto.getCentreName());
+        AppointmentRequest request = appointmentRequestService.findAppointmentRequest(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
 
         if (request == null) {
             header.set("responseText", "Request not found: " + dto.getDate() + " ," + dto.getHallNumber() + ", " + dto.getCentreName());
