@@ -402,7 +402,7 @@ public class AppointmentController {
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
         for (Appointment app : appointments) {
-            if (app.getPatient() == null) {
+            if (app.getPatient() != null) {
                 dtos.add(new AppointmentDTO(app));
             }
         }
@@ -726,7 +726,7 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        app.setConfirmed(true);
+        app.setConfirmed(false);
         appointmentService.save(app);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -736,15 +736,14 @@ public class AppointmentController {
     @ApiOperation("Удаление записей на приемы")
     public ResponseEntity<Void> denyAppointment(@RequestBody AppointmentDTO dto) {
         log.info("Deleting appointments at the medical center '{}'.", dto.getCentreName());
-        Appointment app = appointmentService.findAppointment(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
+        String date = dto.getDate();
+        int hallNumber = dto.getHallNumber();
+        String centre = dto.getCentreName();
+        Appointment app = appointmentService.findAppointment(date, hallNumber, centre);
 
         if (app == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        app.setDate(null);
-        app.setCentre(null);
-        app.setHall(null);
 
         appointmentService.save(app);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -978,7 +977,7 @@ public class AppointmentController {
             return new ResponseEntity<>(headers, HttpStatus.NOT_FOUND);
         }
 
-        app.setDone(true);
+        app.setDone(false);
         appointmentService.save(app);
 
         return new ResponseEntity<>(HttpStatus.OK);

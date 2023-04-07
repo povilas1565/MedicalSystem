@@ -235,4 +235,6 @@ public class AppointmentDTO {
 	public void setDone(boolean done) {
 		this.done = done;
 	}
-}
+
+	}
+
