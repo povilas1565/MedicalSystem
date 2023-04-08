@@ -402,7 +402,7 @@ public class AppointmentController {
         List<AppointmentDTO> dtos = new ArrayList<AppointmentDTO>();
 
         for (Appointment app : appointments) {
-            if (app.getPatient() == null) {
+            if (app.getPatient() != null) {
                 dtos.add(new AppointmentDTO(app));
             }
         }

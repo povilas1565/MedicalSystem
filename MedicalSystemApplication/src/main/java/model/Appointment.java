@@ -1,4 +1,5 @@
 package model;
+
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -8,96 +9,91 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class Appointment 
-{
-	public enum AppointmentType{
-		Examination
-	}
-	
-	@Id
-	@GeneratedValue( strategy = GenerationType.AUTO)
-	private Long id;
-	
-	@Column(name= "startingDateAndTime")
-	private Date date;
-	
-	@Column(name= "endingDateAndTime")
-	private Date endDate;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Hall hall;
-	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "patient_id")
-	private Patient patient;
-	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "centre_id")
-	private Centre centre;
-	
-	@Column(name = "duration", nullable = true)
-	private long duration;
+public class Appointment {
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	private List<Doctor> doctors;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "priceslist_id")
-	private Priceslist priceslist;
-	
-	@Column(name = "appointmentType")
-	private AppointmentType appointmentType;
-	
-	@Column(name="predefined")
-	private Boolean predefined = false;
+	public enum AppointmentType {
+        Examination
+    }
 
-	@Column(name="done")
-	private Boolean done = false;
-	
-	@Column(name="confirmed")
-	private Boolean confirmed = false;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	private Date newDate;
-	private Date newEndDate;
+    @Column(name = "startingDateAndTime")
+    private Date date;
 
-	@Version
-	private Integer version;
-	
-	public Appointment() {
-		super();
-		this.doctors = new ArrayList<>();
-		this.confirmed = true;
-		// TODO Auto-generated constructor stub
-	}
+    @Column(name = "endingDateAndTime")
+    private Date endDate;
 
+    @ManyToOne
+    private Hall hall;
 
-	public Appointment(Date date, Hall hall, Patient patient, Centre centre, long duration,
+    @OneToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    @OneToOne
+    @JoinColumn(name = "centre_id")
+    private Centre centre;
+
+    @Column(name = "duration", nullable = true)
+    private long duration;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Doctor> doctors;
+
+    @OneToOne
+    @JoinColumn(name = "priceslist_id")
+    private Priceslist priceslist;
+
+    @Column(name = "appointmentType")
+    private AppointmentType appointmentType;
+
+    @Column(name = "predefined")
+    private Boolean predefined = false;
+
+    @Column(name = "done")
+    private Boolean done = false;
+
+    @Column(name = "confirmed")
+    private Boolean confirmed = false;
+
+    private Date newDate;
+    private Date newEndDate;
+
+    @Version
+    private Integer version;
+
+    public Appointment() {
+        super();
+        this.doctors = new ArrayList<>();
+        this.confirmed = true;
+        // TODO Auto-generated constructor stub
+    }
+
+    public Appointment(Date date, Hall hall, Patient patient, Centre centre, long duration,
                        Priceslist priceslist, AppointmentType appointmentType) {
-		super();
-		this.date = date;
-		this.hall = hall;
-		this.patient = patient;
-		this.centre = centre;
-		this.duration = duration;
-		this.doctors = new ArrayList<>();
-		this.priceslist = priceslist;
-		this.appointmentType = appointmentType; 
-		this.confirmed = true;
-	}
-	
-	
+        super();
+        this.date = date;
+        this.hall = hall;
+        this.patient = patient;
+        this.centre = centre;
+        this.duration = duration;
+        this.doctors = new ArrayList<>();
+        this.priceslist = priceslist;
+        this.appointmentType = appointmentType;
+        this.confirmed = true;
+    }
 
     public Boolean getConfirmed() {
-		return confirmed;
-	}
+        return confirmed;
+    }
 
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+    }
 
-	public void setConfirmed(Boolean confirmed) {
-		this.confirmed = confirmed;
-	}
-
-
-	public Date getNewEndDate() {
+    public Date getNewEndDate() {
         return newEndDate;
     }
 
@@ -106,216 +102,191 @@ public class Appointment
     }
 
     public Date getEndDate() {
-		return endDate;
-	}
+        return endDate;
+    }
 
-	public Date getNewDate() {
-		return newDate;
-	}
+    public Date getNewDate() {
+        return newDate;
+    }
 
-	public void setNewDate(Date newDate) {
-		this.newDate = newDate;
-	}
+    public void setNewDate(Date newDate) {
+        this.newDate = newDate;
+    }
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
+    public Integer getVersion() {
+        return version;
+    }
 
-	public Integer getVersion() {
-		return version;
-	}
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
+    public Boolean getPredefined() {
+        return predefined;
+    }
 
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
+    public void setPredefined(Boolean predefined) {
+        this.predefined = predefined;
+    }
 
+    public void setPriceslist(Priceslist priceslist) {
+        this.priceslist = priceslist;
+    }
 
-	public Boolean getPredefined() {
-		return predefined;
-	}
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setPredefined(Boolean predefined) {
-		this.predefined = predefined;
-	}
+    public Date getDate() {
+        return date;
+    }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public void setPriceslist(Priceslist priceslist) {
-		this.priceslist = priceslist;
-	}
+    public Hall getHall() {
+        return hall;
+    }
 
+    public void setHall(Hall hall) {
+        this.hall = hall;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Patient getPatient() {
+        return patient;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public Centre getCentre() {
+        return centre;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setCentre(Centre centre) {
+        this.centre = centre;
+    }
 
-	public Hall getHall() {
-		return hall;
-	}
+    public long getDuration() {
+        return duration;
+    }
 
-	public void setHall(Hall hall) {
-		this.hall = hall;
-	}
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
 
-	public Patient getPatient() {
-		return patient;
-	}
+    public List<Doctor> getDoctors() {
+        return doctors;
+    }
 
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
+    public void setDoctors(List<Doctor> doctors) {
+        this.doctors = doctors;
+    }
 
-	public Centre getCentre() {
-		return centre;
-	}
+    public Priceslist getPriceslist() {
+        return priceslist;
+    }
 
-	public void setCentre(Centre centre) {
-		this.centre = centre;
-	}
+    public void setPricelist(Priceslist priceslist) {
+        this.priceslist = priceslist;
+    }
 
-	public long getDuration() {
-		return duration;
-	}
+    public AppointmentType getAppointmentType() {
+        return appointmentType;
+    }
 
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
+    public void setAppointmentType(AppointmentType appointmentType) {
+        this.appointmentType = appointmentType;
+    }
 
-	public List<Doctor> getDoctors() {
-		return doctors;
-	}
+    public Boolean getDone() {
+        return done;
+    }
 
-	public void setDoctors(List<Doctor> doctors) {
-		this.doctors = doctors;
-	}
+    public void setDone(Boolean done) {
+        this.done = done;
+    }
 
-	public Priceslist getPriceslist() {
-		return priceslist;
-	}
+    public static class Builder {
+        private Date date;
+        private Date endDate;
+        private Hall hall;
+        private Patient patient;
+        private Centre centre;
+        private Priceslist priceslist;
+        private List<Doctor> doctors;
+        private AppointmentType appointmentType;
+        private long duration;
 
-	public void setPricelist(Priceslist priceslist) {
-		this.priceslist = priceslist;
-	}
+        public Builder(Date date) {
+            this.date = date;
+            doctors = new ArrayList<>();
+        }
 
-	public AppointmentType getAppointmentType() {
-		return appointmentType;
-	}
+        public Builder withHall(Hall hall) {
+            this.hall = hall;
+            return this;
+        }
 
-	public void setAppointmentType(AppointmentType appointmentType) {
-		this.appointmentType = appointmentType;
-	}
+        public Builder withPatient(Patient patient) {
+            this.patient = patient;
+            return this;
+        }
 
-	public Boolean getDone() {
-		return done;
-	}
+        public Builder withCentre(Centre centre) {
+            this.centre = centre;
+            return this;
+        }
 
-	public void setDone(Boolean done) {
-		this.done = done;
-	}
+        public Builder withEndingDate(Date date) {
+            this.endDate = date;
+            return this;
+        }
 
-	public static class Builder
-	{
-		private Date date;
-		private Date endDate;
-		private Hall hall;
-		private Patient patient;
-		private Centre centre;
-		private Priceslist priceslist;
-		private List<Doctor> doctors;
-		private AppointmentType appointmentType;
-		private long duration;
-		
-		public Builder(Date date)
-		{
-			this.date = date;
-			doctors = new ArrayList<>();
-		}
-		
-		public Builder withHall(Hall hall)
-		{
-			this.hall = hall;
-			
-			return this;
-		}
+        public Builder withDoctors(ArrayList<Doctor> doctors) {
+            this.doctors = doctors;
+            return this;
+        }
 
-		public Builder withPatient(Patient patient)
-		{
-			this.patient = patient;
-			
-			return this;
-		}
-		
-		public Builder withCentre(Centre centre)
-		{
-			this.centre = centre;
-			
-			return this;
-		}
-		
-		public Builder withEndingDate(Date date)
-		{
-			this.endDate = date;
-			
-			return this;
-		}
-		
-		
-		public Builder withDoctors(ArrayList<Doctor> doctors)
-		{
-			this.doctors = doctors;
-			
-			return this;
-		}
-		
-		public Builder withPriceslist(Priceslist priceslist)
-		{
-			this.priceslist = priceslist;
-			
-			return this;
-		}
-		
-		public Builder withType(AppointmentType appointmentType)
-		{
-			this.appointmentType = appointmentType;
-			
-			return this;
-		}
+        public Builder withPriceslist(Priceslist priceslist) {
+            this.priceslist = priceslist;
+            return this;
+        }
 
-		public Builder withDuration(long duration) {
-			this.duration = duration;
-			return this;
-		}
-		
-		public Appointment build()
-		{
-			Appointment app = new Appointment();
-			app.setDate(this.date);
-			app.setPatient(this.patient);
-			app.setCentre(this.centre);
-			app.setHall(this.hall);
-			app.setDoctors(this.doctors);
-			app.setPricelist(priceslist);
-			app.setAppointmentType(this.appointmentType);
-			app.setDuration(this.duration);
-			app.setEndDate(this.endDate);
-			return app;
-		}
+        public Builder withType(AppointmentType appointmentType) {
+            this.appointmentType = appointmentType;
+            return this;
+        }
 
+        public Builder withDuration(long duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Appointment build() {
+            Appointment app = new Appointment();
+            app.setDate(this.date);
+            app.setPatient(this.patient);
+            app.setCentre(this.centre);
+            app.setHall(this.hall);
+            app.setDoctors(this.doctors);
+            app.setPricelist(priceslist);
+            app.setAppointmentType(this.appointmentType);
+            app.setDuration(this.duration);
+            app.setEndDate(this.endDate);
+            return app;
+        }
 
     }
-	
+
 }
