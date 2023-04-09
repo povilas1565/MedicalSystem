@@ -9,8 +9,8 @@ public class MonthDTO {
     private String monthEnd;
 
     public MonthDTO(Date Start, Date End) {
-        this.monthStart = DateUtil.getInstance().getString(Start,"dd-MM-yyyy HH:mm");
-        this.monthEnd = DateUtil.getInstance().getString(End,"dd-MM-yyyy HH:mm");
+        this.monthStart = DateUtil.getInstance().getString(Start,"yyyy-MM-dd HH:mm");
+        this.monthEnd = DateUtil.getInstance().getString(End,"yyyy-MM-dd HH:mm");
     }
 
     public String getMonthStart() {

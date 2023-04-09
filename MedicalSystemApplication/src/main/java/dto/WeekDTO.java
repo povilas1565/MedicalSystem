@@ -9,8 +9,8 @@ public class WeekDTO {
     private String weekEnd;
 
     public WeekDTO(Date weekStart, Date weekEnd) {
-        this.weekStart = DateUtil.getInstance().getString(weekStart, "dd-MM-yyyy HH:mm");
-        this.weekEnd = DateUtil.getInstance().getString(weekEnd,"dd-MM-yyyy HH:mm");
+        this.weekStart = DateUtil.getInstance().getString(weekStart, "yyyy-MM-dd HH:mm");
+        this.weekEnd = DateUtil.getInstance().getString(weekEnd,"yyyy-MM-dd HH:mm");
     }
 
     public String getWeekStart() {
