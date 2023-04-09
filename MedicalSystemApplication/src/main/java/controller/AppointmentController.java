@@ -542,8 +542,8 @@ public class AppointmentController {
             return new ResponseEntity<>(header, HttpStatus.NOT_FOUND);
         }
 
-        Date date = DateUtil.getInstance().getDate(dto.getDate(), "dd-MM-yyyy HH:mm");
-        Date endDate = DateUtil.getInstance().getDate(dto.getEndDate(), "dd-MM-yyyy HH:mm");
+        Date date = DateUtil.getInstance().getDate(dto.getDate(), "yyyy-MM-dd HH:mm");
+        Date endDate = DateUtil.getInstance().getDate(dto.getEndDate(), "yyyy-MM-dd HH:mm");
 
         Hall hall = hallService.findByNumberAndCentre(dto.getHallNumber(), centre);
 
@@ -636,15 +636,15 @@ public class AppointmentController {
         List<Appointment> apps = appointmentService.findAllByHall(hall);
         ArrayList<Doctor> doctors = new ArrayList<>();
         DateUtil util = DateUtil.getInstance();
-        Date desiredStartTime = util.getDate(dto.getDate(), "dd-MM-yyyy HH:mm");
-        Date desiredEndTime = util.getDate(dto.getEndDate(), "dd-MM-yyyy HH:mm");
+        Date desiredStartTime = util.getDate(dto.getDate(), "yyyy-MM-dd HH:mm");
+        Date desiredEndTime = util.getDate(dto.getEndDate(), "yyyy-MM-dd HH:mm");
 
         String parts[] = dto.getNewDate().split(" ");
         String dat = parts[0];
 
         if (!dat.equals("undefined")) {
-            desiredStartTime = util.getDate(dto.getNewDate(), "dd-MM-yyyy HH:mm");
-            desiredEndTime = util.getDate(dto.getNewEndDate(), "dd-MM-yyyy HH:mm");
+            desiredStartTime = util.getDate(dto.getNewDate(), "yyyy-MM-dd HH:mm");
+            desiredEndTime = util.getDate(dto.getNewEndDate(), "yyyy-MM-dd HH:mm");
         }
 
         for (String email : dto.getDoctors()) {
@@ -685,13 +685,13 @@ public class AppointmentController {
             String requestURL = httpRequest.getRequestURL().toString();
             UriComponentsBuilder builderRootAccept = UriComponentsBuilder.fromUriString(requestURL.split("api")[0])
                     .queryParam("centre", appointment.getCentre().getName())
-                    .queryParam("date", DateUtil.getInstance().getString(appointment.getDate(), "dd-MM-yyyy HH:mm"))
+                    .queryParam("date", DateUtil.getInstance().getString(appointment.getDate(), "yyyy-MM-dd HH:mm"))
                     .queryParam("hall", appointment.getHall().getNumber())
                     .queryParam("confirmed", true);
 
             UriComponentsBuilder builderRootDeny = UriComponentsBuilder.fromUriString(requestURL.split("api")[0])
                     .queryParam("centre", appointment.getCentre().getName())
-                    .queryParam("date", DateUtil.getInstance().getString(appointment.getDate(), "dd-MM-yyyy HH:mm"))
+                    .queryParam("date", DateUtil.getInstance().getString(appointment.getDate(), "yyyy-MM-dd HH:mm"))
                     .queryParam("hall", appointment.getHall().getNumber())
                     .queryParam("confirmed", false);
 
@@ -773,7 +773,7 @@ public class AppointmentController {
         log.info("Adding new entries for appointments at the medical center '{}'.", dto.getCentreName());
         HttpHeaders header = new HttpHeaders();
         AppointmentRequest request = new AppointmentRequest();
-        request.setTimestamp(DateUtil.getInstance().getDate(new Date().getTime(), "dd-MM-yyyy HH:mm"));
+        request.setTimestamp(DateUtil.getInstance().getDate(new Date().getTime(), "yyyy-MM-dd HH:mm"));
         Centre centre = centreService.findByName(dto.getCentreName());
 
         AppointmentRequest databaseRequest = appointmentRequestService.findAppointmentRequest(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
@@ -798,7 +798,7 @@ public class AppointmentController {
         }
         request.setPatient(patient);
 
-        Date date = DateUtil.getInstance().getDate(dto.getDate(), "dd-MM-yyyy HH:mm");
+        Date date = DateUtil.getInstance().getDate(dto.getDate(), "yyyy-MM-dd HH:mm");
 
         request.setDate(date);
         request.setAppointmentType(dto.getType());

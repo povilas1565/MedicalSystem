@@ -51,9 +51,9 @@ public class AppointmentDTO {
 	
 	public AppointmentDTO(Appointment appointment)
 	{
-		this.date = DateUtil.getInstance().getString(appointment.getDate(),"dd-MM-yyyy HH:mm");
+		this.date = DateUtil.getInstance().getString(appointment.getDate(),"yyyy-MM-dd HH:mm");
 		if(appointment.getEndDate() != null)
-			this.endDate = DateUtil.getInstance().getString(appointment.getEndDate(), "dd-MM-yyyy HH:mm");
+			this.endDate = DateUtil.getInstance().getString(appointment.getEndDate(), "yyyy-MM-dd HH:mm");
 		if(appointment.getPatient() != null)
 			this.patientEmail = appointment.getPatient().getEmail();
 		this.centreName = appointment.getCentre().getName();
@@ -75,15 +75,15 @@ public class AppointmentDTO {
 		this.predefined = appointment.getPredefined();
 		this.confirmed = appointment.getConfirmed();
 		if(appointment.getNewDate() != null)
-			this.newDate = DateUtil.getInstance().getString(appointment.getNewDate(), "dd-MM-yyyy HH:mm");
+			this.newDate = DateUtil.getInstance().getString(appointment.getNewDate(), "yyyy-MM-dd HH:mm");
 		if(appointment.getNewEndDate() != null)
-			this.newDate = DateUtil.getInstance().getString(appointment.getNewEndDate(), "dd-MM-yyyy HH:mm");
+			this.newDate = DateUtil.getInstance().getString(appointment.getNewEndDate(), "yyyy-MM-dd HH:mm");
 	}
 
 	public AppointmentDTO(AppointmentRequest appointment)
 	{
-		this.date = DateUtil.getInstance().getString(appointment.getDate(),"dd-MM-yyyy HH:mm");
-		this.startTimestamp = DateUtil.getInstance().getString(appointment.getTimestamp(), "dd-MM-yyyy HH:mm");
+		this.date = DateUtil.getInstance().getString(appointment.getDate(),"yyyy-MM-dd HH:mm");
+		this.startTimestamp = DateUtil.getInstance().getString(appointment.getTimestamp(), "yyyy-MM-dd HH:mm");
 		this.patientEmail = appointment.getPatient().getEmail();
 		this.centreName = appointment.getCentre().getName();
 		if(appointment.getHall() != null)

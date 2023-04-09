@@ -65,7 +65,7 @@ public class AppointmentService {
 
     public Appointment findAppointment(String date, int hallNumber, String centre)
     {
-        Date d = DateUtil.getInstance().getDate(date, "dd-MM-yyyy HH:mm");
+        Date d = DateUtil.getInstance().getDate(date, "yyyy-MM-dd HH:mm");
 
         Centre c = centreRepository.findByName(centre);
 
@@ -102,15 +102,15 @@ public class AppointmentService {
         List<Appointment> apps = appointmentRepository.findAllByHall(appointment.getHall());
         DateUtil util = DateUtil.getInstance();
 
-        Date desiredStartTime = util.getDate(dto.getDate(), "dd-MM-yyyy HH:mm");
-        Date desiredEndTime = util.getDate(dto.getEndDate(), "dd-MM-yyyy HH:mm");
+        Date desiredStartTime = util.getDate(dto.getDate(), "yyyy-MM-dd HH:mm");
+        Date desiredEndTime = util.getDate(dto.getEndDate(), "yyyy-MM-dd HH:mm");
 
         String parts[] = dto.getNewDate().split(" ");
         String dat = parts[0];
 
         if(!dat.equals("undefined")){
-            desiredStartTime = util.getDate(dto.getNewDate(), "dd-MM-yyyy HH:mm");
-            desiredEndTime = util.getDate(dto.getNewEndDate(), "dd-MM-yyyy HH:mm");
+            desiredStartTime = util.getDate(dto.getNewDate(), "yyyy-MM-dd HH:mm");
+            desiredEndTime = util.getDate(dto.getNewEndDate(), "yyyy-MM-dd HH:mm");
         }
 
         DateInterval di1 = new DateInterval(desiredStartTime, desiredEndTime);
