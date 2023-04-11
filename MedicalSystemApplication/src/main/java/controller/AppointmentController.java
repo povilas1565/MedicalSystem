@@ -697,7 +697,7 @@ public class AppointmentController {
 
             notificationService.sendNotification("prerecover07@gmail.com", "Confirm preview", "The centre administrator has approved your request for examination.\nConfirm by going to the link:" + builderRootAccept.toUriString() + " Refuse by going to the link:" + builderRootDeny.toUriString());
 
-            notificationService.sendNotification(appointment.getDoctors().get(0).getEmail(), "Admin has booked an appointment to review", "Admin booked a date review " + DateUtil.getInstance().getString(appointment.getDate(), "dd-MM-yyyy HH:mm") + ", in the centre " + appointment.getCentre().getName() + ", in Room № " + appointment.getHall().getNumber() + " and he choose you as a doctor.");
+            notificationService.sendNotification(appointment.getDoctors().get(0).getEmail(), "Admin has booked an appointment to review", "Admin booked a date review " + DateUtil.getInstance().getString(appointment.getDate(), "yyyy-MM-dd HH:mm") + ", in the centre " + appointment.getCentre().getName() + ", in Room № " + appointment.getHall().getNumber() + " and he choose you as a doctor.");
 
         } catch (ConcurrentModificationException e) {
             header.set("responseText", "conflict");

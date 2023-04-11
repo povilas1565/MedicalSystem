@@ -98,7 +98,6 @@ public class AppointmentDTO {
 		this.type = appointment.getAppointmentType();
 	}
 	
-	
 
 	public Boolean getConfirmed() {
 		return confirmed;
