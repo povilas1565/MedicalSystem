@@ -1,12 +1,10 @@
 package dto;
 
-import model.Chat;
-import model.Doctor;
-import model.Nurse;
-import model.Patient;
+import lombok.Builder;
 
 import java.util.Date;
 
+@Builder
 public class ChatDTO {
 
     private String description;
@@ -17,32 +15,6 @@ public class ChatDTO {
     private String patientEmail;
     private String nurseEmail;
     private long id;
-
-    public ChatDTO() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-    public ChatDTO(String description, String name, String message, Date dateAndTime, String doctorEmail, String patientEmail, String nurseEmail) {
-        super();
-        this.description = description;
-        this.name = name;
-        this.message = message;
-        this.dateAndTime = dateAndTime;
-        this.doctorEmail = doctorEmail;
-        this.patientEmail = patientEmail;
-        this.nurseEmail = nurseEmail;
-    }
-
-    public ChatDTO(Chat chat) {
-        this.description = chat.getDescription();
-        this.name = chat.getName();
-        this.message = chat.getMessage();
-        this.dateAndTime = chat.getDateAndTime();
-        this.doctorEmail = chat.getDoctor().getEmail();
-        this.patientEmail = chat.getPatient().getEmail();
-        this.nurseEmail = chat.getNurse().getEmail();
-    }
 
     public Long getId() {
         return id;
@@ -68,13 +40,21 @@ public class ChatDTO {
         this.dateAndTime = dateAndTime;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getMessage() { return message; }
+    public String getMessage() {
+        return message;
+    }
 
-    public void setMessage(String message) { this.message = message; }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public String getDoctor() {
         return doctorEmail;
@@ -100,6 +80,4 @@ public class ChatDTO {
         this.nurseEmail = nurseEmail;
     }
 
-    }
-
-
+}

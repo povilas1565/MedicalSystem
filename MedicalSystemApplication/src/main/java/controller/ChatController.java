@@ -1,4 +1,5 @@
 package controller;
+
 import dto.ChatDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,8 +34,7 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-
-    @PostMapping(value="/addChat1/{doctor}/{patient}")
+    @PostMapping(value = "/addChat1/{doctor}/{patient}")
     @ApiOperation("Cоздание новых чатов между докторами и пациентами")
     public ResponseEntity<Void> addChatBetweenDoctorAndPatient(@PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
         log.info("Creation of new chats between doctor '{}' and patient '{}'.", doctorEmail, patientEmail);
@@ -63,7 +63,7 @@ public class ChatController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping(value ="/addChat2/{nurse}/{patient}")
+    @PostMapping(value = "/addChat2/{nurse}/{patient}")
     @ApiOperation("Cоздание новых чатов между медперсоналом и пациентами")
     public ResponseEntity<Void> addChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
         log.info("Creation of new chats between nurse '{}' and patient '{}'.", nurseEmail, patientEmail);
@@ -93,7 +93,7 @@ public class ChatController {
     }
 
 
-    @PostMapping(value ="/addChat3/{nurse}/{patient}/{doctor}")
+    @PostMapping(value = "/addChat3/{nurse}/{patient}/{doctor}")
     @ApiOperation("Cоздание новых чатов")
     public ResponseEntity<ChatDTO> addChat(@PathVariable("nurse") String nurseEmail, @PathVariable("doctor") String doctorEmail, @PathVariable("patient") String patientEmail, @RequestBody ChatDTO dto) {
         log.info("Creation of new chats between nurse '{}', doctor '{}' and patient '{}'.", nurseEmail, doctorEmail, patientEmail);
@@ -149,13 +149,22 @@ public class ChatController {
         }
 
         Chat chat = chatService.findByDoctorAndPatient(doctor, patient);
-        ChatDTO dto = new ChatDTO(chat);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        ChatDTO chatDTO = ChatDTO.builder()
+                .id(chat.getId())
+                .description(chat.getDescription())
+                .name(chat.getName())
+                .message(chat.getMessage())
+                .dateAndTime(chat.getDateAndTime())
+                .doctorEmail(chat.getDoctor().getEmail())
+                .patientEmail(chat.getPatient().getEmail())
+                .build();
+
+        return new ResponseEntity<>(chatDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getChat2/{nurse}/{patient}")
     @ApiOperation("Получение чатов между медперсоналом и пациентами")
-    public ResponseEntity<ChatDTO> getChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail)  {
+    public ResponseEntity<ChatDTO> getChatBetweenNurseAndPatient(@PathVariable("nurse") String nurseEmail, @PathVariable("patient") String patientEmail) {
         log.info("Getting a chat between nurse '{}' and patient '{}'.", nurseEmail, patientEmail);
         HttpHeaders header = new HttpHeaders();
         Nurse nurse = nurseService.findByEmail(nurseEmail);
@@ -172,13 +181,22 @@ public class ChatController {
         }
 
         Chat chat = chatService.findByNurseAndPatient(nurse, patient);
-        ChatDTO dto = new ChatDTO(chat);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        ChatDTO chatDTO = ChatDTO.builder()
+                .id(chat.getId())
+                .description(chat.getDescription())
+                .name(chat.getName())
+                .message(chat.getMessage())
+                .dateAndTime(chat.getDateAndTime())
+                .nurseEmail(chat.getNurse().getEmail())
+                .patientEmail(chat.getPatient().getEmail())
+                .build();
+
+        return new ResponseEntity<>(chatDTO, HttpStatus.OK);
     }
 
     @PutMapping(value = "/updateChat/{id}")
     @ApiOperation("Обновление(изменение) отчета по id")
-    public ResponseEntity<Void> updateChat(@PathVariable("id")long id, @RequestBody ChatDTO dto) {
+    public ResponseEntity<Void> updateChat(@PathVariable("id") long id, @RequestBody ChatDTO dto) {
         log.info("Update (change) report by id '{}'.", id);
         HttpHeaders header = new HttpHeaders();
         Chat chat = chatService.findById(id);
@@ -248,7 +266,7 @@ public class ChatController {
 
 
         if (chat == null) {
-            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         chat.setDeleted(true);
@@ -257,9 +275,3 @@ public class ChatController {
     }
 
 }
-
-
-
-
-
-
