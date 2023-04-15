@@ -12,7 +12,6 @@ import repository.AppointmentRequestRepository;
 import repository.CentreRepository;
 import repository.HallRepository;
 import repository.UserRepository;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,47 +32,36 @@ public class AppointmentRequestService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<AppointmentRequest> findById(long id)
-    {
+    public Optional<AppointmentRequest> findById(long id) {
         return appointmentRequestRepository.findById(id);
     }
 
-    public List<AppointmentRequest> getAllByCentre(String centre)
-    {
+    public List<AppointmentRequest> getAllByCentre(String centre) {
         Centre c = centreRepository.findByName(centre);
-
         return appointmentRequestRepository.findAllByCentre(c);
     }
 
-    public List<AppointmentRequest> getAllByPatient(Patient p)
-    {
+    public List<AppointmentRequest> getAllByPatient(Patient p) {
         return appointmentRequestRepository.findAllByPatient(p);
     }
 
-    public AppointmentRequest findAppointmentRequest(Date date, Patient patient, Centre centre)
-    {
+    public AppointmentRequest findAppointmentRequest(Date date, Patient patient, Centre centre) {
         return appointmentRequestRepository.findByDateAndPatientAndCentre(date, patient, centre);
     }
 
-    public AppointmentRequest findAppointmentRequest(Date date, Hall hall, Centre centre)
-    {
+    public AppointmentRequest findAppointmentRequest(Date date, Hall hall, Centre centre) {
         return appointmentRequestRepository.findByDateAndHallAndCentre(date, hall, centre);
     }
 
-    public AppointmentRequest findAppointmentRequest(String date, String patientEmail, String centre)
-    {
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    public AppointmentRequest findAppointmentRequest(String date, String patientEmail, String centre) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         try {
             Date d = df.parse(date);
-
             Patient p = (Patient) userRepository.findByEmailAndDeleted(patientEmail, false);
-
             Centre c = centreRepository.findByName(centre);
-
             return findAppointmentRequest(d, p, c);
-
-        } catch (Exception e ) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -81,22 +69,14 @@ public class AppointmentRequestService {
         return null;
     }
 
-
-    public AppointmentRequest findAppointmentRequest(String date, int hallNumber,String centre)
-    {
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    public AppointmentRequest findAppointmentRequest(String date, int hallNumber, String centre) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         try {
             Date d = df.parse(date);
-
-
             Centre c = centreRepository.findByName(centre);
-
-
             Hall h = hallRepository.findByNumberAndCentreAndDeleted(hallNumber, c, false);
-
-            return findAppointmentRequest(d,h,c);
-
+            return findAppointmentRequest(d, h, c);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -105,37 +85,30 @@ public class AppointmentRequestService {
         return null;
     }
 
-    public void delete(AppointmentRequest request)
-    {
+    public void delete(AppointmentRequest request) {
         appointmentRequestRepository.delete(request);
     }
 
-    public void save(AppointmentRequest request)
-    {
+    public void save(AppointmentRequest request) {
         appointmentRequestRepository.save(request);
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
-    public void saveLock(AppointmentRequest request) throws ConcurrentModificationException
-    {
+    public void saveLock(AppointmentRequest request) throws ConcurrentModificationException {
         AppointmentRequest req = findAppointmentRequest(request.getDate(), request.getHall(), request.getCentre());
 
-        if(req != null)
-        {
+        if (req != null) {
             throw new ConcurrentModificationException("Already made");
         }
 
         Date start = request.getDate();
         Date end = Scheduler.addHoursToJavaUtilDate(start, 1);
 
-        for(Doctor d : request.getDoctors())
-        {
+        for (Doctor d : request.getDoctors()) {
             List<Appointment> appointments = d.getAppointments();
 
-            for(Appointment app : appointments)
-            {
-                if(DateUtil.getInstance().overlappingInterval(start, end, app.getDate(), app.getEndDate()))
-                {
+            for (Appointment app : appointments) {
+                if (DateUtil.getInstance().overlappingInterval(start, end, app.getDate(), app.getEndDate())) {
                     throw new ConcurrentModificationException("Overlap");
                 }
             }
@@ -144,10 +117,8 @@ public class AppointmentRequestService {
         appointmentRequestRepository.save(request);
     }
 
-    public List<AppointmentRequest> findAll(){
+    public List<AppointmentRequest> findAll() {
         return appointmentRequestRepository.findAll();
     }
-
-
 
 }

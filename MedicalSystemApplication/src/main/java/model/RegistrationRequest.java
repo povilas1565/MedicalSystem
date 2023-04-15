@@ -22,6 +22,8 @@ public class RegistrationRequest{
 	@Column(name = "email", nullable = false)
 	private String email;
 
+
+
     public RegistrationRequest() {
     	super();
     }

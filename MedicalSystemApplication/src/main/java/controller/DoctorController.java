@@ -63,9 +63,9 @@ public class DoctorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        String pass = "";
+        String pass = dto.getUser().getPassword();
         try {
-            pass = SecurePasswordHasher.getInstance().encode("123");
+            pass = SecurePasswordHasher.getInstance().encode(pass);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
