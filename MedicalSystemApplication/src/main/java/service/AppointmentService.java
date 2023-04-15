@@ -80,6 +80,10 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    public void delete(Appointment appointment) {
+        appointmentRepository.delete(appointment);
+    }
+
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW, readOnly = false)
     public void saveLock(Appointment appointment) throws ObjectOptimisticLockingFailureException
     {

@@ -55,7 +55,7 @@ public class AppointmentRequestService {
     }
 
     public AppointmentRequest findAppointmentRequest(String date, String patientEmail, String centre) {
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         try {
             Date d = df.parse(date);

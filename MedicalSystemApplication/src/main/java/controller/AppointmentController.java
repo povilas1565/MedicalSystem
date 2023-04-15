@@ -736,16 +736,16 @@ public class AppointmentController {
     @ApiOperation("Удаление записей на приемы")
     public ResponseEntity<Void> denyAppointment(@RequestBody AppointmentDTO dto) {
         log.info("Deleting appointments at the medical center '{}'.", dto.getCentreName());
-        String date = dto.getDate();
-        int hallNumber = dto.getHallNumber();
-        String centre = dto.getCentreName();
-        Appointment app = appointmentService.findAppointment(date, hallNumber, centre);
+        HttpHeaders header = new HttpHeaders();
+        Appointment app = appointmentService.findAppointment(dto.getDate(), dto.getHallNumber(), dto.getCentreName());
 
-        if (app == null) {
+        if (app == null)
+        {
+            header.set("responseText", "Appointment not found: " + dto.getDate() + " ," + dto.getHallNumber() + ", " + dto.getCentreName());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        appointmentService.save(app);
+        appointmentService.delete(app);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
