@@ -12,6 +12,7 @@ import repository.AppointmentRequestRepository;
 import repository.CentreRepository;
 import repository.HallRepository;
 import repository.UserRepository;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,7 +55,7 @@ public class AppointmentRequestService {
     }
 
     public AppointmentRequest findAppointmentRequest(String date, String patientEmail, String centre) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
         try {
             Date d = df.parse(date);
