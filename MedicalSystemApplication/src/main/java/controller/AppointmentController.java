@@ -73,7 +73,7 @@ public class AppointmentController {
         return new ResponseEntity<>(new AppointmentDTO(appointment), HttpStatus.OK);
     }
 
-    //Get By doctor and patient
+    // Get By doctor and patient
     @GetMapping(value = "/getAppointments/{doctorEmail}/{patientEmail}")
     @ApiOperation("Назначить приемы")
     public ResponseEntity<List<AppointmentDTO>> getAppointmentsByPatient(@PathVariable("doctorEmail") String doctorEmail, @PathVariable("patientEmail") String patientEmail) {
