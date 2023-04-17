@@ -1,4 +1,5 @@
 package controller;
+
 import dto.ChatDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -273,9 +274,3 @@ public class ChatController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
-
-
-
-
-
-
