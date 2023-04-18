@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +44,10 @@ public class Doctor extends User
 	private List<Vacation> vacations;
 
 
+	/*-----------------------------------------
+	***CONSTRUCTORS
+	 ------------------------------------------*/
+
 
 	public Doctor() {
 
@@ -74,13 +79,19 @@ public class Doctor extends User
 		super(dto.getUser());
 		this.setRole(UserRole.Doctor);
 		this.setIsFirstLog(true);
-		this.shiftStart = DateUtil.getInstance().getDate(dto.getShiftStart(), "HH:mm");
-		this.shiftEnd = DateUtil.getInstance().getDate(dto.getShiftEnd(), "HH:mm");
+		this.type = dto.getType();
+		this.shiftStart = DateUtil.getInstance().getDate(dto.getShiftStart(), "yyyy-MM-dd HH:mm");
+				//DateUtil.getInstance().getDate(dto.getShiftStart(), "HH:mm");
+		this.shiftEnd =DateUtil.getInstance().getDate(dto.getShiftEnd(), "yyyy-MM-dd HH:mm");
+				//DateUtil.getInstance().getDate(dto.getShiftEnd(), "HH:mm");
+
 		this.appointments = new ArrayList<Appointment>();
 		this.vacations = new ArrayList<Vacation>();
 		this.reviews = new ArrayList<ReviewDoctor>();
 	}
-
+/*---------------------------------------
+***METHODS
+ ----------------------------------------*/
 	public Boolean IsFreeOn(Date date)
 	{
 		for(Vacation v: vacations)
@@ -96,55 +107,7 @@ public class Doctor extends User
 		
 		return true;
 	}
-		
-	public List<Vacation> getVacations() {
-		return vacations;
-	}
 
-	public void setVacations(List<Vacation> vacations) {
-		this.vacations = vacations;
-	}
-
-	public Date getShiftStart() {
-		return shiftStart;
-	}
-
-	public void setShiftStart(Date shiftStart) {
-		this.shiftStart = shiftStart;
-	}
-
-	public Date getShiftEnd() {
-		return shiftEnd;
-	}
-
-	public void setShiftEnd(Date shiftEnd) {
-		this.shiftEnd = shiftEnd;
-	}
-
-	public Centre getCentre() {
-		return centre;
-	}
-
-	public void setCentre(Centre centre) {
-		this.centre = centre;
-	}
-
-	public String getType() {
-		return type;
-	}
-	
-	public void setType(String type) {
-		this.type = type;
-	}
-			
-	public float getAverageRating() {
-		return averageRating;
-	}
-
-	public void setAverageRating(float averageRating) {
-		this.averageRating = averageRating;
-	}
-	
 	public float calculateRating()
 	{
 		List<ReviewDoctor> reviews = getReviews();
@@ -172,22 +135,7 @@ public class Doctor extends User
 		 return sum = (Float) sum / ratings.size();
 	}
 
-	public List<ReviewDoctor> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(List<ReviewDoctor> reviews) {
-		this.reviews = reviews;
-	}
-
-	public List<Appointment> getAppointments() {
-		return appointments;
-	}
-
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
-	}
-	
+//-------------------------------------------------------------
 	public static class Builder extends UserBuilder
 	{
 		private String type;
